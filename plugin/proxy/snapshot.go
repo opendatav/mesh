@@ -120,7 +120,7 @@ func (that *SnapShot) remoteService(ctx context.Context, name string, routes *Ro
 
 func (that *SnapShot) withRemoteRoute(ctx context.Context, routes *Routes) {
 	for _, route := range append(that.routers, mtypes.LocRoute(that.env, that.env.InstId)) {
-		if tool.IsLocalEnv(that.env, route.NodeId) || proxy.RecursionBreak(ctx, route.URC()) {
+		if !tool.IsLocalEnv(that.env, route.NodeId) && proxy.RecursionBreak(ctx, route.URC()) {
 			continue
 		}
 		rs := routes.IfAbsent(route.NodeId, func(n string) *dynamic.Service {
