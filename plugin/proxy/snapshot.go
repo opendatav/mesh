@@ -119,16 +119,16 @@ func (that *SnapShot) remoteService(ctx context.Context, name string, routes *Ro
 }
 
 func (that *SnapShot) withRemoteRoute(ctx context.Context, routes *Routes) {
-	for _, route := range that.routers {
+	for _, route := range append(that.routers, mtypes.LocRoute(that.env, that.env.InstId)) {
 		if tool.IsLocalEnv(that.env, route.NodeId) || proxy.RecursionBreak(ctx, route.URC()) {
 			continue
 		}
 		rs := routes.IfAbsent(route.NodeId, func(n string) *dynamic.Service {
 			return that.remoteService(ctx, n, routes, "https", route.NodeId, that.supervise(route), route.URC())
 		})
-		rr := fmt.Sprintf("HeaderRegexp(`x-ptp-target-node-id`, `%s`) || HeaderRegexp(`x-ptp-target-inst-id`, `%s`) || HeaderRegexp(`mesh-urn`, `%s`)", route.NodeId, route.InstId, mtypes.URNMatcher("([-a-zA-Z\\d]+)", route.ID(ctx).SEQ, mtypes.CN, route.NodeId, route.InstId))
+		rr := fmt.Sprintf("(PathRegexp(`/org.ppc.ptp.PrivateTransferProtocol/.*`) || PathRegexp(`/v1/interconn/chan/(invoke|transport)`)) && (HeaderRegexp(`x-ptp-target-node-id`, `%s`) || HeaderRegexp(`x-ptp-target-inst-id`, `%s`) || HeaderRegexp(`mesh-urn`, `%s`))", route.NodeId, route.InstId, mtypes.URNMatcher("([-a-zA-Z\\d]+)", route.ID(ctx).SEQ, mtypes.CN, route.NodeId, route.InstId))
 		routes.Route(ctx, fmt.Sprintf("%s#secure", route.NodeId), &dynamic.Router{
-			EntryPoints: []string{TransportX, TransportY},
+			EntryPoints: []string{TransportY},
 			Middlewares: []string{PluginBarrier},
 			Service:     rs,
 			Rule:        rr,
@@ -139,7 +139,7 @@ func (that *SnapShot) withRemoteRoute(ctx context.Context, routes *Routes) {
 			},
 		})
 		routes.Route(ctx, fmt.Sprintf("%s#insecure", route.NodeId), &dynamic.Router{
-			EntryPoints: []string{TransportX, TransportY},
+			EntryPoints: []string{TransportY},
 			Middlewares: []string{PluginBarrier},
 			Service:     rs,
 			Rule:        rr,
@@ -183,7 +183,7 @@ func (that *SnapShot) withClusterSetRoute(ctx context.Context, routes *Routes, n
 	})
 	cr := pattern()
 	routes.Route(ctx, fmt.Sprintf("%s#secure", cs), &dynamic.Router{
-		EntryPoints: []string{TransportX, TransportY},
+		EntryPoints: []string{TransportX},
 		Middlewares: []string{PluginBarrier},
 		Service:     cs,
 		Rule:        cr,
@@ -194,7 +194,7 @@ func (that *SnapShot) withClusterSetRoute(ctx context.Context, routes *Routes, n
 		},
 	})
 	routes.Route(ctx, fmt.Sprintf("%s#insecure", cs), &dynamic.Router{
-		EntryPoints: []string{TransportX, TransportY},
+		EntryPoints: []string{TransportX},
 		Middlewares: []string{PluginBarrier},
 		Service:     cs,
 		Rule:        cr,
