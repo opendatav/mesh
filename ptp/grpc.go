@@ -39,21 +39,21 @@ func init() {
 	macro.Provide(grpc.IRPCService, privateTransferTransport)
 }
 
-func WithGRPCBound(ctx context.Context, fn func() ([]byte, error)) *Outbound {
-	buff, err := fn()
+func WithGRPCBound(ctx context.Context, fn func() (*TransportOutbound, error)) *Outbound {
+	o, err := fn()
 	if nil == err {
 		return &Outbound{
 			Metadata: map[string]string{},
-			Payload:  buff,
-			Code:     cause.Success.Code,
-			Message:  cause.Success.Message,
+			Payload:  o.Payload,
+			Code:     o.Code,
+			Message:  o.Message,
 		}
 	}
 	log.Warn(ctx, err.Error())
 	code, msg := cause.Parse(err)
 	return &Outbound{
 		Metadata: map[string]string{},
-		Payload:  buff,
+		Payload:  nil,
 		Code:     code,
 		Message:  msg,
 	}
@@ -127,32 +127,32 @@ func (that *privateTransferProtocolServer) Invoke(ctx context.Context, inbound *
 			return nil, cause.Error(err)
 		}
 		contentType := httpx.MIMEPROTOBUF
-		return WithGRPCBound(mtx, func() ([]byte, error) {
+		return WithGRPCBound(mtx, func() (*TransportOutbound, error) {
 			switch uri.Path {
 			case "/org.ppc.ptp.PrivateTransferTransport/peek":
 				pi := new(PeekInbound)
 				if err = Decode(inbound.Payload, pi, contentType); nil != err {
 					return nil, cause.Error(err)
 				}
-				return peekService.ServePeek(mtx, contentType, pi)
+				return privateTransferTransport.Peek(mtx, pi)
 			case "/org.ppc.ptp.PrivateTransferTransport/pop":
 				pi := new(PopInbound)
 				if err = Decode(inbound.Payload, pi, contentType); nil != err {
 					return nil, cause.Error(err)
 				}
-				return popService.ServePop(mtx, contentType, pi)
+				return privateTransferTransport.Pop(mtx, pi)
 			case "/org.ppc.ptp.PrivateTransferTransport/push":
 				pi := new(PushInbound)
 				if err = Decode(inbound.Payload, pi, contentType); nil != err {
 					return nil, cause.Error(err)
 				}
-				return pushService.ServePush(mtx, contentType, pi)
+				return privateTransferTransport.Push(mtx, pi)
 			case "/org.ppc.ptp.PrivateTransferTransport/release":
 				pi := new(ReleaseInbound)
 				if err = Decode(inbound.Payload, pi, contentType); nil != err {
 					return nil, cause.Error(err)
 				}
-				return releaseService.ServeRelease(mtx, contentType, pi)
+				return privateTransferTransport.Release(mtx, pi)
 			default:
 				return nil, cause.NotFound.Error()
 			}

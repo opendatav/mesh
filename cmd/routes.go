@@ -190,6 +190,6 @@ func (that *Route) Home(ctx context.Context) *cobra.Command {
 	route.AddCommand(that.VIP(ctx))
 	route.AddCommand(that.Trick(ctx))
 	route.Flags().StringVarP(&node, "node", "n", types.LocalNodeId, "Mesh node or inst id.")
-	route.Flags().StringVarP(&addr, "addr", "a", "127.0.0.1:7304", "Mesh address.")
+	route.Flags().StringVarP(&addr, "addr", "a", "127.0.0.1:570", "Mesh address.")
 	return route
 }

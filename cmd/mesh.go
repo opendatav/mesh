@@ -114,9 +114,7 @@ func (that *meshCli) Boot(ctx context.Context) *cobra.Command {
 			plugin.NODE.Enable(that.Node)
 			plugin.SERVER.Enable(that.Server)
 			plugin.PROXY.Enable(that.Proxy)
-			if plugin.SERVER.Match() {
-				_ = os.Setenv("mesh.runtime", "127.0.0.1:8864")
-			}
+			_ = os.Setenv("mesh.runtime", "127.0.0.1:8864")
 			macro.WithMode(macro.EableSPIFirst)
 			//environ, err := macro.Load(prsim.INetwork).Get(macro.MeshSPI).(prsim.Network).GetEnviron(ctx)
 			//if nil != err {

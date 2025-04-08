@@ -82,12 +82,12 @@ func IsLocalnet(ctx prsim.Context) (bool, error) {
 		return false, cause.Error(err)
 	}
 	instId := strings.TrimSpace(prsim.MeshTargetInstId.Get(ctx.GetAttachments()))
-	if "" != instId {
-		return strings.EqualFold(env.InstId, instId), nil
+	if "" != instId && strings.EqualFold(env.InstId, instId) {
+		return true, nil
 	}
 	nodeId := strings.TrimSpace(prsim.MeshTargetNodeId.Get(ctx.GetAttachments()))
-	if "" != nodeId {
-		return strings.EqualFold(env.NodeId, nodeId), nil
+	if "" != nodeId && strings.EqualFold(env.NodeId, nodeId) {
+		return true, nil
 	}
 	return "" == instId && "" == nodeId, nil
 }

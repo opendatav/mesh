@@ -331,12 +331,16 @@ type Trick struct {
 }
 
 func LocRoute(environ *Environ, instId string) *Route {
+	return LocRouteWithAddr(environ, instId, macro.Runtime())
+}
+
+func LocRouteWithAddr(environ *Environ, instId string, addr string) *Route {
 	return &Route{
 		NodeId:      environ.NodeId,
 		InstId:      instId,
 		Name:        environ.InstName,
 		InstName:    environ.InstName,
-		Address:     macro.Runtime(),
+		Address:     addr,
 		Describe:    "",
 		HostRoot:    "",
 		HostKey:     "",

@@ -16,7 +16,7 @@ def main():
     push.payload = b'1234567'
     inbound = Inbound()
     inbound.payload = push.SerializeToString()
-    response = requests.post(url='http://127.0.0.1:17304/v1/interconn/chan/invoke', headers={
+    response = requests.post(url='http://127.0.0.1:7304/v1/interconn/chan/invoke', headers={
         'Content-Type': 'application/x-protobuf',
         'x-ptp-tech-provider-code': 'LX',
         'x-ptp-trace-id': '1',
@@ -33,7 +33,7 @@ def main():
     pop = PopInbound()
     pop.topic = "321"
     pop.timeout = 1000
-    response = requests.post(url='http://127.0.0.1:17304/v1/interconn/chan/pop', headers={
+    response = requests.post(url='http://127.0.0.1:7304/v1/interconn/chan/pop', headers={
         'Content-Type': 'application/x-protobuf',
         'x-ptp-tech-provider-code': 'LX',
         'x-ptp-trace-id': '1',
