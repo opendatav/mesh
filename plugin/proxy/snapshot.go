@@ -435,7 +435,7 @@ func (that *SnapShot) withTransports(ctx context.Context) map[string]*dynamic.Se
 		GuestCrt:  that.env.RootCrt,
 	}
 	transports := map[string]*dynamic.ServersTransport{}
-	routes := append(that.routers, &mtypes.Route{NodeId: "default"}, &mtypes.Route{NodeId: mtypes.LocalNodeId})
+	routes := append(that.routers, &mtypes.Route{NodeId: "default"}, &mtypes.Route{NodeId: mtypes.LocalNodeId}, &mtypes.Route{NodeId: that.env.NodeId})
 	for _, route := range routes {
 		pxy := tool.Anyone(mtypes.ParseURL(ctx, tool.Anyone(that.supervise(route), route.URC()).String()).GetP(), route.Proxy)
 		certification := route.GetCertificate(ctx).Override(defaultCts)
@@ -493,7 +493,7 @@ func (that *SnapShot) withTLS(ctx context.Context) *dynamic.TLSConfiguration {
 			},
 		},
 	}
-	options := map[string]tls.Options{"default": *tls.DefaultTLSOptions.DeepCopy(), mtypes.LocalNodeId: *tls.DefaultTLSOptions.DeepCopy()}
+	options := map[string]tls.Options{"default": *tls.DefaultTLSOptions.DeepCopy(), mtypes.LocalNodeId: *tls.DefaultTLSOptions.DeepCopy(), that.env.NodeId: *tls.DefaultTLSOptions.DeepCopy()}
 	for _, route := range that.routers {
 		certification := route.GetCertificate(ctx).Override(defaultCts)
 		stores[route.NodeId] = tls.Store{
