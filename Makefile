@@ -30,7 +30,7 @@ setenv:
 
 .PHONY: image
 image:setenv
-	buildctl --addr tcp://10.99.253.223:1234 build \
+	buildctl --addr tcp://192.168.1.3:1234 build \
 	--frontend dockerfile.v0 \
 	--local context=. \
 	--local dockerfile=. \
