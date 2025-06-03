@@ -56,7 +56,10 @@ type EdgeEnt struct {
 	// 更新人
 	UpdateBy string `json:"update_by"`
 	// 联盟中心节点机构id-多个用逗号分割
-	Group string `json:"group"`
+	Group    string `json:"group"`
+	StaticIP string `json:"static_ip"`
+	PublicIP string `json:"public_ip"`
+	Requests int    `json:"requests"`
 }
 
 type Oauth2ClientEnt struct {

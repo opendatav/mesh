@@ -79,6 +79,8 @@ type Route struct {
 	Upstream    int64  `index:"110" json:"upstream" xml:"upstream" yaml:"upstream" comment:"上行流量"`
 	Downstream  int64  `index:"115" json:"downstream" xml:"downstream" yaml:"downstream" comment:"下行流量"`
 	StaticIP    string `index:"120" json:"static_ip" xml:"static_ip" yaml:"static_ip" comment:"静态出口IP"`
+	PublicIP    string `index:"121" json:"public_ip" xml:"public_ip" yaml:"public_ip" comment:"静态出口IP"`
+	Requests    int    `index:"122" json:"requests" xml:"requests" yaml:"requests" comment:"请求次数"`
 	Proxy       string `index:"125" json:"proxy" xml:"proxy" yaml:"proxy" comment:"Proxy endpoint in transport"`
 	Concurrency int64  `index:"130" json:"concurrency" xml:"concurrency" yaml:"concurrency" comment:"MPC concurrency"`
 }

@@ -122,4 +122,5 @@ var (
 	UnknownScript      = &MeshCode{"E0000000621", "规则不存在"}
 	DataIDError        = &MeshCode{"E0000000622", "数据身份不存在或非法"}
 	StartPending       = &MeshCode{"E0000000623", "系统启动中"}
+	Ratelimit       = &MeshCode{"E0000000624", "限流熔断"}
 )

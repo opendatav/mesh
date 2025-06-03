@@ -11,6 +11,8 @@ set = $(if $(call contains,x$(2),x$(3)), $(eval $(1):=$(4)))
 
 .PHONY: setenv
 setenv:
+	$(eval HTTPS_PROXY:=$(or $(HTTPS_PROXY), http://192.168.1.3:2048))
+	$(eval NO_PROXY:=$(or $(NO_PROXY), 192.168.1.3))
 	$(eval TmpDir := $(shell mktemp -d))
 	$(eval ProtoPath := $(TmpDir)/src:$(ProtoPath):$(TmpDir)/src/types/protos:$(TmpDir)/src/types/pb:.)
 	$(eval GOOS:=$(shell go env GOOS))
@@ -25,11 +27,12 @@ setenv:
 	$(call set,Stage,$(Branch),beta,dev)
 	$(call set,Stage,$(Branch),release,release)
 	$(call set,Stage,$(Branch),master,dev)
-	$(eval ImageID:=bfia/mesh:$(Version)-$(CommitID))
+	$(eval ImageID:=oci.firmer.tech/bfia/mesh:$(Version)-$(CommitID))
 	$(eval Flags:="-X github.com/opendatav/mesh/client/golang/prsim.Version=$(MinaVersion) -X github.com/opendatav/mesh/client/golang/prsim.CommitID=$(CommitID)")
 
 .PHONY: image
 image:setenv
+	HTTPS_PROXY=$(HTTPS_PROXY) NO_PROXY=$(NO_PROXY) \
 	buildctl --addr tcp://192.168.1.3:1234 build \
 	--frontend dockerfile.v0 \
 	--local context=. \
@@ -38,4 +41,7 @@ image:setenv
 	--allow security.insecure \
 	--opt filename=Dockerfile \
 	--opt platform=linux/amd64 \
-	--opt build-arg:flags=$(Flags)
+	--opt build-arg:flags=$(Flags) \
+	--opt build-arg:HTTP_PROXY=$(HTTPS_PROXY) \
+	--opt build-arg:HTTPS_PROXY=$(HTTPS_PROXY) \
+	--opt build-arg:ALL_PROXY=$(HTTPS_PROXY) \

@@ -165,7 +165,7 @@ func (that *Route) Home(ctx context.Context) *cobra.Command {
 				log.Info(mtx, err.Error())
 				return
 			}
-			table := pterm.TableData{{"NodeId", "InstId", "Name", "Address", "Status", "ExpireAt", "AuthCode", "Extra", "Group"}}
+			table := pterm.TableData{{"NodeId", "InstId", "Name", "Address", "Status", "ExpireAt", "AuthCode", "StaticIP", "Requests", "Upstream", "Downstream"}}
 			for _, route := range routes {
 				table = append(table, []string{
 					route.NodeId,
@@ -175,8 +175,10 @@ func (that *Route) Home(ctx context.Context) *cobra.Command {
 					strconv.FormatInt(int64(route.Status), 10),
 					time.UnixMilli(route.ExpireAt).Format(log.DateFormat),
 					route.AuthCode,
-					route.Extra,
-					route.Group,
+					route.StaticIP,
+					fmt.Sprintf("%d/s", route.Requests),
+					fmt.Sprintf("%dMbps", route.Upstream),
+					fmt.Sprintf("%dMbps", route.Downstream),
 				})
 			}
 			if err = pterm.DefaultTable.WithHasHeader().WithBoxed(true).WithData(table).Render(); nil != err {

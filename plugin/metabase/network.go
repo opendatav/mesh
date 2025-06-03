@@ -93,6 +93,9 @@ func (that *network) Refresh(ctx context.Context, routes []*types.Route) error {
 				CreateBy:    tool.Anyone(prev.CreateBy, route.CreateBy),
 				UpdateBy:    tool.Anyone(route.UpdateBy, prev.UpdateBy),
 				Group:       route.Group,
+				StaticIP:    tool.Anyone(route.StaticIP, prev.StaticIP),
+				PublicIP:    tool.Anyone(route.PublicIP, prev.PublicIP),
+				Requests:    tool.Anyone(route.Requests, prev.Requests),
 			})
 			if nil != err {
 				return cause.Error(err)
@@ -270,7 +273,9 @@ func (that *network) ToRoute(ctx context.Context, route *EdgeEnt) *types.Route {
 		Group:       route.Group,
 		Upstream:    attribute.Upstream,
 		Downstream:  attribute.Downstream,
-		StaticIP:    attribute.StaticIP,
+		StaticIP:    tool.Anyone(route.StaticIP, attribute.StaticIP),
+		PublicIP:    route.PublicIP,
+		Requests:    route.Requests,
 		Proxy:       attribute.Proxy,
 		Concurrency: attribute.Concurrency,
 	}

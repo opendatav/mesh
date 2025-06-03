@@ -115,7 +115,7 @@ func (that *URN) MatchNode(ctx context.Context, nodeId string) bool {
 	if xIsInstitutional {
 		instId, err := FromInstID(that.NodeId)
 		if nil != err {
-			log.Warn(ctx, "%s is not standard identity", that.String())
+			log.Debug(ctx, "%s is not standard identity", that.String())
 			return false
 		}
 		return instId.MatchNode(nodeId)
@@ -127,7 +127,7 @@ func (that *URN) MatchInst(ctx context.Context, instId string) bool {
 	xIsInstitutional := that.IsInstitutional(that.NodeId)
 	institutionId, err := FromInstID(instId)
 	if nil != err {
-		log.Warn(ctx, "%s is not standard identity", that.String())
+		log.Debug(ctx, "%s is not standard identity", that.String())
 		return false
 	}
 	if xIsInstitutional {
@@ -200,7 +200,7 @@ func FromURN(ctx context.Context, urn string) *URN {
 
 func FromURNFlag(ctx context.Context, value string) *URNFlag {
 	if "" == value {
-		log.Error(ctx, "Unresolved Flag %s", value)
+		log.Debug(ctx, "Unresolved Flag %s", value)
 		return new(URNFlag)
 	}
 	flag := new(URNFlag)

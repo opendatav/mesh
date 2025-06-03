@@ -19,11 +19,13 @@ import (
 	"github.com/opendatav/mesh/plugin/proxy/tbucket"
 	"github.com/traefik/traefik/v3/pkg/middlewares/accesslog"
 	"github.com/traefik/traefik/v3/pkg/server/dialer"
+	"github.com/traefik/traefik/v3/pkg/server/middleware"
 	tx "github.com/traefik/traefik/v3/pkg/server/router/tcp"
 	"github.com/traefik/traefik/v3/pkg/tcp"
 	"io"
 	"math"
 	"net"
+	"net/http"
 	"strings"
 	"time"
 )
@@ -35,6 +37,7 @@ func init() {
 	tx.Provide(new(tcpRateLimiter))
 	dialer.Provide(new(httpRateLimiters))
 	macro.Provide(prsim.IListener, limiters)
+	middleware.Provide(new(httpRateLimiters))
 }
 
 const safeBandwidth = 1024 * 1024 * 1 / 8
@@ -79,7 +82,45 @@ func (that *httpRateLimiter) DialContext(ctx context.Context, network, address s
 	}, nil
 }
 
+type httpRateLimiterX struct {
+	next http.Handler
+	name string
+}
+
+func (that *httpRateLimiterX) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	if !proxy.RateLimitEnable {
+		that.next.ServeHTTP(w, r)
+		return
+	}
+	sn := prsim.MeshFromNodeId.GetHeader(r.Header)
+	stream := limiters.MatchStreamLimiter(strings.ToUpper(sn))
+	if nil == stream {
+		that.next.ServeHTTP(w, r)
+		return
+	}
+	if _, ok := stream.requestsLimiter.TakeMaxDuration(1, time.Second*5); ok {
+		that.next.ServeHTTP(w, r)
+		return
+	}
+	w.WriteHeader(http.StatusTooManyRequests)
+	if _, err := w.Write([]byte(cause.Ratelimit.Code)); nil != err {
+		log.Warn(mpc.HTTPTracerContext(r), "%s", err)
+	}
+}
+
 type httpRateLimiters struct {
+}
+
+func (that *httpRateLimiters) Name() string {
+	return "httpRateLimiters"
+}
+
+func (that *httpRateLimiters) Scope() int {
+	return 0
+}
+
+func (that *httpRateLimiters) New(ctx context.Context, next http.Handler, name string) (http.Handler, error) {
+	return &httpRateLimiterX{next: next, name: name}, nil
 }
 
 func (that *httpRateLimiters) Priority() int {
@@ -119,7 +160,16 @@ func (that *tcpRateLimiter) Accept(hello tx.Hello, conn tcp.WriteCloser) tcp.Wri
 	if !proxy.RateLimitEnable {
 		return conn
 	}
-	if nil == hello || !types.MatchURNDomain(hello.ServerName()) {
+	if stream := limiters.MatchStreamLimiter(conn.RemoteAddr().String()); nil != stream {
+		log.Info0("TCP connect in %s(%dMbps/s)-(%dMbps/s)[%s-%s]", conn.RemoteAddr().String(), stream.upstream, stream.downstream, conn.LocalAddr().String(), conn.RemoteAddr().String())
+		return &rateLimitConnection{
+			conn:       conn,
+			lr:         stream.Reader(conn),
+			lw:         stream.Writer(conn),
+			closeWrite: conn.CloseWrite,
+		}
+	}
+	if !types.MatchURNDomain(hello.ServerName()) {
 		return conn
 	}
 	names := strings.Split(hello.ServerName(), ".")
@@ -167,14 +217,17 @@ func (that *rateLimiters) Listen(ctx context.Context, event *types.Event) error 
 		log.Info(ctx, "Ratelimit %s upstream:%dMbps#%s downstream:%dMbps#%s. ", route.NodeId, route.Upstream, route.URC().String(), route.Downstream, route.StaticIP)
 		if nil == stream {
 			xstream := &limitStream{
-				nodeId:       strings.ToUpper(route.NodeId),
-				upstream:     route.Upstream,
-				downstream:   route.Downstream,
-				readLimiter:  tbucket.NewFreshRateLimiter(float64(bandwidthDown), bandwidthDown, safeBandwidth, safeBandwidth),
-				writeLimiter: tbucket.NewFreshRateLimiter(float64(bandwidthUp), bandwidthUp, safeBandwidth, safeBandwidth),
+				nodeId:          strings.ToUpper(route.NodeId),
+				upstream:        route.Upstream,
+				downstream:      route.Downstream,
+				readLimiter:     tbucket.NewFreshRateLimiter(float64(bandwidthDown), bandwidthDown, safeBandwidth, safeBandwidth),
+				writeLimiter:    tbucket.NewFreshRateLimiter(float64(bandwidthUp), bandwidthUp, safeBandwidth, safeBandwidth),
+				requestsLimiter: tbucket.NewFreshRateLimiter(float64(route.Requests), int64(route.Requests), 99999, 99999),
 			}
 			that.streams.Put(strings.ToUpper(route.NodeId), xstream)
 			that.streams.Put(strings.ToUpper(route.InstId), xstream)
+			that.streams.Put(route.StaticIP, xstream)
+			that.streams.Put(route.PublicIP, xstream)
 			continue
 		}
 		stream.Refresh(bandwidthUp, bandwidthDown, route)
@@ -191,11 +244,12 @@ func (that *rateLimiters) MatchStreamLimiter(ip string) *limitStream {
 }
 
 type limitStream struct {
-	nodeId       string
-	upstream     int64
-	downstream   int64
-	readLimiter  tbucket.FreshRateLimiter
-	writeLimiter tbucket.FreshRateLimiter
+	nodeId          string
+	upstream        int64
+	downstream      int64
+	readLimiter     tbucket.FreshRateLimiter
+	writeLimiter    tbucket.FreshRateLimiter
+	requestsLimiter tbucket.FreshRateLimiter
 }
 
 func (that *limitStream) Diff(route *types.Route) bool {
@@ -208,6 +262,7 @@ func (that *limitStream) Refresh(bandwidthUp int64, bandwidthDown int64, route *
 	that.downstream = route.Downstream
 	that.readLimiter.Refresh(float64(bandwidthDown), bandwidthDown, safeBandwidth, safeBandwidth)
 	that.writeLimiter.Refresh(float64(bandwidthUp), bandwidthUp, safeBandwidth, safeBandwidth)
+	that.requestsLimiter.Refresh(float64(route.Requests), int64(route.Requests), 99999, 99999)
 }
 
 func (that *limitStream) Reader(reader io.Reader) io.Reader {
