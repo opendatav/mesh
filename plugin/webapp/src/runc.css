@@ -1,0 +1,40 @@
+@keyframes spin-img {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spin {
+    animation: spin-img 20s infinite linear;
+}
+
+@keyframes bounce-img {
+    0% {
+        transform: translateY(10px);
+    }
+    100% {
+        transform: translateY(-10px);
+    }
+}
+
+.bounce {
+    animation: bounce-img 1s infinite alternate;
+    animation-timing-function: ease-in-out;
+}
+
+.sider {
+    width: 250px;
+}
+
+@media only screen and (max-width: 600px) {
+    .sider {
+        width: 0;
+    }
+}
+
+.sticky-view {
+
+}

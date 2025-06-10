@@ -19,24 +19,24 @@ import (
 )
 
 func init() {
-	mfs := &panel{
-		FS: &httpx.StaticFileSystem{
-			FS:      home,
-			Home:    "static",
-			Name:    "mesh.plugin.panel.home",
-			Pattern: "/mesh",
-		},
-	}
-	plugin.Provide(mfs)
-	macro.Provide((*http.FileSystem)(nil), mfs)
-	macro.Provide((*http.FileSystem)(nil), &favicon{
-		FS: &httpx.StaticFileSystem{
-			FS:      home,
-			Home:    "static",
-			Name:    "mesh.plugin.panel.favicon",
-			Pattern: "/favicon.ico",
-		},
-	})
+	//mfs := &panel{
+	//	FS: &httpx.StaticFileSystem{
+	//		FS:      home,
+	//		Home:    "static",
+	//		Name:    "mesh.plugin.panel.home",
+	//		Pattern: "/mesh",
+	//	},
+	//}
+	//plugin.Provide(mfs)
+	//macro.Provide((*http.FileSystem)(nil), mfs)
+	//macro.Provide((*http.FileSystem)(nil), &favicon{
+	//	FS: &httpx.StaticFileSystem{
+	//		FS:      home,
+	//		Home:    "static",
+	//		Name:    "mesh.plugin.panel.favicon",
+	//		Pattern: "/favicon.ico",
+	//	},
+	//})
 }
 
 //go:embed static

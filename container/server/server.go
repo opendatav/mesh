@@ -39,7 +39,6 @@ func (that *server) Start(ctx context.Context, runtime plugin.Runtime) {
 	runtime.Load(plugin.Metabase)
 	runtime.Load(plugin.NSQ)
 	runtime.Load(plugin.PRSIM)
-	runtime.Load(plugin.Panel)
 	runtime.Load(plugin.Redis)
 	runtime.Load(plugin.Cache)
 }

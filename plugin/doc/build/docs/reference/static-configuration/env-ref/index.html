@@ -1,0 +1,918 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-reference/static-configuration/env-ref" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.8.1">
+<title data-rh="true">env-ref | 文档中心</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://github.com/doc/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://github.com/doc/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://github.com/doc/docs/reference/static-configuration/env-ref"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="env-ref | 文档中心"><meta data-rh="true" name="description" content="&lt;!--"><meta data-rh="true" property="og:description" content="&lt;!--"><link data-rh="true" rel="icon" href="/doc/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://github.com/doc/docs/reference/static-configuration/env-ref"><link data-rh="true" rel="alternate" href="https://github.com/doc/docs/reference/static-configuration/env-ref" hreflang="en"><link data-rh="true" rel="alternate" href="https://github.com/doc/docs/reference/static-configuration/env-ref" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"动态配置管理","item":"https://github.com/doc/docs/category/动态配置管理"},{"@type":"ListItem","position":2,"name":"env-ref","item":"https://github.com/doc/docs/reference/static-configuration/env-ref"}]}</script><link rel="alternate" type="application/rss+xml" href="/doc/blog/rss.xml" title="文档中心 RSS Feed">
+<link rel="alternate" type="application/atom+xml" href="/doc/blog/atom.xml" title="文档中心 Atom Feed"><link rel="stylesheet" href="/doc/assets/css/styles.2eab34b2.css">
+<script src="/doc/assets/js/runtime~main.2bae97f1.js" defer="defer"></script>
+<script src="/doc/assets/js/main.1caca4db.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t="light";var e=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",e||t),document.documentElement.setAttribute("data-theme-choice",e||t)}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/doc/img/logo.png"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/doc/"><div class="navbar__logo"><img src="/doc/img/logo.png" alt="金融服务网关Icon" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/doc/img/logo.png" alt="金融服务网关Icon" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">金融服务网关</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/doc/docs/intro">使用文档</a><a class="navbar__item navbar__link" href="/doc/blog">技术博客</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/opendatav/mesh" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/doc/docs/intro">快速指引</a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist" href="/doc/docs/category/开始使用">开始使用</a><button aria-label="Expand sidebar category &#x27;开始使用&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--active" href="/doc/docs/category/动态配置管理">动态配置管理</a><button aria-label="Collapse sidebar category &#x27;动态配置管理&#x27;" aria-expanded="true" type="button" class="clean-btn menu__caret"></button></div><ul class="menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/doc/docs/reference/dynamic-configuration/consul-catalog">dynamic-configuration</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/doc/docs/reference/install-configuration/api-dashboard">install-configuration</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/doc/docs/reference/routing-configuration/dynamic-configuration-methods">routing-configuration</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" tabindex="0" href="/doc/docs/reference/static-configuration/cli-ref">static-configuration</a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/doc/docs/reference/static-configuration/cli-ref">cli-ref</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/doc/docs/reference/static-configuration/cli">Mesh CLI Flags Documentation</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/doc/docs/reference/static-configuration/env-ref">env-ref</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/doc/docs/reference/static-configuration/env">Mesh Environment Variables Documentation</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/doc/docs/reference/static-configuration/file">Mesh File Static Configuration</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/doc/docs/reference/static-configuration/overview">Mesh Static Configuration Overview</a></li></ul></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist" href="/doc/docs/category/路由和负载均衡">路由和负载均衡</a><button aria-label="Expand sidebar category &#x27;路由和负载均衡&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist" href="/doc/docs/category/代码贡献">代码贡献</a><button aria-label="Expand sidebar category &#x27;代码贡献&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist" href="/doc/docs/category/版本兼容">版本兼容</a><button aria-label="Expand sidebar category &#x27;版本兼容&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist" href="/doc/docs/category/https协议">HTTPS协议</a><button aria-label="Expand sidebar category &#x27;HTTPS协议&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/doc/docs/includes/kubernetes-requirements">includes</a></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/doc/docs/">Mesh Proxy Documentation</a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/doc/docs/middlewares/http/addprefix">middlewares</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/doc/docs/observability/access-logs">observability</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/doc/docs/operations/api">operations</a></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/doc/docs/plugins/">Mesh Plugins Documentation</a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/doc/docs/providers/consul-catalog">providers</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/doc/docs/security/content-length">security</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/doc/docs/user-guides/cert-manager">user-guides</a></div></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/doc/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/doc/docs/category/动态配置管理"><span>动态配置管理</span></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">static-configuration</span></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">env-ref</span></li></ul></nav><div class="theme-doc-markdown markdown"><header><h1>env-ref</h1></header><p><code>Mesh_ACCESSLOG</code>:<br>
+<!-- -->Access log settings. (Default: <code>false</code>)</p>
+<p><code>Mesh_ACCESSLOG_ADDINTERNALS</code>:<br>
+<!-- -->Enables access log for internal services (ping, dashboard, etc...). (Default: <code>false</code>)</p>
+<p><code>Mesh_ACCESSLOG_BUFFERINGSIZE</code>:<br>
+<!-- -->Number of access log lines to process in a buffered way. (Default: <code>0</code>)</p>
+<p><code>Mesh_ACCESSLOG_FIELDS_DEFAULTMODE</code>:<br>
+<!-- -->Default mode for fields: keep | drop (Default: <code>keep</code>)</p>
+<p><code>Mesh_ACCESSLOG_FIELDS_HEADERS_DEFAULTMODE</code>:<br>
+<!-- -->Default mode for fields: keep | drop | redact (Default: <code>drop</code>)</p>
+<p><code>Mesh_ACCESSLOG_FIELDS_HEADERS_NAMES_&lt;NAME&gt;</code>:<br>
+<!-- -->Override mode for headers</p>
+<p><code>Mesh_ACCESSLOG_FIELDS_NAMES_&lt;NAME&gt;</code>:<br>
+<!-- -->Override mode for fields</p>
+<p><code>Mesh_ACCESSLOG_FILEPATH</code>:<br>
+<!-- -->Access log file path. Stdout is used when omitted or empty.</p>
+<p><code>Mesh_ACCESSLOG_FILTERS_MINDURATION</code>:<br>
+<!-- -->Keep access logs when request took longer than the specified duration. (Default: <code>0</code>)</p>
+<p><code>Mesh_ACCESSLOG_FILTERS_RETRYATTEMPTS</code>:<br>
+<!-- -->Keep access logs when at least one retry happened. (Default: <code>false</code>)</p>
+<p><code>Mesh_ACCESSLOG_FILTERS_STATUSCODES</code>:<br>
+<!-- -->Keep access logs with status codes in the specified range.</p>
+<p><code>Mesh_ACCESSLOG_FORMAT</code>:<br>
+<!-- -->Access log format: json | common (Default: <code>common</code>)</p>
+<p><code>Mesh_ACCESSLOG_OTLP</code>:<br>
+<!-- -->Settings for OpenTelemetry. (Default: <code>false</code>)</p>
+<p><code>Mesh_ACCESSLOG_OTLP_GRPC</code>:<br>
+<!-- -->gRPC configuration for the OpenTelemetry collector. (Default: <code>false</code>)</p>
+<p><code>Mesh_ACCESSLOG_OTLP_GRPC_ENDPOINT</code>:<br>
+<!-- -->Sets the gRPC endpoint (host<!-- -->:port<!-- -->) of the collector. (Default: <code>localhost:4317</code>)</p>
+<p><code>Mesh_ACCESSLOG_OTLP_GRPC_HEADERS_&lt;NAME&gt;</code>:<br>
+<!-- -->Headers sent with payload.</p>
+<p><code>Mesh_ACCESSLOG_OTLP_GRPC_INSECURE</code>:<br>
+<!-- -->Disables client transport security for the exporter. (Default: <code>false</code>)</p>
+<p><code>Mesh_ACCESSLOG_OTLP_GRPC_TLS_CA</code>:<br>
+<!-- -->TLS CA</p>
+<p><code>Mesh_ACCESSLOG_OTLP_GRPC_TLS_CERT</code>:<br>
+<!-- -->TLS cert</p>
+<p><code>Mesh_ACCESSLOG_OTLP_GRPC_TLS_INSECURESKIPVERIFY</code>:<br>
+<!-- -->TLS insecure skip verify (Default: <code>false</code>)</p>
+<p><code>Mesh_ACCESSLOG_OTLP_GRPC_TLS_KEY</code>:<br>
+<!-- -->TLS key</p>
+<p><code>Mesh_ACCESSLOG_OTLP_HTTP</code>:<br>
+<!-- -->HTTP configuration for the OpenTelemetry collector. (Default: <code>false</code>)</p>
+<p><code>Mesh_ACCESSLOG_OTLP_HTTP_ENDPOINT</code>:<br>
+<!-- -->Sets the HTTP endpoint (scheme://host<!-- -->:port<!-- -->/path) of the collector. (Default: <code>https://localhost:4318</code>)</p>
+<p><code>Mesh_ACCESSLOG_OTLP_HTTP_HEADERS_&lt;NAME&gt;</code>:<br>
+<!-- -->Headers sent with payload.</p>
+<p><code>Mesh_ACCESSLOG_OTLP_HTTP_TLS_CA</code>:<br>
+<!-- -->TLS CA</p>
+<p><code>Mesh_ACCESSLOG_OTLP_HTTP_TLS_CERT</code>:<br>
+<!-- -->TLS cert</p>
+<p><code>Mesh_ACCESSLOG_OTLP_HTTP_TLS_INSECURESKIPVERIFY</code>:<br>
+<!-- -->TLS insecure skip verify (Default: <code>false</code>)</p>
+<p><code>Mesh_ACCESSLOG_OTLP_HTTP_TLS_KEY</code>:<br>
+<!-- -->TLS key</p>
+<p><code>Mesh_ACCESSLOG_OTLP_RESOURCEATTRIBUTES_&lt;NAME&gt;</code>:<br>
+<!-- -->Defines additional resource attributes (key<!-- -->:value<!-- -->).</p>
+<p><code>Mesh_ACCESSLOG_OTLP_SERVICENAME</code>:<br>
+<!-- -->Set the name for this service. (Default: <code>Mesh</code>)</p>
+<p><code>Mesh_API</code>:<br>
+<!-- -->Enable api/dashboard. (Default: <code>false</code>)</p>
+<p><code>Mesh_API_BASEPATH</code>:<br>
+<!-- -->Defines the base path where the API and Dashboard will be exposed. (Default: <code>/</code>)</p>
+<p><code>Mesh_API_DASHBOARD</code>:<br>
+<!-- -->Activate dashboard. (Default: <code>true</code>)</p>
+<p><code>Mesh_API_DEBUG</code>:<br>
+<!-- -->Enable additional endpoints for debugging and profiling. (Default: <code>false</code>)</p>
+<p><code>Mesh_API_DISABLEDASHBOARDAD</code>:<br>
+<!-- -->Disable ad in the dashboard. (Default: <code>false</code>)</p>
+<p><code>Mesh_API_INSECURE</code>:<br>
+<!-- -->Activate API directly on the entryPoint named Mesh. (Default: <code>false</code>)</p>
+<p><code>Mesh_CERTIFICATESRESOLVERS_&lt;NAME&gt;</code>:<br>
+<!-- -->Certificates resolvers configuration. (Default: <code>false</code>)</p>
+<p><code>Mesh_CERTIFICATESRESOLVERS_&lt;NAME&gt;_ACME_CACERTIFICATES</code>:<br>
+<!-- -->Specify the paths to PEM encoded CA Certificates that can be used to authenticate an ACME server with an HTTPS certificate not issued by a CA in the system-wide trusted root list.</p>
+<p><code>Mesh_CERTIFICATESRESOLVERS_&lt;NAME&gt;_ACME_CASERVER</code>:<br>
+<!-- -->CA server to use. (Default: <code>https://acme-v02.api.letsencrypt.org/directory</code>)</p>
+<p><code>Mesh_CERTIFICATESRESOLVERS_&lt;NAME&gt;_ACME_CASERVERNAME</code>:<br>
+<!-- -->Specify the CA server name that can be used to authenticate an ACME server with an HTTPS certificate not issued by a CA in the system-wide trusted root list.</p>
+<p><code>Mesh_CERTIFICATESRESOLVERS_&lt;NAME&gt;_ACME_CASYSTEMCERTPOOL</code>:<br>
+<!-- -->Define if the certificates pool must use a copy of the system cert pool. (Default: <code>false</code>)</p>
+<p><code>Mesh_CERTIFICATESRESOLVERS_&lt;NAME&gt;_ACME_CERTIFICATESDURATION</code>:<br>
+<!-- -->Certificates&#x27; duration in hours. (Default: <code>2160</code>)</p>
+<p><code>Mesh_CERTIFICATESRESOLVERS_&lt;NAME&gt;_ACME_CLIENTRESPONSEHEADERTIMEOUT</code>:<br>
+<!-- -->Timeout for receiving the response headers when communicating with the ACME server. (Default: <code>30</code>)</p>
+<p><code>Mesh_CERTIFICATESRESOLVERS_&lt;NAME&gt;_ACME_CLIENTTIMEOUT</code>:<br>
+<!-- -->Timeout for a complete HTTP transaction with the ACME server. (Default: <code>120</code>)</p>
+<p><code>Mesh_CERTIFICATESRESOLVERS_&lt;NAME&gt;_ACME_DNSCHALLENGE</code>:<br>
+<!-- -->Activate DNS-01 Challenge. (Default: <code>false</code>)</p>
+<p><code>Mesh_CERTIFICATESRESOLVERS_&lt;NAME&gt;_ACME_DNSCHALLENGE_DELAYBEFORECHECK</code>:<br>
+<!-- -->(Deprecated) Assume DNS propagates after a delay in seconds rather than finding and querying nameservers. (Default: <code>0</code>)</p>
+<p><code>Mesh_CERTIFICATESRESOLVERS_&lt;NAME&gt;_ACME_DNSCHALLENGE_DISABLEPROPAGATIONCHECK</code>:<br>
+<!-- -->(Deprecated) Disable the DNS propagation checks before notifying ACME that the DNS challenge is ready. [not recommended] (Default: <code>false</code>)</p>
+<p><code>Mesh_CERTIFICATESRESOLVERS_&lt;NAME&gt;_ACME_DNSCHALLENGE_PROPAGATION</code>:<br>
+<!-- -->DNS propagation checks configuration (Default: <code>false</code>)</p>
+<p><code>Mesh_CERTIFICATESRESOLVERS_&lt;NAME&gt;_ACME_DNSCHALLENGE_PROPAGATION_DELAYBEFORECHECKS</code>:<br>
+<!-- -->Defines the delay before checking the challenge TXT record propagation. (Default: <code>0</code>)</p>
+<p><code>Mesh_CERTIFICATESRESOLVERS_&lt;NAME&gt;_ACME_DNSCHALLENGE_PROPAGATION_DISABLEANSCHECKS</code>:<br>
+<!-- -->Disables the challenge TXT record propagation checks against authoritative nameservers. (Default: <code>false</code>)</p>
+<p><code>Mesh_CERTIFICATESRESOLVERS_&lt;NAME&gt;_ACME_DNSCHALLENGE_PROPAGATION_DISABLECHECKS</code>:<br>
+<!-- -->Disables the challenge TXT record propagation checks (not recommended). (Default: <code>false</code>)</p>
+<p><code>Mesh_CERTIFICATESRESOLVERS_&lt;NAME&gt;_ACME_DNSCHALLENGE_PROPAGATION_REQUIREALLRNS</code>:<br>
+<!-- -->Requires the challenge TXT record to be propagated to all recursive nameservers. (Default: <code>false</code>)</p>
+<p><code>Mesh_CERTIFICATESRESOLVERS_&lt;NAME&gt;_ACME_DNSCHALLENGE_PROVIDER</code>:<br>
+<!-- -->Use a DNS-01 based challenge provider rather than HTTPS.</p>
+<p><code>Mesh_CERTIFICATESRESOLVERS_&lt;NAME&gt;_ACME_DNSCHALLENGE_RESOLVERS</code>:<br>
+<!-- -->Use following DNS servers to resolve the FQDN authority.</p>
+<p><code>Mesh_CERTIFICATESRESOLVERS_&lt;NAME&gt;_ACME_EAB_HMACENCODED</code>:<br>
+<!-- -->Base64 encoded HMAC key from External CA.</p>
+<p><code>Mesh_CERTIFICATESRESOLVERS_&lt;NAME&gt;_ACME_EAB_KID</code>:<br>
+<!-- -->Key identifier from External CA.</p>
+<p><code>Mesh_CERTIFICATESRESOLVERS_&lt;NAME&gt;_ACME_EMAIL</code>:<br>
+<!-- -->Email address used for registration.</p>
+<p><code>Mesh_CERTIFICATESRESOLVERS_&lt;NAME&gt;_ACME_EMAILADDRESSES</code>:<br>
+<!-- -->CSR email addresses to use.</p>
+<p><code>Mesh_CERTIFICATESRESOLVERS_&lt;NAME&gt;_ACME_HTTPCHALLENGE</code>:<br>
+<!-- -->Activate HTTP-01 Challenge. (Default: <code>false</code>)</p>
+<p><code>Mesh_CERTIFICATESRESOLVERS_&lt;NAME&gt;_ACME_HTTPCHALLENGE_DELAY</code>:<br>
+<!-- -->Delay between the creation of the challenge and the validation. (Default: <code>0</code>)</p>
+<p><code>Mesh_CERTIFICATESRESOLVERS_&lt;NAME&gt;_ACME_HTTPCHALLENGE_ENTRYPOINT</code>:<br>
+<!-- -->HTTP challenge EntryPoint</p>
+<p><code>Mesh_CERTIFICATESRESOLVERS_&lt;NAME&gt;_ACME_KEYTYPE</code>:<br>
+<!-- -->KeyType used for generating certificate private key. Allow value &#x27;EC256&#x27;, &#x27;EC384&#x27;, &#x27;RSA2048&#x27;, &#x27;RSA4096&#x27;, &#x27;RSA8192&#x27;. (Default: <code>RSA4096</code>)</p>
+<p><code>Mesh_CERTIFICATESRESOLVERS_&lt;NAME&gt;_ACME_PREFERREDCHAIN</code>:<br>
+<!-- -->Preferred chain to use.</p>
+<p><code>Mesh_CERTIFICATESRESOLVERS_&lt;NAME&gt;_ACME_PROFILE</code>:<br>
+<!-- -->Certificate profile to use.</p>
+<p><code>Mesh_CERTIFICATESRESOLVERS_&lt;NAME&gt;_ACME_STORAGE</code>:<br>
+<!-- -->Storage to use. (Default: <code>acme.json</code>)</p>
+<p><code>Mesh_CERTIFICATESRESOLVERS_&lt;NAME&gt;_ACME_TLSCHALLENGE</code>:<br>
+<!-- -->Activate TLS-ALPN-01 Challenge. (Default: <code>true</code>)</p>
+<p><code>Mesh_CERTIFICATESRESOLVERS_&lt;NAME&gt;_TAILSCALE</code>:<br>
+<!-- -->Enables Tailscale certificate resolution. (Default: <code>true</code>)</p>
+<p><code>Mesh_CORE_DEFAULTRULESYNTAX</code>:<br>
+<!-- -->Defines the rule parser default syntax (v2 or v3) (Default: <code>v3</code>)</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;</code>:<br>
+<!-- -->Entry points definition. (Default: <code>false</code>)</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_ADDRESS</code>:<br>
+<!-- -->Entry point address.</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_ALLOWACMEBYPASS</code>:<br>
+<!-- -->Enables handling of ACME TLS and HTTP challenges with custom routers. (Default: <code>false</code>)</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_ASDEFAULT</code>:<br>
+<!-- -->Adds this EntryPoint to the list of default EntryPoints to be used on routers that don&#x27;t have any Entrypoint defined. (Default: <code>false</code>)</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_FORWARDEDHEADERS_CONNECTION</code>:<br>
+<!-- -->List of Connection headers that are allowed to pass through the middleware chain before being removed.</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_FORWARDEDHEADERS_INSECURE</code>:<br>
+<!-- -->Trust all forwarded headers. (Default: <code>false</code>)</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_FORWARDEDHEADERS_TRUSTEDIPS</code>:<br>
+<!-- -->Trust only forwarded headers from selected IPs.</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_HTTP</code>:<br>
+<!-- -->HTTP configuration.</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_HTTP2_MAXCONCURRENTSTREAMS</code>:<br>
+<!-- -->Specifies the number of concurrent streams per connection that each client is allowed to initiate. (Default: <code>250</code>)</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_HTTP3</code>:<br>
+<!-- -->HTTP/3 configuration. (Default: <code>false</code>)</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_HTTP3_ADVERTISEDPORT</code>:<br>
+<!-- -->UDP port to advertise, on which HTTP/3 is available. (Default: <code>0</code>)</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_HTTP_ENCODEQUERYSEMICOLONS</code>:<br>
+<!-- -->Defines whether request query semicolons should be URLEncoded. (Default: <code>false</code>)</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_HTTP_MAXHEADERBYTES</code>:<br>
+<!-- -->Maximum size of request headers in bytes. (Default: <code>1048576</code>)</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_HTTP_MIDDLEWARES</code>:<br>
+<!-- -->Default middlewares for the routers linked to the entry point.</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_HTTP_REDIRECTIONS_ENTRYPOINT_PERMANENT</code>:<br>
+<!-- -->Applies a permanent redirection. (Default: <code>true</code>)</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_HTTP_REDIRECTIONS_ENTRYPOINT_PRIORITY</code>:<br>
+<!-- -->Priority of the generated router. (Default: <code>9223372036854775806</code>)</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_HTTP_REDIRECTIONS_ENTRYPOINT_SCHEME</code>:<br>
+<!-- -->Scheme used for the redirection. (Default: <code>https</code>)</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_HTTP_REDIRECTIONS_ENTRYPOINT_TO</code>:<br>
+<!-- -->Targeted entry point of the redirection.</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_HTTP_SANITIZEPATH</code>:<br>
+<!-- -->Defines whether to enable request path sanitization (removal of /./, /../ and multiple slash sequences). (Default: <code>true</code>)</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_HTTP_TLS</code>:<br>
+<!-- -->Default TLS configuration for the routers linked to the entry point. (Default: <code>false</code>)</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_HTTP_TLS_CERTRESOLVER</code>:<br>
+<!-- -->Default certificate resolver for the routers linked to the entry point.</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_HTTP_TLS_DOMAINS</code>:<br>
+<!-- -->Default TLS domains for the routers linked to the entry point.</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_HTTP_TLS_DOMAINS_n_MAIN</code>:<br>
+<!-- -->Default subject name.</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_HTTP_TLS_DOMAINS_n_SANS</code>:<br>
+<!-- -->Subject alternative names.</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_HTTP_TLS_OPTIONS</code>:<br>
+<!-- -->Default TLS options for the routers linked to the entry point.</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_OBSERVABILITY_ACCESSLOGS</code>:<br>
+<!-- -->(Default: <code>true</code>)</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_OBSERVABILITY_METRICS</code>:<br>
+<!-- -->(Default: <code>true</code>)</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_OBSERVABILITY_TRACING</code>:<br>
+<!-- -->(Default: <code>true</code>)</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_PROXYPROTOCOL</code>:<br>
+<!-- -->Proxy-Protocol configuration. (Default: <code>false</code>)</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_PROXYPROTOCOL_INSECURE</code>:<br>
+<!-- -->Trust all. (Default: <code>false</code>)</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_PROXYPROTOCOL_TRUSTEDIPS</code>:<br>
+<!-- -->Trust only selected IPs.</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_REUSEPORT</code>:<br>
+<!-- -->Enables EntryPoints from the same or different processes listening on the same TCP/UDP port. (Default: <code>false</code>)</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_TRANSPORT_KEEPALIVEMAXREQUESTS</code>:<br>
+<!-- -->Maximum number of requests before closing a keep-alive connection. (Default: <code>0</code>)</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_TRANSPORT_KEEPALIVEMAXTIME</code>:<br>
+<!-- -->Maximum duration before closing a keep-alive connection. (Default: <code>0</code>)</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_TRANSPORT_LIFECYCLE_GRACETIMEOUT</code>:<br>
+<!-- -->Duration to give active requests a chance to finish before Mesh stops. (Default: <code>10</code>)</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_TRANSPORT_LIFECYCLE_REQUESTACCEPTGRACETIMEOUT</code>:<br>
+<!-- -->Duration to keep accepting requests before Mesh initiates the graceful shutdown procedure. (Default: <code>0</code>)</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_TRANSPORT_RESPONDINGTIMEOUTS_IDLETIMEOUT</code>:<br>
+<!-- -->IdleTimeout is the maximum amount duration an idle (keep-alive) connection will remain idle before closing itself. If zero, no timeout is set. (Default: <code>180</code>)</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_TRANSPORT_RESPONDINGTIMEOUTS_READTIMEOUT</code>:<br>
+<!-- -->ReadTimeout is the maximum duration for reading the entire request, including the body. If zero, no timeout is set. (Default: <code>60</code>)</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_TRANSPORT_RESPONDINGTIMEOUTS_WRITETIMEOUT</code>:<br>
+<!-- -->WriteTimeout is the maximum duration before timing out writes of the response. If zero, no timeout is set. (Default: <code>0</code>)</p>
+<p><code>Mesh_ENTRYPOINTS_&lt;NAME&gt;_UDP_TIMEOUT</code>:<br>
+<!-- -->Timeout defines how long to wait on an idle session before releasing the related resources. (Default: <code>3</code>)</p>
+<p><code>Mesh_EXPERIMENTAL_ABORTONPLUGINFAILURE</code>:<br>
+<!-- -->Defines whether all plugins must be loaded successfully for Mesh to start. (Default: <code>false</code>)</p>
+<p><code>Mesh_EXPERIMENTAL_FASTPROXY</code>:<br>
+<!-- -->Enables the FastProxy implementation. (Default: <code>false</code>)</p>
+<p><code>Mesh_EXPERIMENTAL_FASTPROXY_DEBUG</code>:<br>
+<!-- -->Enable debug mode for the FastProxy implementation. (Default: <code>false</code>)</p>
+<p><code>Mesh_EXPERIMENTAL_KUBERNETESGATEWAY</code>:<br>
+<!-- -->(Deprecated) Allow the Kubernetes gateway api provider usage. (Default: <code>false</code>)</p>
+<p><code>Mesh_EXPERIMENTAL_LOCALPLUGINS_&lt;NAME&gt;</code>:<br>
+<!-- -->Local plugins configuration. (Default: <code>false</code>)</p>
+<p><code>Mesh_EXPERIMENTAL_LOCALPLUGINS_&lt;NAME&gt;_MODULENAME</code>:<br>
+<!-- -->Plugin&#x27;s module name.</p>
+<p><code>Mesh_EXPERIMENTAL_LOCALPLUGINS_&lt;NAME&gt;_SETTINGS</code>:<br>
+<!-- -->Plugin&#x27;s settings (works only for wasm plugins).</p>
+<p><code>Mesh_EXPERIMENTAL_LOCALPLUGINS_&lt;NAME&gt;_SETTINGS_ENVS</code>:<br>
+<!-- -->Environment variables to forward to the wasm guest.</p>
+<p><code>Mesh_EXPERIMENTAL_LOCALPLUGINS_&lt;NAME&gt;_SETTINGS_MOUNTS</code>:<br>
+<!-- -->Directory to mount to the wasm guest.</p>
+<p><code>Mesh_EXPERIMENTAL_LOCALPLUGINS_&lt;NAME&gt;_SETTINGS_USEUNSAFE</code>:<br>
+<!-- -->Allow the plugin to use unsafe package. (Default: <code>false</code>)</p>
+<p><code>Mesh_EXPERIMENTAL_OTLPLOGS</code>:<br>
+<!-- -->Enables the OpenTelemetry logs integration. (Default: <code>false</code>)</p>
+<p><code>Mesh_EXPERIMENTAL_PLUGINS_&lt;NAME&gt;_MODULENAME</code>:<br>
+<!-- -->plugin&#x27;s module name.</p>
+<p><code>Mesh_EXPERIMENTAL_PLUGINS_&lt;NAME&gt;_SETTINGS</code>:<br>
+<!-- -->Plugin&#x27;s settings (works only for wasm plugins).</p>
+<p><code>Mesh_EXPERIMENTAL_PLUGINS_&lt;NAME&gt;_SETTINGS_ENVS</code>:<br>
+<!-- -->Environment variables to forward to the wasm guest.</p>
+<p><code>Mesh_EXPERIMENTAL_PLUGINS_&lt;NAME&gt;_SETTINGS_MOUNTS</code>:<br>
+<!-- -->Directory to mount to the wasm guest.</p>
+<p><code>Mesh_EXPERIMENTAL_PLUGINS_&lt;NAME&gt;_SETTINGS_USEUNSAFE</code>:<br>
+<!-- -->Allow the plugin to use unsafe package. (Default: <code>false</code>)</p>
+<p><code>Mesh_EXPERIMENTAL_PLUGINS_&lt;NAME&gt;_VERSION</code>:<br>
+<!-- -->plugin&#x27;s version.</p>
+<p><code>Mesh_GLOBAL_CHECKNEWVERSION</code>:<br>
+<!-- -->Periodically check if a new version has been released. (Default: <code>true</code>)</p>
+<p><code>Mesh_GLOBAL_SENDANONYMOUSUSAGE</code>:<br>
+<!-- -->Periodically send anonymous usage statistics. If the option is not specified, it will be disabled by default. (Default: <code>false</code>)</p>
+<p><code>Mesh_HOSTRESOLVER</code>:<br>
+<!-- -->Enable CNAME Flattening. (Default: <code>false</code>)</p>
+<p><code>Mesh_HOSTRESOLVER_CNAMEFLATTENING</code>:<br>
+<!-- -->A flag to enable/disable CNAME flattening (Default: <code>false</code>)</p>
+<p><code>Mesh_HOSTRESOLVER_RESOLVCONFIG</code>:<br>
+<!-- -->resolv.conf used for DNS resolving (Default: <code>/etc/resolv.conf</code>)</p>
+<p><code>Mesh_HOSTRESOLVER_RESOLVDEPTH</code>:<br>
+<!-- -->The maximal depth of DNS recursive resolving (Default: <code>5</code>)</p>
+<p><code>Mesh_LOG</code>:<br>
+<!-- -->Mesh log settings. (Default: <code>false</code>)</p>
+<p><code>Mesh_LOG_COMPRESS</code>:<br>
+<!-- -->Determines if the rotated log files should be compressed using gzip. (Default: <code>false</code>)</p>
+<p><code>Mesh_LOG_FILEPATH</code>:<br>
+<!-- -->Mesh log file path. Stdout is used when omitted or empty.</p>
+<p><code>Mesh_LOG_FORMAT</code>:<br>
+<!-- -->Mesh log format: json | common (Default: <code>common</code>)</p>
+<p><code>Mesh_LOG_LEVEL</code>:<br>
+<!-- -->Log level set to Mesh logs. (Default: <code>ERROR</code>)</p>
+<p><code>Mesh_LOG_MAXAGE</code>:<br>
+<!-- -->Maximum number of days to retain old log files based on the timestamp encoded in their filename. (Default: <code>0</code>)</p>
+<p><code>Mesh_LOG_MAXBACKUPS</code>:<br>
+<!-- -->Maximum number of old log files to retain. (Default: <code>0</code>)</p>
+<p><code>Mesh_LOG_MAXSIZE</code>:<br>
+<!-- -->Maximum size in megabytes of the log file before it gets rotated. (Default: <code>0</code>)</p>
+<p><code>Mesh_LOG_NOCOLOR</code>:<br>
+<!-- -->When using the &#x27;common&#x27; format, disables the colorized output. (Default: <code>false</code>)</p>
+<p><code>Mesh_LOG_OTLP</code>:<br>
+<!-- -->Settings for OpenTelemetry. (Default: <code>false</code>)</p>
+<p><code>Mesh_LOG_OTLP_GRPC</code>:<br>
+<!-- -->gRPC configuration for the OpenTelemetry collector. (Default: <code>false</code>)</p>
+<p><code>Mesh_LOG_OTLP_GRPC_ENDPOINT</code>:<br>
+<!-- -->Sets the gRPC endpoint (host<!-- -->:port<!-- -->) of the collector. (Default: <code>localhost:4317</code>)</p>
+<p><code>Mesh_LOG_OTLP_GRPC_HEADERS_&lt;NAME&gt;</code>:<br>
+<!-- -->Headers sent with payload.</p>
+<p><code>Mesh_LOG_OTLP_GRPC_INSECURE</code>:<br>
+<!-- -->Disables client transport security for the exporter. (Default: <code>false</code>)</p>
+<p><code>Mesh_LOG_OTLP_GRPC_TLS_CA</code>:<br>
+<!-- -->TLS CA</p>
+<p><code>Mesh_LOG_OTLP_GRPC_TLS_CERT</code>:<br>
+<!-- -->TLS cert</p>
+<p><code>Mesh_LOG_OTLP_GRPC_TLS_INSECURESKIPVERIFY</code>:<br>
+<!-- -->TLS insecure skip verify (Default: <code>false</code>)</p>
+<p><code>Mesh_LOG_OTLP_GRPC_TLS_KEY</code>:<br>
+<!-- -->TLS key</p>
+<p><code>Mesh_LOG_OTLP_HTTP</code>:<br>
+<!-- -->HTTP configuration for the OpenTelemetry collector. (Default: <code>false</code>)</p>
+<p><code>Mesh_LOG_OTLP_HTTP_ENDPOINT</code>:<br>
+<!-- -->Sets the HTTP endpoint (scheme://host<!-- -->:port<!-- -->/path) of the collector. (Default: <code>https://localhost:4318</code>)</p>
+<p><code>Mesh_LOG_OTLP_HTTP_HEADERS_&lt;NAME&gt;</code>:<br>
+<!-- -->Headers sent with payload.</p>
+<p><code>Mesh_LOG_OTLP_HTTP_TLS_CA</code>:<br>
+<!-- -->TLS CA</p>
+<p><code>Mesh_LOG_OTLP_HTTP_TLS_CERT</code>:<br>
+<!-- -->TLS cert</p>
+<p><code>Mesh_LOG_OTLP_HTTP_TLS_INSECURESKIPVERIFY</code>:<br>
+<!-- -->TLS insecure skip verify (Default: <code>false</code>)</p>
+<p><code>Mesh_LOG_OTLP_HTTP_TLS_KEY</code>:<br>
+<!-- -->TLS key</p>
+<p><code>Mesh_LOG_OTLP_RESOURCEATTRIBUTES_&lt;NAME&gt;</code>:<br>
+<!-- -->Defines additional resource attributes (key<!-- -->:value<!-- -->).</p>
+<p><code>Mesh_LOG_OTLP_SERVICENAME</code>:<br>
+<!-- -->Set the name for this service. (Default: <code>Mesh</code>)</p>
+<p><code>Mesh_METRICS_ADDINTERNALS</code>:<br>
+<!-- -->Enables metrics for internal services (ping, dashboard, etc...). (Default: <code>false</code>)</p>
+<p><code>Mesh_METRICS_DATADOG</code>:<br>
+<!-- -->Datadog metrics exporter type. (Default: <code>false</code>)</p>
+<p><code>Mesh_METRICS_DATADOG_ADDENTRYPOINTSLABELS</code>:<br>
+<!-- -->Enable metrics on entry points. (Default: <code>true</code>)</p>
+<p><code>Mesh_METRICS_DATADOG_ADDRESS</code>:<br>
+<!-- -->Datadog&#x27;s address. (Default: <code>localhost:8125</code>)</p>
+<p><code>Mesh_METRICS_DATADOG_ADDROUTERSLABELS</code>:<br>
+<!-- -->Enable metrics on routers. (Default: <code>false</code>)</p>
+<p><code>Mesh_METRICS_DATADOG_ADDSERVICESLABELS</code>:<br>
+<!-- -->Enable metrics on services. (Default: <code>true</code>)</p>
+<p><code>Mesh_METRICS_DATADOG_PREFIX</code>:<br>
+<!-- -->Prefix to use for metrics collection. (Default: <code>Mesh</code>)</p>
+<p><code>Mesh_METRICS_DATADOG_PUSHINTERVAL</code>:<br>
+<!-- -->Datadog push interval. (Default: <code>10</code>)</p>
+<p><code>Mesh_METRICS_INFLUXDB2</code>:<br>
+<!-- -->InfluxDB v2 metrics exporter type. (Default: <code>false</code>)</p>
+<p><code>Mesh_METRICS_INFLUXDB2_ADDENTRYPOINTSLABELS</code>:<br>
+<!-- -->Enable metrics on entry points. (Default: <code>true</code>)</p>
+<p><code>Mesh_METRICS_INFLUXDB2_ADDITIONALLABELS_&lt;NAME&gt;</code>:<br>
+<!-- -->Additional labels (influxdb tags) on all metrics</p>
+<p><code>Mesh_METRICS_INFLUXDB2_ADDRESS</code>:<br>
+<!-- -->InfluxDB v2 address. (Default: <code>http://localhost:8086</code>)</p>
+<p><code>Mesh_METRICS_INFLUXDB2_ADDROUTERSLABELS</code>:<br>
+<!-- -->Enable metrics on routers. (Default: <code>false</code>)</p>
+<p><code>Mesh_METRICS_INFLUXDB2_ADDSERVICESLABELS</code>:<br>
+<!-- -->Enable metrics on services. (Default: <code>true</code>)</p>
+<p><code>Mesh_METRICS_INFLUXDB2_BUCKET</code>:<br>
+<!-- -->InfluxDB v2 bucket ID.</p>
+<p><code>Mesh_METRICS_INFLUXDB2_ORG</code>:<br>
+<!-- -->InfluxDB v2 org ID.</p>
+<p><code>Mesh_METRICS_INFLUXDB2_PUSHINTERVAL</code>:<br>
+<!-- -->InfluxDB v2 push interval. (Default: <code>10</code>)</p>
+<p><code>Mesh_METRICS_INFLUXDB2_TOKEN</code>:<br>
+<!-- -->InfluxDB v2 access token.</p>
+<p><code>Mesh_METRICS_OTLP</code>:<br>
+<!-- -->OpenTelemetry metrics exporter type. (Default: <code>false</code>)</p>
+<p><code>Mesh_METRICS_OTLP_ADDENTRYPOINTSLABELS</code>:<br>
+<!-- -->Enable metrics on entry points. (Default: <code>true</code>)</p>
+<p><code>Mesh_METRICS_OTLP_ADDROUTERSLABELS</code>:<br>
+<!-- -->Enable metrics on routers. (Default: <code>false</code>)</p>
+<p><code>Mesh_METRICS_OTLP_ADDSERVICESLABELS</code>:<br>
+<!-- -->Enable metrics on services. (Default: <code>true</code>)</p>
+<p><code>Mesh_METRICS_OTLP_EXPLICITBOUNDARIES</code>:<br>
+<!-- -->Boundaries for latency metrics. (Default: <code>0.005000, 0.010000, 0.025000, 0.050000, 0.075000, 0.100000, 0.250000, 0.500000, 0.750000, 1.000000, 2.500000, 5.000000, 7.500000, 10.000000</code>)</p>
+<p><code>Mesh_METRICS_OTLP_GRPC</code>:<br>
+<!-- -->gRPC configuration for the OpenTelemetry collector. (Default: <code>false</code>)</p>
+<p><code>Mesh_METRICS_OTLP_GRPC_ENDPOINT</code>:<br>
+<!-- -->Sets the gRPC endpoint (host<!-- -->:port<!-- -->) of the collector. (Default: <code>localhost:4317</code>)</p>
+<p><code>Mesh_METRICS_OTLP_GRPC_HEADERS_&lt;NAME&gt;</code>:<br>
+<!-- -->Headers sent with payload.</p>
+<p><code>Mesh_METRICS_OTLP_GRPC_INSECURE</code>:<br>
+<!-- -->Disables client transport security for the exporter. (Default: <code>false</code>)</p>
+<p><code>Mesh_METRICS_OTLP_GRPC_TLS_CA</code>:<br>
+<!-- -->TLS CA</p>
+<p><code>Mesh_METRICS_OTLP_GRPC_TLS_CERT</code>:<br>
+<!-- -->TLS cert</p>
+<p><code>Mesh_METRICS_OTLP_GRPC_TLS_INSECURESKIPVERIFY</code>:<br>
+<!-- -->TLS insecure skip verify (Default: <code>false</code>)</p>
+<p><code>Mesh_METRICS_OTLP_GRPC_TLS_KEY</code>:<br>
+<!-- -->TLS key</p>
+<p><code>Mesh_METRICS_OTLP_HTTP</code>:<br>
+<!-- -->HTTP configuration for the OpenTelemetry collector. (Default: <code>false</code>)</p>
+<p><code>Mesh_METRICS_OTLP_HTTP_ENDPOINT</code>:<br>
+<!-- -->Sets the HTTP endpoint (scheme://host<!-- -->:port<!-- -->/path) of the collector. (Default: <code>https://localhost:4318</code>)</p>
+<p><code>Mesh_METRICS_OTLP_HTTP_HEADERS_&lt;NAME&gt;</code>:<br>
+<!-- -->Headers sent with payload.</p>
+<p><code>Mesh_METRICS_OTLP_HTTP_TLS_CA</code>:<br>
+<!-- -->TLS CA</p>
+<p><code>Mesh_METRICS_OTLP_HTTP_TLS_CERT</code>:<br>
+<!-- -->TLS cert</p>
+<p><code>Mesh_METRICS_OTLP_HTTP_TLS_INSECURESKIPVERIFY</code>:<br>
+<!-- -->TLS insecure skip verify (Default: <code>false</code>)</p>
+<p><code>Mesh_METRICS_OTLP_HTTP_TLS_KEY</code>:<br>
+<!-- -->TLS key</p>
+<p><code>Mesh_METRICS_OTLP_PUSHINTERVAL</code>:<br>
+<!-- -->Period between calls to collect a checkpoint. (Default: <code>10</code>)</p>
+<p><code>Mesh_METRICS_OTLP_SERVICENAME</code>:<br>
+<!-- -->OTEL service name to use. (Default: <code>Mesh</code>)</p>
+<p><code>Mesh_METRICS_PROMETHEUS</code>:<br>
+<!-- -->Prometheus metrics exporter type. (Default: <code>false</code>)</p>
+<p><code>Mesh_METRICS_PROMETHEUS_ADDENTRYPOINTSLABELS</code>:<br>
+<!-- -->Enable metrics on entry points. (Default: <code>true</code>)</p>
+<p><code>Mesh_METRICS_PROMETHEUS_ADDROUTERSLABELS</code>:<br>
+<!-- -->Enable metrics on routers. (Default: <code>false</code>)</p>
+<p><code>Mesh_METRICS_PROMETHEUS_ADDSERVICESLABELS</code>:<br>
+<!-- -->Enable metrics on services. (Default: <code>true</code>)</p>
+<p><code>Mesh_METRICS_PROMETHEUS_BUCKETS</code>:<br>
+<!-- -->Buckets for latency metrics. (Default: <code>0.100000, 0.300000, 1.200000, 5.000000</code>)</p>
+<p><code>Mesh_METRICS_PROMETHEUS_ENTRYPOINT</code>:<br>
+<!-- -->EntryPoint (Default: <code>Mesh</code>)</p>
+<p><code>Mesh_METRICS_PROMETHEUS_HEADERLABELS_&lt;NAME&gt;</code>:<br>
+<!-- -->Defines the extra labels for the requests_total metrics, and for each of them, the request header containing the value for this label.</p>
+<p><code>Mesh_METRICS_PROMETHEUS_MANUALROUTING</code>:<br>
+<!-- -->Manual routing (Default: <code>false</code>)</p>
+<p><code>Mesh_METRICS_STATSD</code>:<br>
+<!-- -->StatsD metrics exporter type. (Default: <code>false</code>)</p>
+<p><code>Mesh_METRICS_STATSD_ADDENTRYPOINTSLABELS</code>:<br>
+<!-- -->Enable metrics on entry points. (Default: <code>true</code>)</p>
+<p><code>Mesh_METRICS_STATSD_ADDRESS</code>:<br>
+<!-- -->StatsD address. (Default: <code>localhost:8125</code>)</p>
+<p><code>Mesh_METRICS_STATSD_ADDROUTERSLABELS</code>:<br>
+<!-- -->Enable metrics on routers. (Default: <code>false</code>)</p>
+<p><code>Mesh_METRICS_STATSD_ADDSERVICESLABELS</code>:<br>
+<!-- -->Enable metrics on services. (Default: <code>true</code>)</p>
+<p><code>Mesh_METRICS_STATSD_PREFIX</code>:<br>
+<!-- -->Prefix to use for metrics collection. (Default: <code>Mesh</code>)</p>
+<p><code>Mesh_METRICS_STATSD_PUSHINTERVAL</code>:<br>
+<!-- -->StatsD push interval. (Default: <code>10</code>)</p>
+<p><code>Mesh_PING</code>:<br>
+<!-- -->Enable ping. (Default: <code>false</code>)</p>
+<p><code>Mesh_PING_ENTRYPOINT</code>:<br>
+<!-- -->EntryPoint (Default: <code>Mesh</code>)</p>
+<p><code>Mesh_PING_MANUALROUTING</code>:<br>
+<!-- -->Manual routing (Default: <code>false</code>)</p>
+<p><code>Mesh_PING_TERMINATINGSTATUSCODE</code>:<br>
+<!-- -->Terminating status code (Default: <code>503</code>)</p>
+<p><code>Mesh_PROVIDERS_CONSUL</code>:<br>
+<!-- -->Enable Consul backend with default settings. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_CONSULCATALOG</code>:<br>
+<!-- -->Enable ConsulCatalog backend with default settings. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_CONSULCATALOG_CACHE</code>:<br>
+<!-- -->Use local agent caching for catalog reads. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_CONSULCATALOG_CONNECTAWARE</code>:<br>
+<!-- -->Enable Consul Connect support. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_CONSULCATALOG_CONNECTBYDEFAULT</code>:<br>
+<!-- -->Consider every service as Connect capable by default. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_CONSULCATALOG_CONSTRAINTS</code>:<br>
+<!-- -->Constraints is an expression that Mesh matches against the container&#x27;s labels to determine whether to create any route for that container.</p>
+<p><code>Mesh_PROVIDERS_CONSULCATALOG_DEFAULTRULE</code>:<br>
+<!-- -->Default rule. (Default: <code>Host(`{{ normalize .Name }}`)</code>)</p>
+<p><code>Mesh_PROVIDERS_CONSULCATALOG_ENDPOINT_ADDRESS</code>:<br>
+<!-- -->The address of the Consul server</p>
+<p><code>Mesh_PROVIDERS_CONSULCATALOG_ENDPOINT_DATACENTER</code>:<br>
+<!-- -->Data center to use. If not provided, the default agent data center is used</p>
+<p><code>Mesh_PROVIDERS_CONSULCATALOG_ENDPOINT_ENDPOINTWAITTIME</code>:<br>
+<!-- -->WaitTime limits how long a Watch will block. If not provided, the agent default values will be used (Default: <code>0</code>)</p>
+<p><code>Mesh_PROVIDERS_CONSULCATALOG_ENDPOINT_HTTPAUTH_PASSWORD</code>:<br>
+<!-- -->Basic Auth password</p>
+<p><code>Mesh_PROVIDERS_CONSULCATALOG_ENDPOINT_HTTPAUTH_USERNAME</code>:<br>
+<!-- -->Basic Auth username</p>
+<p><code>Mesh_PROVIDERS_CONSULCATALOG_ENDPOINT_SCHEME</code>:<br>
+<!-- -->The URI scheme for the Consul server</p>
+<p><code>Mesh_PROVIDERS_CONSULCATALOG_ENDPOINT_TLS_CA</code>:<br>
+<!-- -->TLS CA</p>
+<p><code>Mesh_PROVIDERS_CONSULCATALOG_ENDPOINT_TLS_CERT</code>:<br>
+<!-- -->TLS cert</p>
+<p><code>Mesh_PROVIDERS_CONSULCATALOG_ENDPOINT_TLS_INSECURESKIPVERIFY</code>:<br>
+<!-- -->TLS insecure skip verify (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_CONSULCATALOG_ENDPOINT_TLS_KEY</code>:<br>
+<!-- -->TLS key</p>
+<p><code>Mesh_PROVIDERS_CONSULCATALOG_ENDPOINT_TOKEN</code>:<br>
+<!-- -->Token is used to provide a per-request ACL token which overrides the agent&#x27;s default token</p>
+<p><code>Mesh_PROVIDERS_CONSULCATALOG_EXPOSEDBYDEFAULT</code>:<br>
+<!-- -->Expose containers by default. (Default: <code>true</code>)</p>
+<p><code>Mesh_PROVIDERS_CONSULCATALOG_NAMESPACES</code>:<br>
+<!-- -->Sets the namespaces used to discover services (Consul Enterprise only).</p>
+<p><code>Mesh_PROVIDERS_CONSULCATALOG_PREFIX</code>:<br>
+<!-- -->Prefix for consul service tags. (Default: <code>Mesh</code>)</p>
+<p><code>Mesh_PROVIDERS_CONSULCATALOG_REFRESHINTERVAL</code>:<br>
+<!-- -->Interval for check Consul API. (Default: <code>15</code>)</p>
+<p><code>Mesh_PROVIDERS_CONSULCATALOG_REQUIRECONSISTENT</code>:<br>
+<!-- -->Forces the read to be fully consistent. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_CONSULCATALOG_SERVICENAME</code>:<br>
+<!-- -->Name of the Mesh service in Consul Catalog (needs to be registered via the orchestrator or manually). (Default: <code>Mesh</code>)</p>
+<p><code>Mesh_PROVIDERS_CONSULCATALOG_STALE</code>:<br>
+<!-- -->Use stale consistency for catalog reads. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_CONSULCATALOG_STRICTCHECKS</code>:<br>
+<!-- -->A list of service health statuses to allow taking traffic. (Default: <code>passing, warning</code>)</p>
+<p><code>Mesh_PROVIDERS_CONSULCATALOG_WATCH</code>:<br>
+<!-- -->Watch Consul API events. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_CONSUL_ENDPOINTS</code>:<br>
+<!-- -->KV store endpoints. (Default: <code>127.0.0.1:8500</code>)</p>
+<p><code>Mesh_PROVIDERS_CONSUL_NAMESPACES</code>:<br>
+<!-- -->Sets the namespaces used to discover the configuration (Consul Enterprise only).</p>
+<p><code>Mesh_PROVIDERS_CONSUL_ROOTKEY</code>:<br>
+<!-- -->Root key used for KV store. (Default: <code>Mesh</code>)</p>
+<p><code>Mesh_PROVIDERS_CONSUL_TLS_CA</code>:<br>
+<!-- -->TLS CA</p>
+<p><code>Mesh_PROVIDERS_CONSUL_TLS_CERT</code>:<br>
+<!-- -->TLS cert</p>
+<p><code>Mesh_PROVIDERS_CONSUL_TLS_INSECURESKIPVERIFY</code>:<br>
+<!-- -->TLS insecure skip verify (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_CONSUL_TLS_KEY</code>:<br>
+<!-- -->TLS key</p>
+<p><code>Mesh_PROVIDERS_CONSUL_TOKEN</code>:<br>
+<!-- -->Per-request ACL token.</p>
+<p><code>Mesh_PROVIDERS_DOCKER</code>:<br>
+<!-- -->Enable Docker backend with default settings. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_DOCKER_ALLOWEMPTYSERVICES</code>:<br>
+<!-- -->Disregards the Docker containers health checks with respect to the creation or removal of the corresponding services. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_DOCKER_CONSTRAINTS</code>:<br>
+<!-- -->Constraints is an expression that Mesh matches against the container&#x27;s labels to determine whether to create any route for that container.</p>
+<p><code>Mesh_PROVIDERS_DOCKER_DEFAULTRULE</code>:<br>
+<!-- -->Default rule. (Default: <code>Host(`{{ normalize .Name }}`)</code>)</p>
+<p><code>Mesh_PROVIDERS_DOCKER_ENDPOINT</code>:<br>
+<!-- -->Docker server endpoint. Can be a TCP or a Unix socket endpoint. (Default: <code>unix:///var/run/docker.sock</code>)</p>
+<p><code>Mesh_PROVIDERS_DOCKER_EXPOSEDBYDEFAULT</code>:<br>
+<!-- -->Expose containers by default. (Default: <code>true</code>)</p>
+<p><code>Mesh_PROVIDERS_DOCKER_HTTPCLIENTTIMEOUT</code>:<br>
+<!-- -->Client timeout for HTTP connections. (Default: <code>0</code>)</p>
+<p><code>Mesh_PROVIDERS_DOCKER_NETWORK</code>:<br>
+<!-- -->Default Docker network used.</p>
+<p><code>Mesh_PROVIDERS_DOCKER_PASSWORD</code>:<br>
+<!-- -->Password for Basic HTTP authentication.</p>
+<p><code>Mesh_PROVIDERS_DOCKER_TLS_CA</code>:<br>
+<!-- -->TLS CA</p>
+<p><code>Mesh_PROVIDERS_DOCKER_TLS_CERT</code>:<br>
+<!-- -->TLS cert</p>
+<p><code>Mesh_PROVIDERS_DOCKER_TLS_INSECURESKIPVERIFY</code>:<br>
+<!-- -->TLS insecure skip verify (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_DOCKER_TLS_KEY</code>:<br>
+<!-- -->TLS key</p>
+<p><code>Mesh_PROVIDERS_DOCKER_USEBINDPORTIP</code>:<br>
+<!-- -->Use the ip address from the bound port, rather than from the inner network. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_DOCKER_USERNAME</code>:<br>
+<!-- -->Username for Basic HTTP authentication.</p>
+<p><code>Mesh_PROVIDERS_DOCKER_WATCH</code>:<br>
+<!-- -->Watch Docker events. (Default: <code>true</code>)</p>
+<p><code>Mesh_PROVIDERS_ECS</code>:<br>
+<!-- -->Enable AWS ECS backend with default settings. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_ECS_ACCESSKEYID</code>:<br>
+<!-- -->AWS credentials access key ID to use for making requests.</p>
+<p><code>Mesh_PROVIDERS_ECS_AUTODISCOVERCLUSTERS</code>:<br>
+<!-- -->Auto discover cluster. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_ECS_CLUSTERS</code>:<br>
+<!-- -->ECS Cluster names. (Default: <code>default</code>)</p>
+<p><code>Mesh_PROVIDERS_ECS_CONSTRAINTS</code>:<br>
+<!-- -->Constraints is an expression that Mesh matches against the container&#x27;s labels to determine whether to create any route for that container.</p>
+<p><code>Mesh_PROVIDERS_ECS_DEFAULTRULE</code>:<br>
+<!-- -->Default rule. (Default: <code>Host(`{{ normalize .Name }}`)</code>)</p>
+<p><code>Mesh_PROVIDERS_ECS_ECSANYWHERE</code>:<br>
+<!-- -->Enable ECS Anywhere support. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_ECS_EXPOSEDBYDEFAULT</code>:<br>
+<!-- -->Expose services by default. (Default: <code>true</code>)</p>
+<p><code>Mesh_PROVIDERS_ECS_HEALTHYTASKSONLY</code>:<br>
+<!-- -->Determines whether to discover only healthy tasks. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_ECS_REFRESHSECONDS</code>:<br>
+<!-- -->Polling interval (in seconds). (Default: <code>15</code>)</p>
+<p><code>Mesh_PROVIDERS_ECS_REGION</code>:<br>
+<!-- -->AWS region to use for requests.</p>
+<p><code>Mesh_PROVIDERS_ECS_SECRETACCESSKEY</code>:<br>
+<!-- -->AWS credentials access key to use for making requests.</p>
+<p><code>Mesh_PROVIDERS_ETCD</code>:<br>
+<!-- -->Enable Etcd backend with default settings. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_ETCD_ENDPOINTS</code>:<br>
+<!-- -->KV store endpoints. (Default: <code>127.0.0.1:2379</code>)</p>
+<p><code>Mesh_PROVIDERS_ETCD_PASSWORD</code>:<br>
+<!-- -->Password for authentication.</p>
+<p><code>Mesh_PROVIDERS_ETCD_ROOTKEY</code>:<br>
+<!-- -->Root key used for KV store. (Default: <code>Mesh</code>)</p>
+<p><code>Mesh_PROVIDERS_ETCD_TLS_CA</code>:<br>
+<!-- -->TLS CA</p>
+<p><code>Mesh_PROVIDERS_ETCD_TLS_CERT</code>:<br>
+<!-- -->TLS cert</p>
+<p><code>Mesh_PROVIDERS_ETCD_TLS_INSECURESKIPVERIFY</code>:<br>
+<!-- -->TLS insecure skip verify (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_ETCD_TLS_KEY</code>:<br>
+<!-- -->TLS key</p>
+<p><code>Mesh_PROVIDERS_ETCD_USERNAME</code>:<br>
+<!-- -->Username for authentication.</p>
+<p><code>Mesh_PROVIDERS_FILE_DEBUGLOGGENERATEDTEMPLATE</code>:<br>
+<!-- -->Enable debug logging of generated configuration template. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_FILE_DIRECTORY</code>:<br>
+<!-- -->Load dynamic configuration from one or more .yml or .toml files in a directory.</p>
+<p><code>Mesh_PROVIDERS_FILE_FILENAME</code>:<br>
+<!-- -->Load dynamic configuration from a file.</p>
+<p><code>Mesh_PROVIDERS_FILE_WATCH</code>:<br>
+<!-- -->Watch provider. (Default: <code>true</code>)</p>
+<p><code>Mesh_PROVIDERS_HTTP</code>:<br>
+<!-- -->Enable HTTP backend with default settings. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_HTTP_ENDPOINT</code>:<br>
+<!-- -->Load configuration from this endpoint.</p>
+<p><code>Mesh_PROVIDERS_HTTP_HEADERS_&lt;NAME&gt;</code>:<br>
+<!-- -->Define custom headers to be sent to the endpoint.</p>
+<p><code>Mesh_PROVIDERS_HTTP_POLLINTERVAL</code>:<br>
+<!-- -->Polling interval for endpoint. (Default: <code>5</code>)</p>
+<p><code>Mesh_PROVIDERS_HTTP_POLLTIMEOUT</code>:<br>
+<!-- -->Polling timeout for endpoint. (Default: <code>5</code>)</p>
+<p><code>Mesh_PROVIDERS_HTTP_TLS_CA</code>:<br>
+<!-- -->TLS CA</p>
+<p><code>Mesh_PROVIDERS_HTTP_TLS_CERT</code>:<br>
+<!-- -->TLS cert</p>
+<p><code>Mesh_PROVIDERS_HTTP_TLS_INSECURESKIPVERIFY</code>:<br>
+<!-- -->TLS insecure skip verify (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_HTTP_TLS_KEY</code>:<br>
+<!-- -->TLS key</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESCRD</code>:<br>
+<!-- -->Enable Kubernetes backend with default settings. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESCRD_ALLOWCROSSNAMESPACE</code>:<br>
+<!-- -->Allow cross namespace resource reference. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESCRD_ALLOWEMPTYSERVICES</code>:<br>
+<!-- -->Allow the creation of services without endpoints. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESCRD_ALLOWEXTERNALNAMESERVICES</code>:<br>
+<!-- -->Allow ExternalName services. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESCRD_CERTAUTHFILEPATH</code>:<br>
+<!-- -->Kubernetes certificate authority file path (not needed for in-cluster client).</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESCRD_DISABLECLUSTERSCOPERESOURCES</code>:<br>
+<!-- -->Disables the lookup of cluster scope resources (incompatible with IngressClasses and NodePortLB enabled services). (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESCRD_ENDPOINT</code>:<br>
+<!-- -->Kubernetes server endpoint (required for external cluster client).</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESCRD_INGRESSCLASS</code>:<br>
+<!-- -->Value of kubernetes.io/ingress.class annotation to watch for.</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESCRD_LABELSELECTOR</code>:<br>
+<!-- -->Kubernetes label selector to use.</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESCRD_NAMESPACES</code>:<br>
+<!-- -->Kubernetes namespaces.</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESCRD_NATIVELBBYDEFAULT</code>:<br>
+<!-- -->Defines whether to use Native Kubernetes load-balancing mode by default. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESCRD_THROTTLEDURATION</code>:<br>
+<!-- -->Ingress refresh throttle duration (Default: <code>0</code>)</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESCRD_TOKEN</code>:<br>
+<!-- -->Kubernetes bearer token (not needed for in-cluster client). It accepts either a token value or a file path to the token.</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESGATEWAY</code>:<br>
+<!-- -->Enable Kubernetes gateway api provider with default settings. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESGATEWAY_CERTAUTHFILEPATH</code>:<br>
+<!-- -->Kubernetes certificate authority file path (not needed for in-cluster client).</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESGATEWAY_ENDPOINT</code>:<br>
+<!-- -->Kubernetes server endpoint (required for external cluster client).</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESGATEWAY_EXPERIMENTALCHANNEL</code>:<br>
+<!-- -->Toggles Experimental Channel resources support (TCPRoute, TLSRoute...). (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESGATEWAY_LABELSELECTOR</code>:<br>
+<!-- -->Kubernetes label selector to select specific GatewayClasses.</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESGATEWAY_NAMESPACES</code>:<br>
+<!-- -->Kubernetes namespaces.</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESGATEWAY_NATIVELBBYDEFAULT</code>:<br>
+<!-- -->Defines whether to use Native Kubernetes load-balancing by default. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESGATEWAY_STATUSADDRESS_HOSTNAME</code>:<br>
+<!-- -->Hostname used for Kubernetes Gateway status address.</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESGATEWAY_STATUSADDRESS_IP</code>:<br>
+<!-- -->IP used to set Kubernetes Gateway status address.</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESGATEWAY_STATUSADDRESS_SERVICE</code>:<br>
+<!-- -->Published Kubernetes Service to copy status addresses from.</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESGATEWAY_STATUSADDRESS_SERVICE_NAME</code>:<br>
+<!-- -->Name of the Kubernetes service.</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESGATEWAY_STATUSADDRESS_SERVICE_NAMESPACE</code>:<br>
+<!-- -->Namespace of the Kubernetes service.</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESGATEWAY_THROTTLEDURATION</code>:<br>
+<!-- -->Kubernetes refresh throttle duration (Default: <code>0</code>)</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESGATEWAY_TOKEN</code>:<br>
+<!-- -->Kubernetes bearer token (not needed for in-cluster client). It accepts either a token value or a file path to the token.</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESINGRESS</code>:<br>
+<!-- -->Enable Kubernetes backend with default settings. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESINGRESS_ALLOWEMPTYSERVICES</code>:<br>
+<!-- -->Allow creation of services without endpoints. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESINGRESS_ALLOWEXTERNALNAMESERVICES</code>:<br>
+<!-- -->Allow ExternalName services. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESINGRESS_CERTAUTHFILEPATH</code>:<br>
+<!-- -->Kubernetes certificate authority file path (not needed for in-cluster client).</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESINGRESS_DISABLECLUSTERSCOPERESOURCES</code>:<br>
+<!-- -->Disables the lookup of cluster scope resources (incompatible with IngressClasses and NodePortLB enabled services). (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESINGRESS_DISABLEINGRESSCLASSLOOKUP</code>:<br>
+<!-- -->Disables the lookup of IngressClasses (Deprecated, please use DisableClusterScopeResources). (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESINGRESS_ENDPOINT</code>:<br>
+<!-- -->Kubernetes server endpoint (required for external cluster client).</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESINGRESS_INGRESSCLASS</code>:<br>
+<!-- -->Value of kubernetes.io/ingress.class annotation or IngressClass name to watch for.</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESINGRESS_INGRESSENDPOINT_HOSTNAME</code>:<br>
+<!-- -->Hostname used for Kubernetes Ingress endpoints.</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESINGRESS_INGRESSENDPOINT_IP</code>:<br>
+<!-- -->IP used for Kubernetes Ingress endpoints.</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESINGRESS_INGRESSENDPOINT_PUBLISHEDSERVICE</code>:<br>
+<!-- -->Published Kubernetes Service to copy status from.</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESINGRESS_LABELSELECTOR</code>:<br>
+<!-- -->Kubernetes Ingress label selector to use.</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESINGRESS_NAMESPACES</code>:<br>
+<!-- -->Kubernetes namespaces.</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESINGRESS_NATIVELBBYDEFAULT</code>:<br>
+<!-- -->Defines whether to use Native Kubernetes load-balancing mode by default. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESINGRESS_THROTTLEDURATION</code>:<br>
+<!-- -->Ingress refresh throttle duration (Default: <code>0</code>)</p>
+<p><code>Mesh_PROVIDERS_KUBERNETESINGRESS_TOKEN</code>:<br>
+<!-- -->Kubernetes bearer token (not needed for in-cluster client). It accepts either a token value or a file path to the token.</p>
+<p><code>Mesh_PROVIDERS_NOMAD</code>:<br>
+<!-- -->Enable Nomad backend with default settings. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_NOMAD_ALLOWEMPTYSERVICES</code>:<br>
+<!-- -->Allow the creation of services without endpoints. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_NOMAD_CONSTRAINTS</code>:<br>
+<!-- -->Constraints is an expression that Mesh matches against the Nomad service&#x27;s tags to determine whether to create route(s) for that service.</p>
+<p><code>Mesh_PROVIDERS_NOMAD_DEFAULTRULE</code>:<br>
+<!-- -->Default rule. (Default: <code>Host(`{{ normalize .Name }}`)</code>)</p>
+<p><code>Mesh_PROVIDERS_NOMAD_ENDPOINT_ADDRESS</code>:<br>
+<!-- -->The address of the Nomad server, including scheme and port. (Default: <code>http://127.0.0.1:4646</code>)</p>
+<p><code>Mesh_PROVIDERS_NOMAD_ENDPOINT_ENDPOINTWAITTIME</code>:<br>
+<!-- -->WaitTime limits how long a Watch will block. If not provided, the agent default values will be used (Default: <code>0</code>)</p>
+<p><code>Mesh_PROVIDERS_NOMAD_ENDPOINT_REGION</code>:<br>
+<!-- -->Nomad region to use. If not provided, the local agent region is used.</p>
+<p><code>Mesh_PROVIDERS_NOMAD_ENDPOINT_TLS_CA</code>:<br>
+<!-- -->TLS CA</p>
+<p><code>Mesh_PROVIDERS_NOMAD_ENDPOINT_TLS_CERT</code>:<br>
+<!-- -->TLS cert</p>
+<p><code>Mesh_PROVIDERS_NOMAD_ENDPOINT_TLS_INSECURESKIPVERIFY</code>:<br>
+<!-- -->TLS insecure skip verify (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_NOMAD_ENDPOINT_TLS_KEY</code>:<br>
+<!-- -->TLS key</p>
+<p><code>Mesh_PROVIDERS_NOMAD_ENDPOINT_TOKEN</code>:<br>
+<!-- -->Token is used to provide a per-request ACL token.</p>
+<p><code>Mesh_PROVIDERS_NOMAD_EXPOSEDBYDEFAULT</code>:<br>
+<!-- -->Expose Nomad services by default. (Default: <code>true</code>)</p>
+<p><code>Mesh_PROVIDERS_NOMAD_NAMESPACES</code>:<br>
+<!-- -->Sets the Nomad namespaces used to discover services.</p>
+<p><code>Mesh_PROVIDERS_NOMAD_PREFIX</code>:<br>
+<!-- -->Prefix for nomad service tags. (Default: <code>Mesh</code>)</p>
+<p><code>Mesh_PROVIDERS_NOMAD_REFRESHINTERVAL</code>:<br>
+<!-- -->Interval for polling Nomad API. (Default: <code>15</code>)</p>
+<p><code>Mesh_PROVIDERS_NOMAD_STALE</code>:<br>
+<!-- -->Use stale consistency for catalog reads. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_NOMAD_THROTTLEDURATION</code>:<br>
+<!-- -->Watch throttle duration. (Default: <code>0</code>)</p>
+<p><code>Mesh_PROVIDERS_NOMAD_WATCH</code>:<br>
+<!-- -->Watch Nomad Service events. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_PLUGIN_&lt;NAME&gt;</code>:<br>
+<!-- -->Plugins configuration.</p>
+<p><code>Mesh_PROVIDERS_PROVIDERSTHROTTLEDURATION</code>:<br>
+<!-- -->Backends throttle duration: minimum duration between 2 events from providers before applying a new configuration. It avoids unnecessary reloads if multiples events are sent in a short amount of time. (Default: <code>2</code>)</p>
+<p><code>Mesh_PROVIDERS_REDIS</code>:<br>
+<!-- -->Enable Redis backend with default settings. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_REDIS_DB</code>:<br>
+<!-- -->Database to be selected after connecting to the server. (Default: <code>0</code>)</p>
+<p><code>Mesh_PROVIDERS_REDIS_ENDPOINTS</code>:<br>
+<!-- -->KV store endpoints. (Default: <code>127.0.0.1:6379</code>)</p>
+<p><code>Mesh_PROVIDERS_REDIS_PASSWORD</code>:<br>
+<!-- -->Password for authentication.</p>
+<p><code>Mesh_PROVIDERS_REDIS_ROOTKEY</code>:<br>
+<!-- -->Root key used for KV store. (Default: <code>Mesh</code>)</p>
+<p><code>Mesh_PROVIDERS_REDIS_SENTINEL_LATENCYSTRATEGY</code>:<br>
+<!-- -->Defines whether to route commands to the closest master or replica nodes (mutually exclusive with RandomStrategy and ReplicaStrategy). (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_REDIS_SENTINEL_MASTERNAME</code>:<br>
+<!-- -->Name of the master.</p>
+<p><code>Mesh_PROVIDERS_REDIS_SENTINEL_PASSWORD</code>:<br>
+<!-- -->Password for Sentinel authentication.</p>
+<p><code>Mesh_PROVIDERS_REDIS_SENTINEL_RANDOMSTRATEGY</code>:<br>
+<!-- -->Defines whether to route commands randomly to master or replica nodes (mutually exclusive with LatencyStrategy and ReplicaStrategy). (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_REDIS_SENTINEL_REPLICASTRATEGY</code>:<br>
+<!-- -->Defines whether to route all commands to replica nodes (mutually exclusive with LatencyStrategy and RandomStrategy). (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_REDIS_SENTINEL_USEDISCONNECTEDREPLICAS</code>:<br>
+<!-- -->Use replicas disconnected with master when cannot get connected replicas. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_REDIS_SENTINEL_USERNAME</code>:<br>
+<!-- -->Username for Sentinel authentication.</p>
+<p><code>Mesh_PROVIDERS_REDIS_TLS_CA</code>:<br>
+<!-- -->TLS CA</p>
+<p><code>Mesh_PROVIDERS_REDIS_TLS_CERT</code>:<br>
+<!-- -->TLS cert</p>
+<p><code>Mesh_PROVIDERS_REDIS_TLS_INSECURESKIPVERIFY</code>:<br>
+<!-- -->TLS insecure skip verify (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_REDIS_TLS_KEY</code>:<br>
+<!-- -->TLS key</p>
+<p><code>Mesh_PROVIDERS_REDIS_USERNAME</code>:<br>
+<!-- -->Username for authentication.</p>
+<p><code>Mesh_PROVIDERS_REST</code>:<br>
+<!-- -->Enable Rest backend with default settings. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_REST_INSECURE</code>:<br>
+<!-- -->Activate REST Provider directly on the entryPoint named Mesh. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_SWARM</code>:<br>
+<!-- -->Enable Docker Swarm backend with default settings. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_SWARM_ALLOWEMPTYSERVICES</code>:<br>
+<!-- -->Disregards the Docker containers health checks with respect to the creation or removal of the corresponding services. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_SWARM_CONSTRAINTS</code>:<br>
+<!-- -->Constraints is an expression that Mesh matches against the container&#x27;s labels to determine whether to create any route for that container.</p>
+<p><code>Mesh_PROVIDERS_SWARM_DEFAULTRULE</code>:<br>
+<!-- -->Default rule. (Default: <code>Host(`{{ normalize .Name }}`)</code>)</p>
+<p><code>Mesh_PROVIDERS_SWARM_ENDPOINT</code>:<br>
+<!-- -->Docker server endpoint. Can be a TCP or a Unix socket endpoint. (Default: <code>unix:///var/run/docker.sock</code>)</p>
+<p><code>Mesh_PROVIDERS_SWARM_EXPOSEDBYDEFAULT</code>:<br>
+<!-- -->Expose containers by default. (Default: <code>true</code>)</p>
+<p><code>Mesh_PROVIDERS_SWARM_HTTPCLIENTTIMEOUT</code>:<br>
+<!-- -->Client timeout for HTTP connections. (Default: <code>0</code>)</p>
+<p><code>Mesh_PROVIDERS_SWARM_NETWORK</code>:<br>
+<!-- -->Default Docker network used.</p>
+<p><code>Mesh_PROVIDERS_SWARM_PASSWORD</code>:<br>
+<!-- -->Password for Basic HTTP authentication.</p>
+<p><code>Mesh_PROVIDERS_SWARM_REFRESHSECONDS</code>:<br>
+<!-- -->Polling interval for swarm mode. (Default: <code>15</code>)</p>
+<p><code>Mesh_PROVIDERS_SWARM_TLS_CA</code>:<br>
+<!-- -->TLS CA</p>
+<p><code>Mesh_PROVIDERS_SWARM_TLS_CERT</code>:<br>
+<!-- -->TLS cert</p>
+<p><code>Mesh_PROVIDERS_SWARM_TLS_INSECURESKIPVERIFY</code>:<br>
+<!-- -->TLS insecure skip verify (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_SWARM_TLS_KEY</code>:<br>
+<!-- -->TLS key</p>
+<p><code>Mesh_PROVIDERS_SWARM_USEBINDPORTIP</code>:<br>
+<!-- -->Use the ip address from the bound port, rather than from the inner network. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_SWARM_USERNAME</code>:<br>
+<!-- -->Username for Basic HTTP authentication.</p>
+<p><code>Mesh_PROVIDERS_SWARM_WATCH</code>:<br>
+<!-- -->Watch Docker events. (Default: <code>true</code>)</p>
+<p><code>Mesh_PROVIDERS_ZOOKEEPER</code>:<br>
+<!-- -->Enable ZooKeeper backend with default settings. (Default: <code>false</code>)</p>
+<p><code>Mesh_PROVIDERS_ZOOKEEPER_ENDPOINTS</code>:<br>
+<!-- -->KV store endpoints. (Default: <code>127.0.0.1:2181</code>)</p>
+<p><code>Mesh_PROVIDERS_ZOOKEEPER_PASSWORD</code>:<br>
+<!-- -->Password for authentication.</p>
+<p><code>Mesh_PROVIDERS_ZOOKEEPER_ROOTKEY</code>:<br>
+<!-- -->Root key used for KV store. (Default: <code>Mesh</code>)</p>
+<p><code>Mesh_PROVIDERS_ZOOKEEPER_USERNAME</code>:<br>
+<!-- -->Username for authentication.</p>
+<p><code>Mesh_SERVERSTRANSPORT_FORWARDINGTIMEOUTS_DIALTIMEOUT</code>:<br>
+<!-- -->The amount of time to wait until a connection to a backend server can be established. If zero, no timeout exists. (Default: <code>30</code>)</p>
+<p><code>Mesh_SERVERSTRANSPORT_FORWARDINGTIMEOUTS_IDLECONNTIMEOUT</code>:<br>
+<!-- -->The maximum period for which an idle HTTP keep-alive connection will remain open before closing itself (Default: <code>90</code>)</p>
+<p><code>Mesh_SERVERSTRANSPORT_FORWARDINGTIMEOUTS_RESPONSEHEADERTIMEOUT</code>:<br>
+<!-- -->The amount of time to wait for a server&#x27;s response headers after fully writing the request (including its body, if any). If zero, no timeout exists. (Default: <code>0</code>)</p>
+<p><code>Mesh_SERVERSTRANSPORT_INSECURESKIPVERIFY</code>:<br>
+<!-- -->Disable SSL certificate verification. (Default: <code>false</code>)</p>
+<p><code>Mesh_SERVERSTRANSPORT_MAXIDLECONNSPERHOST</code>:<br>
+<!-- -->If non-zero, controls the maximum idle (keep-alive) to keep per-host. If zero, DefaultMaxIdleConnsPerHost is used (Default: <code>200</code>)</p>
+<p><code>Mesh_SERVERSTRANSPORT_ROOTCAS</code>:<br>
+<!-- -->Add cert file for self-signed certificate.</p>
+<p><code>Mesh_SERVERSTRANSPORT_SPIFFE</code>:<br>
+<!-- -->Defines the SPIFFE configuration. (Default: <code>false</code>)</p>
+<p><code>Mesh_SERVERSTRANSPORT_SPIFFE_IDS</code>:<br>
+<!-- -->Defines the allowed SPIFFE IDs (takes precedence over the SPIFFE TrustDomain).</p>
+<p><code>Mesh_SERVERSTRANSPORT_SPIFFE_TRUSTDOMAIN</code>:<br>
+<!-- -->Defines the allowed SPIFFE trust domain.</p>
+<p><code>Mesh_SPIFFE_WORKLOADAPIADDR</code>:<br>
+<!-- -->Defines the workload API address.</p>
+<p><code>Mesh_TCPSERVERSTRANSPORT_DIALKEEPALIVE</code>:<br>
+<!-- -->Defines the interval between keep-alive probes for an active network connection. If zero, keep-alive probes are sent with a default value (currently 15 seconds), if supported by the protocol and operating system. Network protocols or operating systems that do not support keep-alives ignore this field. If negative, keep-alive probes are disabled (Default: <code>15</code>)</p>
+<p><code>Mesh_TCPSERVERSTRANSPORT_DIALTIMEOUT</code>:<br>
+<!-- -->Defines the amount of time to wait until a connection to a backend server can be established. If zero, no timeout exists. (Default: <code>30</code>)</p>
+<p><code>Mesh_TCPSERVERSTRANSPORT_TERMINATIONDELAY</code>:<br>
+<!-- -->Defines the delay to wait before fully terminating the connection, after one connected peer has closed its writing capability. (Default: <code>0</code>)</p>
+<p><code>Mesh_TCPSERVERSTRANSPORT_TLS</code>:<br>
+<!-- -->Defines the TLS configuration. (Default: <code>false</code>)</p>
+<p><code>Mesh_TCPSERVERSTRANSPORT_TLS_INSECURESKIPVERIFY</code>:<br>
+<!-- -->Disables SSL certificate verification. (Default: <code>false</code>)</p>
+<p><code>Mesh_TCPSERVERSTRANSPORT_TLS_ROOTCAS</code>:<br>
+<!-- -->Defines a list of CA secret used to validate self-signed certificate</p>
+<p><code>Mesh_TCPSERVERSTRANSPORT_TLS_SPIFFE</code>:<br>
+<!-- -->Defines the SPIFFE TLS configuration. (Default: <code>false</code>)</p>
+<p><code>Mesh_TCPSERVERSTRANSPORT_TLS_SPIFFE_IDS</code>:<br>
+<!-- -->Defines the allowed SPIFFE IDs (takes precedence over the SPIFFE TrustDomain).</p>
+<p><code>Mesh_TCPSERVERSTRANSPORT_TLS_SPIFFE_TRUSTDOMAIN</code>:<br>
+<!-- -->Defines the allowed SPIFFE trust domain.</p>
+<p><code>Mesh_TRACING</code>:<br>
+<!-- -->Tracing configuration. (Default: <code>false</code>)</p>
+<p><code>Mesh_TRACING_ADDINTERNALS</code>:<br>
+<!-- -->Enables tracing for internal services (ping, dashboard, etc...). (Default: <code>false</code>)</p>
+<p><code>Mesh_TRACING_CAPTUREDREQUESTHEADERS</code>:<br>
+<!-- -->Request headers to add as attributes for server and client spans.</p>
+<p><code>Mesh_TRACING_CAPTUREDRESPONSEHEADERS</code>:<br>
+<!-- -->Response headers to add as attributes for server and client spans.</p>
+<p><code>Mesh_TRACING_GLOBALATTRIBUTES_&lt;NAME&gt;</code>:<br>
+<!-- -->(Deprecated) Defines additional resource attributes (key<!-- -->:value<!-- -->).</p>
+<p><code>Mesh_TRACING_OTLP</code>:<br>
+<!-- -->Settings for OpenTelemetry. (Default: <code>false</code>)</p>
+<p><code>Mesh_TRACING_OTLP_GRPC</code>:<br>
+<!-- -->gRPC configuration for the OpenTelemetry collector. (Default: <code>false</code>)</p>
+<p><code>Mesh_TRACING_OTLP_GRPC_ENDPOINT</code>:<br>
+<!-- -->Sets the gRPC endpoint (host<!-- -->:port<!-- -->) of the collector. (Default: <code>localhost:4317</code>)</p>
+<p><code>Mesh_TRACING_OTLP_GRPC_HEADERS_&lt;NAME&gt;</code>:<br>
+<!-- -->Headers sent with payload.</p>
+<p><code>Mesh_TRACING_OTLP_GRPC_INSECURE</code>:<br>
+<!-- -->Disables client transport security for the exporter. (Default: <code>false</code>)</p>
+<p><code>Mesh_TRACING_OTLP_GRPC_TLS_CA</code>:<br>
+<!-- -->TLS CA</p>
+<p><code>Mesh_TRACING_OTLP_GRPC_TLS_CERT</code>:<br>
+<!-- -->TLS cert</p>
+<p><code>Mesh_TRACING_OTLP_GRPC_TLS_INSECURESKIPVERIFY</code>:<br>
+<!-- -->TLS insecure skip verify (Default: <code>false</code>)</p>
+<p><code>Mesh_TRACING_OTLP_GRPC_TLS_KEY</code>:<br>
+<!-- -->TLS key</p>
+<p><code>Mesh_TRACING_OTLP_HTTP</code>:<br>
+<!-- -->HTTP configuration for the OpenTelemetry collector. (Default: <code>false</code>)</p>
+<p><code>Mesh_TRACING_OTLP_HTTP_ENDPOINT</code>:<br>
+<!-- -->Sets the HTTP endpoint (scheme://host<!-- -->:port<!-- -->/path) of the collector. (Default: <code>https://localhost:4318</code>)</p>
+<p><code>Mesh_TRACING_OTLP_HTTP_HEADERS_&lt;NAME&gt;</code>:<br>
+<!-- -->Headers sent with payload.</p>
+<p><code>Mesh_TRACING_OTLP_HTTP_TLS_CA</code>:<br>
+<!-- -->TLS CA</p>
+<p><code>Mesh_TRACING_OTLP_HTTP_TLS_CERT</code>:<br>
+<!-- -->TLS cert</p>
+<p><code>Mesh_TRACING_OTLP_HTTP_TLS_INSECURESKIPVERIFY</code>:<br>
+<!-- -->TLS insecure skip verify (Default: <code>false</code>)</p>
+<p><code>Mesh_TRACING_OTLP_HTTP_TLS_KEY</code>:<br>
+<!-- -->TLS key</p>
+<p><code>Mesh_TRACING_RESOURCEATTRIBUTES_&lt;NAME&gt;</code>:<br>
+<!-- -->Defines additional resource attributes (key<!-- -->:value<!-- -->).</p>
+<p><code>Mesh_TRACING_SAFEQUERYPARAMS</code>:<br>
+<!-- -->Query params to not redact.</p>
+<p><code>Mesh_TRACING_SAMPLERATE</code>:<br>
+<!-- -->Sets the rate between 0.0 and 1.0 of requests to trace. (Default: <code>1.000000</code>)</p>
+<p><code>Mesh_TRACING_SERVICENAME</code>:<br>
+<!-- -->Sets the name for this service. (Default: <code>Mesh</code>)</p></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"><a href="https://github.com/opendatav/mesh/tree/main/packages/create-docusaurus/templates/shared/docs/reference/static-configuration/env-ref.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/doc/docs/reference/static-configuration/cli"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Mesh CLI Flags Documentation</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/doc/docs/reference/static-configuration/env"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Mesh Environment Variables Documentation</div></a></nav></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">文档</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/doc/docs/intro">Tutorial</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">社区</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://stackoverflow.com/questions/tagged/mesh" target="_blank" rel="noopener noreferrer" class="footer__link-item">Stack Overflow<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://discordapp.com/invite/mesh" target="_blank" rel="noopener noreferrer" class="footer__link-item">Discord<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://x.com/mesh" target="_blank" rel="noopener noreferrer" class="footer__link-item">X<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">其他</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/doc/blog">Blog</a></li><li class="footer__item"><a href="https://github.com/opendatav/mesh" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2025 Mesh, Inc. Built with Mesh.</div></div></div></footer></div>
+</body>
+</html>

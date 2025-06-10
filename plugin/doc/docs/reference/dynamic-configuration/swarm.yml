@@ -1,0 +1,3 @@
+- "Mesh.enable=true"
+- "Mesh.swarm.network=foobar"
+- "Mesh.swarm.lbswarm=true"

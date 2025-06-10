@@ -1,0 +1,592 @@
+---
+title: "Mesh Nomad Service Discovery Routing"
+description: "Learn how to use Nomad Service Discovery as a provider for routing configurations in Mesh Proxy. Read the technical documentation."
+---
+
+# Mesh and Nomad Service Discovery
+
+One of the best feature of Mesh is to delegate the routing configuration to the application level.
+With Nomad, Mesh can leverage tags attached to a service to generate routing rules.
+
+!!! warning "Tags & sensitive data"
+
+    We recommend to *not* use tags to store sensitive data (certificates, credentials, etc).
+    Instead, we recommend to store sensitive data in a safer storage (secrets, file, etc).
+
+## Routing Configuration
+
+!!! info "Tags"
+
+    Tags are case-insensitive.
+
+!!! tip "TLS Default Generated Certificates"
+
+    To learn how to configure Mesh default generated certificate, refer to the [TLS Certificates](../http/tls/tls-certificates.md#acme-default-certificate) page.
+
+### General
+
+Mesh creates, for each Nomad service, a corresponding Mesh [service](../http/load-balancing/service.md) and [router](../http/router/rules-and-priority.md).
+
+The Mesh service automatically gets a server per instance in this Nomad service, and the router gets a default rule attached to it, based on the Nomad service name.
+
+### Routers
+
+To update the configuration of the Router automatically attached to the service, add tags starting with `Mesh.routers.{name-of-your-choice}.` and followed by the option you want to change.
+
+For example, to change the rule, you could add the tag ```Mesh.http.routers.my-service.rule=Host(`example.com`)```.
+
+??? info "`Mesh.http.routers.<router_name>.rule`"
+
+    See [rule](../http/router/rules-and-priority.md) for more information.
+
+    ```yaml
+    Mesh.http.routers.myrouter.rule=Host(`example.com`)
+    ```
+
+??? info "`Mesh.http.routers.<router_name>.ruleSyntax`"
+
+    !!! warning
+
+        RuleSyntax option is deprecated and will be removed in the next major version.
+        Please do not use this field and rewrite the router rules to use the v3 syntax.
+
+    See [ruleSyntax](../http/router/rules-and-priority.md#rulesyntax) for more information.
+    
+    ```yaml
+    Mesh.http.routers.myrouter.ruleSyntax=v3
+    ```
+
+??? info "`Mesh.http.routers.<router_name>.entrypoints`"
+
+    See [entry points](../../install-configuration/entrypoints.md) for more information.
+
+    ```yaml
+    Mesh.http.routers.myrouter.entrypoints=web,websecure
+    ```
+
+??? info "`Mesh.http.routers.<router_name>.middlewares`"
+
+    See [middlewares overview](../http/middlewares/overview.md) for more information.
+
+    ```yaml
+    Mesh.http.routers.myrouter.middlewares=auth,prefix,cb
+    ```
+
+??? info "`Mesh.http.routers.<router_name>.service`"
+
+    See [service](../http/load-balancing/service.md) for more information.
+
+    ```yaml
+    Mesh.http.routers.myrouter.service=myservice
+    ```
+
+??? info "`Mesh.http.routers.<router_name>.tls`"
+
+    See [tls](../http/tls/overview.md) for more information.
+
+    ```yaml
+    Mesh.http.routers.myrouter.tls=true
+    ```
+
+??? info "`Mesh.http.routers.<router_name>.tls.certresolver`"
+
+    See [certResolver](../../install-configuration/tls/certificate-resolvers/overview.md) for more information.
+
+    ```yaml
+    Mesh.http.routers.myrouter.tls.certresolver=myresolver
+    ```
+
+??? info "`Mesh.http.routers.<router_name>.tls.domains[n].main`"
+
+    See [domains](../../install-configuration/tls/certificate-resolvers/acme.md#domain-definition) for more information.
+
+    ```yaml
+    Mesh.http.routers.myrouter.tls.domains[0].main=example.org
+    ```
+
+??? info "`Mesh.http.routers.<router_name>.tls.domains[n].sans`"
+
+    See [domains](../../install-configuration/tls/certificate-resolvers/acme.md#domain-definition) for more information.
+
+    ```yaml
+    Mesh.http.routers.myrouter.tls.domains[0].sans=test.example.org,dev.example.org
+    ```
+
+??? info "`Mesh.http.routers.<router_name>.tls.options`"
+
+    ```yaml
+    Mesh.http.routers.myrouter.tls.options=foobar
+    ```
+
+??? info "`Mesh.http.routers.<router_name>.priority`"
+
+    See [priority](../http/router/rules-and-priority.md#priority-calculation) for more information.
+
+    ```yaml
+    Mesh.http.routers.myrouter.priority=42
+    ```
+
+??? info "`Mesh.http.routers.<router_name>.observability.accesslogs`"
+    
+    The accessLogs option controls whether the router will produce access-logs.
+    
+    ```yaml
+     "Mesh.http.routers.myrouter.observability.accesslogs=true"
+    ```
+
+??? info "`Mesh.http.routers.<router_name>.observability.metrics`"
+    
+    The metrics option controls whether the router will produce metrics.
+
+    ```yaml
+     "Mesh.http.routers.myrouter.observability.metrics=true"
+    ```
+
+??? info "`Mesh.http.routers.<router_name>.observability.tracing`"
+    
+    The tracing option controls whether the router will produce traces.
+
+    ```yaml
+     "Mesh.http.routers.myrouter.observability.tracing=true"
+    ```
+    
+### Services
+
+To update the configuration of the Service automatically attached to the service,
+add tags starting with `Mesh.http.services.{name-of-your-choice}.`, followed by the option you want to change.
+
+For example, to change the `passHostHeader` behavior,
+you'd add the tag `Mesh.http.services.{name-of-your-choice}.loadbalancer.passhostheader=false`.
+
+??? info "`Mesh.http.services.<service_name>.loadbalancer.server.port`"
+
+    Registers a port.
+    Useful when the service exposes multiples ports.
+
+    ```yaml
+    Mesh.http.services.myservice.loadbalancer.server.port=8080
+    ```
+
+??? info "`Mesh.http.services.<service_name>.loadbalancer.server.scheme`"
+
+    Overrides the default scheme.
+
+    ```yaml
+    Mesh.http.services.myservice.loadbalancer.server.scheme=http
+    ```
+
+??? info "`Mesh.http.services.<service_name>.loadbalancer.server.weight`"
+
+    Overrides the default weight.
+    
+    ```yaml
+    Mesh.http.services.myservice.loadbalancer.server.weight=42
+    ```
+
+??? info "`Mesh.http.services.<service_name>.loadbalancer.serverstransport`"
+
+    Allows to reference a ServersTransport resource that is defined either with the File provider or the Kubernetes CRD one.
+    See [serverstransport](../http/load-balancing/serverstransport.md) for more information.
+
+    ```yaml
+    Mesh.http.services.myservice.loadbalancer.serverstransport=foobar@file
+    ```
+
+??? info "`Mesh.http.services.<service_name>.loadbalancer.passhostheader`"
+
+    ```yaml
+    Mesh.http.services.myservice.loadbalancer.passhostheader=true
+    ```
+
+??? info "`Mesh.http.services.<service_name>.loadbalancer.healthcheck.headers.<header_name>`"
+
+    See [health check](../http/load-balancing/service.md#health-check) for more information.
+
+    ```yaml
+    Mesh.http.services.myservice.loadbalancer.healthcheck.headers.X-Foo=foobar
+    ```
+
+??? info "`Mesh.http.services.<service_name>.loadbalancer.healthcheck.hostname`"
+
+    See [health check](../http/load-balancing/service.md#health-check) for more information.
+
+    ```yaml
+    Mesh.http.services.myservice.loadbalancer.healthcheck.hostname=example.org
+    ```
+
+??? info "`Mesh.http.services.<service_name>.loadbalancer.healthcheck.interval`"
+
+    See [health check](../http/load-balancing/service.md#health-check) for more information.
+
+    ```yaml
+    Mesh.http.services.myservice.loadbalancer.healthcheck.interval=10
+    ```
+
+??? info "`Mesh.http.services.<service_name>.loadbalancer.healthcheck.unhealthyinterval`"
+
+    See [health check](../http/load-balancing/service.md#health-check) for more information.
+
+    ```yaml
+    Mesh.http.services.myservice.loadbalancer.healthcheck.unhealthyinterval=10
+    ```
+
+??? info "`Mesh.http.services.<service_name>.loadbalancer.healthcheck.path`"
+
+    See [health check](../http/load-balancing/service.md#health-check) for more information.
+
+    ```yaml
+    Mesh.http.services.myservice.loadbalancer.healthcheck.path=/foo
+    ```
+
+??? info "`Mesh.http.services.<service_name>.loadbalancer.healthcheck.status`"
+
+    See [health check](../http/load-balancing/service.md#health-check) for more information.
+
+    ```yaml
+    Mesh.http.services.myservice.loadbalancer.healthcheck.status=42
+    ```
+
+??? info "`Mesh.http.services.<service_name>.loadbalancer.healthcheck.port`"
+
+    See [health check](../http/load-balancing/service.md#health-check) for more information.
+
+    ```yaml
+    Mesh.http.services.myservice.loadbalancer.healthcheck.port=42
+    ```
+
+??? info "`Mesh.http.services.<service_name>.loadbalancer.healthcheck.scheme`"
+
+    See [health check](../http/load-balancing/service.md#health-check) for more information.
+
+    ```yaml
+    Mesh.http.services.myservice.loadbalancer.healthcheck.scheme=http
+    ```
+
+??? info "`Mesh.http.services.<service_name>.loadbalancer.healthcheck.timeout`"
+
+    See [health check](../http/load-balancing/service.md#health-check) for more information.
+
+    ```yaml
+    Mesh.http.services.myservice.loadbalancer.healthcheck.timeout=10
+    ```
+
+??? info "`Mesh.http.services.<service_name>.loadbalancer.healthcheck.followredirects`"
+
+    See [health check](../http/load-balancing/service.md#health-check) for more information.
+
+    ```yaml
+    Mesh.http.services.myservice.loadbalancer.healthcheck.followredirects=true
+    ```
+
+??? info "`Mesh.http.services.<service_name>.loadbalancer.sticky.cookie`"
+
+    ```yaml
+    Mesh.http.services.myservice.loadbalancer.sticky.cookie=true
+    ```
+
+??? info "`Mesh.http.services.<service_name>.loadbalancer.sticky.cookie.httponly`"
+
+    ```yaml
+    Mesh.http.services.myservice.loadbalancer.sticky.cookie.httponly=true
+    ```
+
+??? info "`Mesh.http.services.<service_name>.loadbalancer.sticky.cookie.name`"
+
+    ```yaml
+    Mesh.http.services.myservice.loadbalancer.sticky.cookie.name=foobar
+    ```
+
+??? info "`Mesh.http.services.<service_name>.loadbalancer.sticky.cookie.path`"
+
+    ```yaml
+    - "Mesh.http.services.myservice.loadbalancer.sticky.cookie.path=/foobar"
+    ```
+
+??? info "`Mesh.http.services.<service_name>.loadbalancer.sticky.cookie.secure`"
+
+    ```yaml
+    Mesh.http.services.myservice.loadbalancer.sticky.cookie.secure=true
+    ```
+
+??? info "`Mesh.http.services.<service_name>.loadbalancer.sticky.cookie.samesite`"
+
+    ```yaml
+    Mesh.http.services.myservice.loadbalancer.sticky.cookie.samesite=none
+    ```
+
+??? info "`Mesh.http.services.<service_name>.loadbalancer.sticky.cookie.maxage`"
+
+    ```yaml
+    Mesh.http.services.myservice.loadbalancer.sticky.cookie.maxage=42
+    ```
+
+??? info "`Mesh.http.services.<service_name>.loadbalancer.responseforwarding.flushinterval`"
+
+    ```yaml
+    Mesh.http.services.myservice.loadbalancer.responseforwarding.flushinterval=10
+    ```
+
+### Middleware
+
+You can declare pieces of middleware using tags starting with `Mesh.http.middlewares.{name-of-your-choice}.`, followed by the middleware type/options.
+
+For example, to declare a middleware [`redirectscheme`](../http/middlewares/redirectscheme.md) named `my-redirect`, you'd write `Mesh.http.middlewares.my-redirect.redirectscheme.scheme: https`.
+
+More information about available middlewares in the dedicated [middlewares section](../http/middlewares/overview.md).
+
+??? example "Declaring and Referencing a Middleware"
+
+    ```yaml
+    # ...
+    # Declaring a middleware
+    Mesh.http.middlewares.my-redirect.redirectscheme.scheme=https
+    # Referencing a middleware
+    Mesh.http.routers.my-service.middlewares=my-redirect
+    ```
+
+!!! warning "Conflicts in Declaration"
+
+    If you declare multiple middleware with the same name but with different parameters, the middleware fails to be declared.
+
+### TCP
+
+You can declare TCP Routers and/or Services using tags.
+
+??? example "Declaring TCP Routers and Services"
+
+    ```yaml
+    Mesh.tcp.routers.my-router.rule=HostSNI(`example.com`)
+    Mesh.tcp.routers.my-router.tls=true
+    Mesh.tcp.services.my-service.loadbalancer.server.port=4123
+    ```
+
+!!! warning "TCP and HTTP"
+
+    If you declare a TCP Router/Service, it will prevent Mesh from automatically creating an HTTP Router/Service (like it does by default if no TCP Router/Service is defined).
+    You can declare both a TCP Router/Service and an HTTP Router/Service for the same Nomad service (but you have to do so manually).
+
+#### TCP Routers
+
+??? info "`Mesh.tcp.routers.<router_name>.entrypoints`"
+
+    See [entry points](../../install-configuration/entrypoints.md) for more information.
+
+    ```yaml
+    Mesh.tcp.routers.mytcprouter.entrypoints=ep1,ep2
+    ```
+
+??? info "`Mesh.tcp.routers.<router_name>.rule`"
+
+    See [rule](../tcp/router/rules-and-priority.md#rules) for more information.
+
+    ```yaml
+    Mesh.tcp.routers.mytcprouter.rule=HostSNI(`example.com`)
+    ```
+
+??? info "`Mesh.tcp.routers.<router_name>.ruleSyntax`"
+
+    !!! warning
+
+        RuleSyntax option is deprecated and will be removed in the next major version.
+        Please do not use this field and rewrite the router rules to use the v3 syntax.
+
+    configure the rule syntax to be used for parsing the rule on a per-router basis.
+    
+    ```yaml
+    Mesh.tcp.routers.mytcprouter.ruleSyntax=v3
+    ```
+    
+??? info "`Mesh.tcp.routers.<router_name>.priority`"
+
+    See [priority](../tcp/router/rules-and-priority.md#priority) for more information.
+
+    ```yaml
+    Mesh.tcp.routers.myrouter.priority=42
+    ```
+
+??? info "`Mesh.tcp.routers.<router_name>.service`"
+
+    See [service](../tcp/service.md) for more information.
+
+    ```yaml
+    Mesh.tcp.routers.mytcprouter.service=myservice
+    ```
+
+??? info "`Mesh.tcp.routers.<router_name>.tls`"
+
+    See [TLS](../tcp/tls.md) for more information.
+
+    ```yaml
+    Mesh.tcp.routers.mytcprouter.tls=true
+    ```
+
+??? info "`Mesh.tcp.routers.<router_name>.tls.certresolver`"
+
+    See [certResolver](../tcp/tls.md#configuration-options) for more information.
+
+    ```yaml
+    Mesh.tcp.routers.mytcprouter.tls.certresolver=myresolver
+    ```
+
+??? info "`Mesh.tcp.routers.<router_name>.tls.domains[n].main`"
+
+    See [TLS](../tcp/tls.md) for more information.
+
+    ```yaml
+    Mesh.tcp.routers.mytcprouter.tls.domains[0].main=example.org
+    ```
+
+??? info "`Mesh.tcp.routers.<router_name>.tls.domains[n].sans`"
+
+    See [TLS](../tcp/tls.md) for more information.
+
+    ```yaml
+    Mesh.tcp.routers.mytcprouter.tls.domains[0].sans=test.example.org,dev.example.org
+    ```
+
+??? info "`Mesh.tcp.routers.<router_name>.tls.options`"
+
+    See [TLS](../tcp/tls.md#configuration-options) for more information.
+
+    ```yaml
+    Mesh.tcp.routers.mytcprouter.tls.options=myoptions
+    ```
+
+??? info "`Mesh.tcp.routers.<router_name>.tls.passthrough`"
+
+    See [Passthrough](../tcp/tls.md#passthrough) for more information.
+
+    ```yaml
+    Mesh.tcp.routers.mytcprouter.tls.passthrough=true
+    ```
+
+#### TCP Services
+
+??? info "`Mesh.tcp.services.<service_name>.loadbalancer.server.port`"
+
+    Registers a port of the application.
+
+    ```yaml
+    Mesh.tcp.services.mytcpservice.loadbalancer.server.port=423
+    ```
+
+??? info "`Mesh.tcp.services.<service_name>.loadbalancer.server.tls`"
+
+    Determines whether to use TLS when dialing with the backend.
+
+    ```yaml
+    Mesh.tcp.services.mytcpservice.loadbalancer.server.tls=true
+    ```
+
+??? info "`Mesh.tcp.services.<service_name>.loadbalancer.proxyprotocol.version`"
+
+    See [PROXY protocol](../tcp/service.md#proxy-protocol) for more information.
+
+    ```yaml
+    Mesh.tcp.services.mytcpservice.loadbalancer.proxyprotocol.version=1
+    ```
+
+??? info "`Mesh.tcp.services.<service_name>.loadbalancer.serverstransport`"
+
+    Allows to reference a ServersTransport resource that is defined either with the File provider or the Kubernetes CRD one.
+    See [serverstransport](../tcp/serverstransport.md) for more information.
+
+    ```yaml
+    Mesh.tcp.services.myservice.loadbalancer.serverstransport=foobar@file
+    ```
+
+#### TCP Middleware
+
+You can declare pieces of middleware using tags starting with `Mesh.tcp.middlewares.{name-of-your-choice}.`, followed by the middleware type/options.
+
+For example, to declare a middleware [`InFlightConn`](../tcp/middlewares/inflightconn.md) named `test-inflightconn`, you'd write `Mesh.tcp.middlewares.test-inflightconn.inflightconn.amount=10`.
+
+More information about available middlewares in the dedicated [middlewares section](../tcp/middlewares/overview.md).
+
+??? example "Declaring and Referencing a Middleware"
+    
+    ```yaml
+    # ...
+    # Declaring a middleware
+    Mesh.tcp.middlewares.test-inflightconn.amount=10
+    # Referencing a middleware
+    Mesh.tcp.routers.my-service.middlewares=test-inflightconn
+    ```
+
+!!! warning "Conflicts in Declaration"
+
+    If you declare multiple middleware with the same name but with different parameters, the middleware fails to be declared.
+
+### UDP
+
+You can declare UDP Routers and/or Services using tags.
+
+??? example "Declaring UDP Routers and Services"
+
+    ```yaml
+    Mesh.udp.routers.my-router.entrypoints=udp
+    Mesh.udp.services.my-service.loadbalancer.server.port=4123
+    ```
+
+!!! warning "UDP and HTTP"
+
+    If you declare a UDP Router/Service, it will prevent Mesh from automatically creating an HTTP Router/Service (like it does by default if no UDP Router/Service is defined).
+    You can declare both a UDP Router/Service and an HTTP Router/Service for the same Nomad service (but you have to do so manually).
+
+#### UDP Routers
+
+??? info "`Mesh.udp.routers.<router_name>.entrypoints`"
+
+    See [entry points](../../install-configuration/entrypoints.md) for more information.
+
+    ```yaml
+    Mesh.udp.routers.myudprouter.entrypoints=ep1,ep2
+    ```
+
+??? info "`Mesh.udp.routers.<router_name>.service`"
+
+    See [service](../udp/service.md) for more information.
+
+    ```yaml
+    Mesh.udp.routers.myudprouter.service=myservice
+    ```
+
+#### UDP Services
+
+??? info "`Mesh.udp.services.<service_name>.loadbalancer.server.port`"
+
+    Registers a port of the application.
+
+    ```yaml
+    Mesh.udp.services.myudpservice.loadbalancer.server.port=423
+    ```
+
+### Specific Provider Options
+
+#### `Mesh.enable`
+
+```yaml
+Mesh.enable=true
+```
+
+You can tell Mesh to consider (or not) the service by setting `Mesh.enable` to true or false.
+
+This option overrides the value of `exposedByDefault`.
+
+#### `Mesh.nomad.canary`
+
+```yaml
+Mesh.nomad.canary=true
+```
+
+When Nomad orchestrator is a provider (of service registration) for Mesh,
+one might have the need to distinguish within Mesh between a [Canary](https://learn.hashicorp.com/tutorials/nomad/job-blue-green-and-canary-deployments#deploy-with-canaries) instance of a service, or a production one.
+For example if one does not want them to be part of the same load-balancer.
+
+Therefore, this option, which is meant to be provided as one of the values of the `canary_tags` field in the Nomad [service stanza](https://www.nomadproject.io/docs/job-specification/service#canary_tags),
+allows Mesh to identify that the associated instance is a canary one.
+
+#### Port Lookup
+
+Mesh is capable of detecting the port to use, by following the default Nomad Service Discovery flow.
+That means, if you just expose lets say port `:1337` on the Nomad job, Mesh will pick up this port and use it.

@@ -1,0 +1,26 @@
+version: "3.3"
+
+services:
+
+  Mesh:
+    image: "Mesh:v3.4"
+    container_name: "Mesh"
+    command:
+      #- "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entryPoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+  whoami:
+    image: "Mesh/whoami"
+    container_name: "simple-service"
+    labels:
+      - "Mesh.enable=true"
+      - "Mesh.http.routers.whoami.rule=Host(`whoami.localhost`)"
+      - "Mesh.http.routers.whoami.entrypoints=web"

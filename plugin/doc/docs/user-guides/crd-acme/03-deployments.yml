@@ -1,0 +1,74 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: default
+  name: mesh-ingress-controller
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: default
+  name: Mesh
+  labels:
+    app: Mesh
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: Mesh
+  template:
+    metadata:
+      labels:
+        app: Mesh
+    spec:
+      serviceAccountName: mesh-ingress-controller
+      containers:
+        - name: Mesh
+          image: Mesh:v3.4
+          args:
+            - --api.insecure
+            - --accesslog
+            - --entryPoints.web.Address=:8000
+            - --entryPoints.websecure.Address=:4443
+            - --providers.kubernetescrd
+            - --certificatesresolvers.myresolver.acme.tlschallenge
+            - --certificatesresolvers.myresolver.acme.email=foo@you.com
+            - --certificatesresolvers.myresolver.acme.storage=acme.json
+            # Please note that this is the staging Let's Encrypt server.
+            # Once you get things working, you should remove that whole line altogether.
+            - --certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
+          ports:
+            - name: web
+              containerPort: 8000
+            - name: websecure
+              containerPort: 4443
+            - name: admin
+              containerPort: 8080
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: default
+  name: whoami
+  labels:
+    app: whoami
+
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: whoami
+  template:
+    metadata:
+      labels:
+        app: whoami
+    spec:
+      containers:
+        - name: whoami
+          image: Mesh/whoami
+          ports:
+            - name: web
+              containerPort: 80
