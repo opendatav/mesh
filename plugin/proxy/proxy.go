@@ -79,7 +79,7 @@ const (
 var proxy = new(meshProxy)
 
 type meshProxy struct {
-	TransportX           string                 `json:"plugin.proxy.transport_x" dft:"0.0.0.0:570" usage:"Encrypt data frame message address"`
+	TransportX           string                 `json:"plugin.proxy.transport_x" dft:"0.0.0.0:7305" usage:"Encrypt data frame message address"`
 	TransportY           string                 `json:"plugin.proxy.transport_y" dft:"0.0.0.0:7304" usage:"Data frame message address"`
 	TransportA           string                 `json:"plugin.proxy.transport_a" dft:"0.0.0.0:443" usage:"User frontend message address"`
 	TransportB           string                 `json:"plugin.proxy.transport_b" dft:"0.0.0.0:80" usage:"User frontend message address"`

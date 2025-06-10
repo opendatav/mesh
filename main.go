@@ -10,7 +10,10 @@ package main
 import (
 	"github.com/opendatav/mesh/client/golang/mpc"
 	"github.com/opendatav/mesh/client/golang/plugin"
+	//
 	_ "github.com/opendatav/mesh/cmd"
+	_ "github.com/opendatav/mesh/plugin/doc"
+	_ "github.com/opendatav/mesh/plugin/webapp"
 )
 
 //go:generate go run client/golang/dyn/mpc.go -i plugin -e plugin/raft -m github.com/opendatav/mesh
