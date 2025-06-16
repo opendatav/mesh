@@ -65,7 +65,7 @@ func Status(ctx context.Context) *cobra.Command {
 	}
 	status.Flags().StringVarP(&sets, "sets", "s", tool.Name.Get(), "Mesh sets name.")
 	status.Flags().StringVarP(&node, "node", "n", types.LocalNodeId, "Mesh node or inst id.")
-	status.Flags().StringVarP(&addr, "addr", "a", "127.0.0.1:570", "Mesh address.")
+	status.Flags().StringVarP(&addr, "addr", "a", "127.0.0.1:7305", "Mesh address.")
 	status.Flags().StringVarP(&format, "output", "o", "json", "Mesh invoke output format.")
 	return status
 }

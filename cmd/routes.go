@@ -64,7 +64,7 @@ func (that *Route) Remove(ctx context.Context) *cobra.Command {
 		},
 	}
 	remove.Flags().StringVarP(&node, "node", "n", types.LocalNodeId, "Mesh node or inst id.")
-	remove.Flags().StringVarP(&addr, "addr", "a", "127.0.0.1:570", "Mesh address.")
+	remove.Flags().StringVarP(&addr, "addr", "a", "127.0.0.1:7305", "Mesh address.")
 	return remove
 }
 
@@ -102,7 +102,7 @@ func (that *Route) VIP(ctx context.Context) *cobra.Command {
 	vip.Flags().StringVarP(&remove, "remove", "r", "", "Mesh vip remove.")
 	vip.Flags().StringVarP(&write, "write", "w", "", "Mesh vip write.")
 	vip.Flags().StringVarP(&node, "node", "n", types.LocalNodeId, "Mesh node or inst id.")
-	vip.Flags().StringVarP(&addr, "addr", "a", "127.0.0.1:570", "Mesh address.")
+	vip.Flags().StringVarP(&addr, "addr", "a", "127.0.0.1:7305", "Mesh address.")
 	return vip
 }
 
@@ -140,7 +140,7 @@ func (that *Route) Trick(ctx context.Context) *cobra.Command {
 	vip.Flags().StringVarP(&remove, "remove", "r", "", "Mesh vip remove.")
 	vip.Flags().StringVarP(&write, "write", "w", "", "Mesh vip write.")
 	vip.Flags().StringVarP(&node, "node", "n", types.LocalNodeId, "Mesh node or inst id.")
-	vip.Flags().StringVarP(&addr, "addr", "a", "127.0.0.1:570", "Mesh address.")
+	vip.Flags().StringVarP(&addr, "addr", "a", "127.0.0.1:7305", "Mesh address.")
 	return vip
 }
 
@@ -192,6 +192,6 @@ func (that *Route) Home(ctx context.Context) *cobra.Command {
 	route.AddCommand(that.VIP(ctx))
 	route.AddCommand(that.Trick(ctx))
 	route.Flags().StringVarP(&node, "node", "n", types.LocalNodeId, "Mesh node or inst id.")
-	route.Flags().StringVarP(&addr, "addr", "a", "127.0.0.1:570", "Mesh address.")
+	route.Flags().StringVarP(&addr, "addr", "a", "127.0.0.1:7305", "Mesh address.")
 	return route
 }

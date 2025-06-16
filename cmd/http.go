@@ -87,7 +87,7 @@ func (that *HTTP) Home(ctx context.Context) *cobra.Command {
 		},
 	}
 	h2.Flags().StringVarP(&node, "node", "n", types.LocalNodeId, "Mesh node or inst id.")
-	h2.Flags().StringVarP(&addr, "addr", "a", "127.0.0.1:570", "Mesh address.")
+	h2.Flags().StringVarP(&addr, "addr", "a", "127.0.0.1:7305", "Mesh address.")
 	h2.Flags().StringVarP(&method, "request", "X", http.MethodGet, "Specify request command to use")
 	h2.Flags().StringVarP(&data, "data", "i", "", "HTTP POST data")
 	h2.Flags().StringVarP(&location, "location", "L", "", "Follow redirects")

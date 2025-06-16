@@ -72,7 +72,7 @@ func Exec(ctx context.Context) *cobra.Command {
 		},
 	}
 	exec.Flags().StringVarP(&node, "node", "n", types.LocalNodeId, "Mesh node or inst id.")
-	exec.Flags().StringVarP(&addr, "addr", "a", "127.0.0.1:570", "Mesh address.")
+	exec.Flags().StringVarP(&addr, "addr", "a", "127.0.0.1:7305", "Mesh address.")
 	exec.Flags().StringVarP(&method, "method", "m", "mesh.net.environ", "Mesh program interface name.")
 	exec.Flags().StringVarP(&input, "input", "i", "{}", "Mesh program interface parameters.")
 	exec.Flags().StringVarP(&format, "output", "o", "json", "Mesh invoke output format.")
