@@ -126,7 +126,7 @@ func (that *SnapShot) withRemoteRoute(ctx context.Context, routes *Routes) {
 		rs := routes.IfAbsent(route.NodeId, func(n string) *dynamic.Service {
 			return that.remoteService(ctx, n, routes, "https", route.NodeId, that.supervise(route), route.URC())
 		})
-		rr := fmt.Sprintf("!PathRegexp(`/org.ppc.ptp.PrivateTransferTransport/.*`) && !PathRegexp(`/v1/interconn/chan/(pop|push|peek|release)`) && (HeaderRegexp(`x-ptp-target-node-id`, `%s`) || HeaderRegexp(`x-ptp-target-inst-id`, `%s`) || HeaderRegexp(`mesh-urn`, `%s`))", route.NodeId, route.InstId, mtypes.URNMatcher("([-a-zA-Z\\d]+)", route.ID(ctx).SEQ, mtypes.CN, route.NodeId, route.InstId))
+		rr := fmt.Sprintf("HeaderRegexp(`x-ptp-target-node-id`, `%s`) || HeaderRegexp(`x-ptp-target-inst-id`, `%s`) || HeaderRegexp(`mesh-urn`, `%s`)", route.NodeId, route.InstId, mtypes.URNMatcher("([-a-zA-Z\\d]+)", route.ID(ctx).SEQ, mtypes.CN, route.NodeId, route.InstId))
 		routes.Route(ctx, fmt.Sprintf("%s#secure", route.NodeId), &dynamic.Router{
 			EntryPoints: []string{TransportY},
 			Middlewares: []string{PluginBarrier},
@@ -146,6 +146,52 @@ func (that *SnapShot) withRemoteRoute(ctx context.Context, routes *Routes) {
 			Priority:    3100,
 		})
 	}
+	addr := tool.Runtime.Get().String()
+	h2s := routes.IfAbsent(fmt.Sprintf("%s#h2l", that.env.NodeId), func(n string) *dynamic.Service {
+		return that.remoteService(ctx, n, routes, "h2c", that.env.NodeId, mtypes.URC(addr))
+	})
+	h2r := fmt.Sprintf("PathRegexp(`/org.ppc.ptp\\..*`) && !PathRegexp(`/org.ppc.ptp.PrivateTransferTransport/.*`) && (HeaderRegexp(`x-ptp-target-node-id`, `%s`) || HeaderRegexp(`x-ptp-target-inst-id`, `%s`))", that.env.NodeId, that.env.InstId)
+	routes.Route(ctx, fmt.Sprintf("%s#secure#h2l", that.env.NodeId), &dynamic.Router{
+		EntryPoints: []string{TransportY},
+		Middlewares: []string{PluginBarrier},
+		Service:     h2s,
+		Rule:        h2r,
+		Priority:    3500,
+		TLS: &dynamic.RouterTLSConfig{
+			Options: that.env.NodeId,
+			Domains: proxy.Domains(),
+		},
+	})
+	routes.Route(ctx, fmt.Sprintf("%s#insecure#h2l", that.env.NodeId), &dynamic.Router{
+		EntryPoints: []string{TransportY},
+		Middlewares: []string{PluginBarrier},
+		Service:     h2s,
+		Rule:        h2r,
+		Priority:    3100,
+	})
+	h1s := routes.IfAbsent(fmt.Sprintf("%s#h1l", that.env.NodeId), func(n string) *dynamic.Service {
+		h, p := assemblies.ParseHost(ctx, addr)
+		return that.remoteService(ctx, n, routes, "http", that.env.NodeId, mtypes.URC(fmt.Sprintf("%s:%d", h, p)))
+	})
+	h1r := fmt.Sprintf("PathRegexp(`/v1/interconn/.*`) && !PathRegexp(`/v1/interconn/chan/(pop|push|peek|release)`) && (HeaderRegexp(`x-ptp-target-node-id`, `%s`) || HeaderRegexp(`x-ptp-target-inst-id`, `%s`))", that.env.NodeId, that.env.InstId)
+	routes.Route(ctx, fmt.Sprintf("%s#secure#h1l", that.env.NodeId), &dynamic.Router{
+		EntryPoints: []string{TransportY},
+		Middlewares: []string{PluginBarrier},
+		Service:     h1s,
+		Rule:        h1r,
+		Priority:    3500,
+		TLS: &dynamic.RouterTLSConfig{
+			Options: that.env.NodeId,
+			Domains: proxy.Domains(),
+		},
+	})
+	routes.Route(ctx, fmt.Sprintf("%s#insecure#h1l", that.env.NodeId), &dynamic.Router{
+		EntryPoints: []string{TransportY},
+		Middlewares: []string{PluginBarrier},
+		Service:     h1s,
+		Rule:        h1r,
+		Priority:    3100,
+	})
 }
 
 // supervise redirect request to spec inst if in union
