@@ -18,7 +18,7 @@ replace (
 	github.com/opendatav/mesh/client/golang v0.0.0 => ./client/golang
 	github.com/opendatav/mesh/container/operator v0.0.0 => ./container/operator
 	github.com/timshannon/badgerhold/v4 v4.0.0 => github.com/ducesoft/badgerhold/v4 v4.0.0-20230312123627-250c739c70df
-	github.com/traefik/traefik/v3 v3.0.0 => github.com/ducesoft/traefik/v3 v3.0.0-20250107035807-ab5fedf2cf5a
+	github.com/traefik/traefik/v3 v3.0.0 => github.com/ducesoft/traefik/v3 v3.0.0-20250623101852-c24ce1f4ba36
 	github.com/vulcand/oxy/v2 v2.0.0 => github.com/ducesoft/oxy/v2 v2.0.0-20221222033727-1be0c32e5e77
 )
 
@@ -63,6 +63,7 @@ require (
 	go.opentelemetry.io/otel/trace v1.32.0
 	google.golang.org/grpc v1.67.1
 	google.golang.org/protobuf v1.35.1
+	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 	gopkg.in/yaml.v3 v3.0.1
 )
@@ -246,6 +247,8 @@ require (
 	github.com/k0kubun/go-ansi v0.0.0-20180517002512-3bf9e2903213 // indirect
 	github.com/klauspost/compress v1.17.11-0.20241004063537-dbd6c381492a // indirect
 	github.com/kolo/xmlrpc v0.0.0-20220921171641-a4b6fa1dd06b // indirect
+	github.com/kr/pretty v0.3.1 // indirect
+	github.com/kr/text v0.2.0 // indirect
 	github.com/kvtools/consul v1.0.2 // indirect
 	github.com/kvtools/etcdv3 v1.0.2 // indirect
 	github.com/kvtools/redis v1.1.0 // indirect
@@ -318,6 +321,7 @@ require (
 	github.com/regfish/regfish-dnsapi-go v0.1.1 // indirect
 	github.com/rivo/uniseg v0.4.4 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
+	github.com/rogpeppe/go-internal v1.12.0 // indirect
 	github.com/rs/cors v1.7.0 // indirect
 	github.com/sacloud/api-client-go v0.2.10 // indirect
 	github.com/sacloud/go-http v0.1.8 // indirect
