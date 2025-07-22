@@ -15,11 +15,14 @@ import (
 	"github.com/opendatav/mesh/client/golang/prsim"
 	"github.com/opendatav/mesh/client/golang/tool"
 	mtypes "github.com/opendatav/mesh/client/golang/types"
+	"github.com/opendatav/mesh/plugin/metabase"
+	"github.com/opendatav/mesh/plugin/metabase/orm"
 	"github.com/traefik/traefik/v3/pkg/config/dynamic"
 	"github.com/traefik/traefik/v3/pkg/provider"
 	"github.com/traefik/traefik/v3/pkg/safe"
 	"github.com/traefik/traefik/v3/pkg/tls"
 	"github.com/traefik/traefik/v3/pkg/types"
+	"strings"
 )
 
 func init() {
@@ -38,6 +41,7 @@ type meshNetGraph struct {
 	groups            map[string]*mtypes.Route
 	registrations     mtypes.MetadataRegistrations
 	license           *mtypes.License
+	rules             []*mtypes.RouteRule
 }
 
 func (that *meshNetGraph) Att() *macro.Att {
@@ -61,6 +65,28 @@ func (that *meshNetGraph) Listen(ctx context.Context, event *mtypes.Event) error
 		}
 		that.routes = routes
 		that.groups = groups
+
+		if err := metabase.WithTx(ctx, func(ctx context.Context, session orm.IO) error {
+			rs, err := session.Route().All(ctx)
+			if nil != err {
+				return cause.Error(err)
+			}
+			var rules []*mtypes.RouteRule
+			for _, r := range rs {
+				rules = append(rules, &mtypes.RouteRule{
+					Name:           r.Name,
+					Listen:         strings.Split(r.Listen, ";"),
+					Matcher:        r.Matcher,
+					Backend:        strings.Split(r.Backend, ";"),
+					Priority:       int(r.Priority),
+					PassHostHeader: r.PassHostHeader > 0,
+				})
+			}
+			that.rules = rules
+			return nil
+		}); nil != err {
+			return cause.Error(err)
+		}
 	}
 	if event.Binding.Match(prsim.LicenseImports) {
 		var license *mtypes.License
@@ -98,6 +124,7 @@ func (that *meshNetGraph) refresh(ctx context.Context) error {
 			sets:    that.registrations.Of(mtypes.METADATA),
 			complex: that.registrations.Of(mtypes.COMPLEX),
 			lic:     tool.Anyone(that.license, new(mtypes.License)),
+			rules:   that.rules,
 		}
 		message := snap.routesMessage(ctx)
 		that.stringify(ctx, message)

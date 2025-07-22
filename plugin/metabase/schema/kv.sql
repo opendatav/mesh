@@ -20,3 +20,8 @@ ORDER BY `key` ASC
 SELECT `key`
 FROM `mesh_kv`
 WHERE `key` LIKE '%?.key%';
+
+-- @SelectKeyPrefix#many
+SELECT *
+FROM `mesh_kv`
+WHERE `key` LIKE '%?.key%';

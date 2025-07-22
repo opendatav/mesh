@@ -37,6 +37,7 @@ type SnapShot struct {
 	sets    mtypes.MetadataRegistrations
 	complex mtypes.MetadataRegistrations
 	lic     *mtypes.License
+	rules   []*mtypes.RouteRule
 }
 
 func (that *Routes) IfAbsent(name string, fn func(n string) *dynamic.Service) string {
@@ -369,12 +370,39 @@ func (that *SnapShot) dyn(ctx context.Context, route *mtypes.Route, middlewares 
 	return ms
 }
 
+func (that *SnapShot) withRules(ctx context.Context, routes *Routes) {
+	for _, rule := range that.rules {
+		svc := routes.IfAbsent(rule.Name, func(n string) *dynamic.Service {
+			return &dynamic.Service{
+				LoadBalancer: &dynamic.ServersLoadBalancer{
+					Servers: tool.Map(func(v string) dynamic.Server {
+						return dynamic.Server{
+							URL: v,
+						}
+					}, rule.Backend),
+					HealthCheck:      nil,
+					PassHostHeader:   &rule.PassHostHeader,
+					ServersTransport: mtypes.LocalNodeId,
+				},
+			}
+		})
+		routes.Route(ctx, rule.Name, &dynamic.Router{
+			EntryPoints: tool.Distinct(tool.WithoutZero(rule.Listen)),
+			Middlewares: []string{},
+			Service:     svc,
+			Rule:        rule.Matcher,
+			Priority:    rule.Priority,
+		})
+	}
+}
+
 func (that *SnapShot) routesMessage(ctx context.Context) *dynamic.Message {
 	routes := &Routes{services: map[string]*dynamic.Service{}, routers: map[string]*dynamic.Router{}}
 	assemblies.WithAsmRoute(ctx, routes)
 	that.withRemoteRoute(ctx, routes)
 	that.withClusterRoute(ctx, routes)
 	that.withComplexRoute(ctx, routes)
+	that.withRules(ctx, routes)
 	return &dynamic.Message{
 		ProviderName: ProviderName,
 		Configuration: &dynamic.Configuration{

@@ -137,6 +137,18 @@ func init() {
 	macro.Provide(mpc.IInvoker, serviceAssert)
 	macro.Provide(macro.ICaller, serviceAssert)
 
+	var serviceRouteAdd = &meshPRSINetworkRouteAddMPS{service: service}
+	var _ mpc.Invoker = serviceRouteAdd
+	var _ macro.Caller = serviceRouteAdd
+	macro.Provide(mpc.IInvoker, serviceRouteAdd)
+	macro.Provide(macro.ICaller, serviceRouteAdd)
+
+	var serviceRouteRemove = &meshPRSINetworkRouteRemoveMPS{service: service}
+	var _ mpc.Invoker = serviceRouteRemove
+	var _ macro.Caller = serviceRouteRemove
+	macro.Provide(mpc.IInvoker, serviceRouteRemove)
+	macro.Provide(macro.ICaller, serviceRouteRemove)
+
 }
 
 // meshPRSINetworkMPS is an implementation of prsim.PRSINetwork
@@ -264,6 +276,18 @@ func (that *meshPRSINetworkMPS) Disband(ctx context.Context, nodeIds []string) e
 // @MPI("mesh.net.assert")
 func (that *meshPRSINetworkMPS) Assert(ctx context.Context, feature string, nodeIds []string) (bool, error) {
 	return that.mps.Assert(ctx, feature, nodeIds)
+}
+
+// RouteAdd
+// @MPI("mesh.net.route.add")
+func (that *meshPRSINetworkMPS) RouteAdd(ctx context.Context, routes []*types.RouteRule) error {
+	return that.mps.RouteAdd(ctx, routes)
+}
+
+// RouteRemove
+// @MPI("mesh.net.route.remove")
+func (that *meshPRSINetworkMPS) RouteRemove(ctx context.Context, names []string) error {
+	return that.mps.RouteRemove(ctx, names)
 }
 
 type meshPRSINetworkGetEnvironMPS struct {
@@ -702,4 +726,54 @@ func (that *meshPRSINetworkAssertMPS) Invoke(ctx context.Context, invocation mpc
 		return nil, cause.CompatibleError("Service %s parameters can't compatible. ", mpc.ContextWith(ctx).GetUrn())
 	}
 	return that.service.Assert(ctx, parameters.Feature, parameters.NodeIds)
+}
+
+type meshPRSINetworkRouteAddMPS struct {
+	service prsim.Network
+}
+
+func (that *meshPRSINetworkRouteAddMPS) Att() *macro.Att {
+	return &macro.Att{Name: strings.ReplaceAll("mesh.net.route.add", "${mesh.name}", tool.Name.Get())}
+}
+func (that *meshPRSINetworkRouteAddMPS) Stt() *macro.Stt {
+	return &macro.Stt{Name: strings.ReplaceAll("mesh.net.route.add", "${mesh.name}", tool.Name.Get())}
+}
+
+func (that *meshPRSINetworkRouteAddMPS) Call(ctx context.Context, proxy interface{}, method macro.Inspector, args ...interface{}) (interface{}, error) {
+	parameters := new(proxympx.MeshNetworkRouteAddParameters)
+	parameters.SetArguments(ctx, args...)
+	return nil, that.service.RouteAdd(ctx, parameters.Routes)
+}
+
+func (that *meshPRSINetworkRouteAddMPS) Invoke(ctx context.Context, invocation mpc.Invocation) (interface{}, error) {
+	parameters, ok := invocation.GetParameters().(*proxympx.MeshNetworkRouteAddParameters)
+	if !ok {
+		return nil, cause.CompatibleError("Service %s parameters can't compatible. ", mpc.ContextWith(ctx).GetUrn())
+	}
+	return nil, that.service.RouteAdd(ctx, parameters.Routes)
+}
+
+type meshPRSINetworkRouteRemoveMPS struct {
+	service prsim.Network
+}
+
+func (that *meshPRSINetworkRouteRemoveMPS) Att() *macro.Att {
+	return &macro.Att{Name: strings.ReplaceAll("mesh.net.route.remove", "${mesh.name}", tool.Name.Get())}
+}
+func (that *meshPRSINetworkRouteRemoveMPS) Stt() *macro.Stt {
+	return &macro.Stt{Name: strings.ReplaceAll("mesh.net.route.remove", "${mesh.name}", tool.Name.Get())}
+}
+
+func (that *meshPRSINetworkRouteRemoveMPS) Call(ctx context.Context, proxy interface{}, method macro.Inspector, args ...interface{}) (interface{}, error) {
+	parameters := new(proxympx.MeshNetworkRouteRemoveParameters)
+	parameters.SetArguments(ctx, args...)
+	return nil, that.service.RouteRemove(ctx, parameters.Names)
+}
+
+func (that *meshPRSINetworkRouteRemoveMPS) Invoke(ctx context.Context, invocation mpc.Invocation) (interface{}, error) {
+	parameters, ok := invocation.GetParameters().(*proxympx.MeshNetworkRouteRemoveParameters)
+	if !ok {
+		return nil, cause.CompatibleError("Service %s parameters can't compatible. ", mpc.ContextWith(ctx).GetUrn())
+	}
+	return nil, that.service.RouteRemove(ctx, parameters.Names)
 }

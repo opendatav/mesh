@@ -107,4 +107,12 @@ type Network interface {
 	// Network feature assert.
 	// @MPI("mesh.net.assert")
 	Assert(ctx context.Context, feature string, nodeIds []string) (bool, error)
+
+	// RouteAdd
+	// @MPI("mesh.net.route.add")
+	RouteAdd(ctx context.Context, routes []*types.RouteRule) error
+
+	// RouteRemove
+	// @MPI("mesh.net.route.remove")
+	RouteRemove(ctx context.Context, names []string) error
 }

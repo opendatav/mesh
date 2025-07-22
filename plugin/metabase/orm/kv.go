@@ -39,6 +39,10 @@ type KvDao interface {
 	// SELECT `key` FROM `mesh_kv` WHERE `key` LIKE '%?.key%'
 	SelectKeys(ctx context.Context, key string) ([]string, error)
 
+	// SelectKeyPrefix
+	// SELECT * FROM `mesh_kv` WHERE `key` LIKE '%?.key%'
+	SelectKeyPrefix(ctx context.Context, key string) ([]*MeshKv, error)
+
 	// InsertMeshKv
 	// INSERT INTO `mesh_kv` (`key`, `value`, `create_at`, `update_at`, `create_by`, `update_by`) VALUES ('?.key', '?.value', '?.createAt', '?.updateAt', '?.createBy', '?.updateBy')
 	InsertMeshKv(ctx context.Context, it *MeshKv) (int64, error)
@@ -85,6 +89,19 @@ func (that *meshKvDiv) SelectKeys(ctx context.Context, key string) ([]string, er
 		ns[idx] = *r
 	}
 	return ns, nil
+}
+
+func (that *meshKvDiv) SelectKeyPrefix(ctx context.Context, key string) ([]*MeshKv, error) {
+	rs, err := dao.Query[MeshKv](ctx, &specs.Vars{
+		Expr: "SELECT * FROM `mesh_kv` WHERE `key` LIKE '%?.key%'",
+		Args: map[string]any{
+			"key": key,
+		},
+	})
+	if nil != err {
+		return nil, cause.Error(err)
+	}
+	return rs, nil
 }
 
 func (that *meshKvDiv) InsertMeshKv(ctx context.Context, it *MeshKv) (int64, error) {

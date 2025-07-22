@@ -251,3 +251,11 @@ func (that *network) ToRoute(ctx context.Context, route *orm.Edge) *types.Route 
 		Concurrency: attribute.Concurrency,
 	}
 }
+
+func (that *network) RouteAdd(ctx context.Context, routes []*types.RouteRule) error {
+	return nil
+}
+
+func (that *network) RouteRemove(ctx context.Context, names []string) error {
+	return nil
+}

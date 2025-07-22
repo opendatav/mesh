@@ -37,6 +37,7 @@ type runtimeAware struct {
 	RemoteBuiltin  prsim.Builtin
 	Channel        grpc.Channel
 	Endpoint       prsim.Endpoint
+	Yaml          codec.Codec
 }
 
 func (that *runtimeAware) Att() *macro.Att {
@@ -57,5 +58,6 @@ func (that *runtimeAware) Init() error {
 	that.RemoteBuiltin = macro.Load(prsim.IBuiltin).Get(macro.MeshMPI).(prsim.Builtin)
 	that.Channel = macro.Load(grpc.IChannel).Get(grpc.Name).(grpc.Channel)
 	that.Endpoint = macro.Load(prsim.IEndpoint).Get(macro.MeshMPI).(prsim.Endpoint)
+	that.Yaml = macro.Load(codec.ICodec).Get(codec.YAML).(codec.Codec)
 	return nil
 }

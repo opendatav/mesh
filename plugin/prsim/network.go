@@ -23,6 +23,8 @@ import (
 	"github.com/opendatav/mesh/client/golang/types"
 	_ "github.com/opendatav/mesh/plugin/cache"
 	_ "github.com/opendatav/mesh/plugin/kms"
+	"github.com/opendatav/mesh/plugin/metabase"
+	"github.com/opendatav/mesh/plugin/metabase/orm"
 	"os"
 	"sort"
 	"strings"
@@ -584,4 +586,37 @@ func (that *PRSINetwork) operateAlly(ctx context.Context, nodeIds []string, stat
 		}
 	}
 	return nil
+}
+
+func (that *PRSINetwork) RouteAdd(ctx context.Context, routes []*types.RouteRule) error {
+	return metabase.WithTx(ctx, func(ctx context.Context, session orm.IO) error {
+		for _, route := range routes {
+			if _, err := session.Route().InsertRoute(ctx, &orm.Route{
+				Name:           fmt.Sprintf("mesh.proxy.routes.%s", route.Name),
+				Listen:         strings.Join(route.Listen, ";"),
+				Matcher:        route.Matcher,
+				Backend:        strings.Join(route.Backend, ";"),
+				Priority:       int64(route.Priority),
+				PassHostHeader: tool.Ternary[int64](route.PassHostHeader, 1, 0),
+				CreateAt:       time.Now(),
+				UpdateAt:       time.Now(),
+				CreateBy:       "",
+				UpdateBy:       "",
+			}); nil != err {
+				return cause.Error(err)
+			}
+		}
+		return nil
+	})
+}
+
+func (that *PRSINetwork) RouteRemove(ctx context.Context, names []string) error {
+	return metabase.WithTx(ctx, func(ctx context.Context, session orm.IO) error {
+		for _, name := range names {
+			if _, err := session.Route().DeleteRouteByName(ctx, name); nil != err {
+				return cause.Error(err)
+			}
+		}
+		return nil
+	})
 }

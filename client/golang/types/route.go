@@ -369,7 +369,10 @@ func LocRouteWithAddr(environ *Environ, instId string, addr string) *Route {
 }
 
 type RouteRule struct {
-	Name    string   `index:"1" json:"name" xml:"name" yaml:"name" comment:"Route name"`
-	Matcher string   `index:"2" json:"matcher" xml:"matcher" yaml:"matcher" comment:"Route matcher"`
-	Backend []string `index:"3" json:"backend" xml:"backend" yaml:"backend" comment:"Route backend"`
+	Name           string   `index:"1" json:"name" xml:"name" yaml:"name" comment:"Route name"`
+	Listen         []string `index:"2" json:"listen" xml:"listen" yaml:"listen" comment:"Route listen address, e.g."`
+	Matcher        string   `index:"3" json:"matcher" xml:"matcher" yaml:"matcher" comment:"Route matcher"`
+	Backend        []string `index:"4" json:"backend" xml:"backend" yaml:"backend" comment:"Route backend"`
+	Priority       int      `index:"5" json:"priority" xml:"priority" yaml:"priority" comment:"Route priority"`
+	PassHostHeader bool     `index:"6" json:"pass_host_header" xml:"pass_host_header" yaml:"pass_host_header" comment:"Pass host header to backend"`
 }

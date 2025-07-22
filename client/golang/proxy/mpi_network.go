@@ -240,6 +240,30 @@ func init() {
 					Meta: &macro.Rtt{Name: "mesh.net.assert"},
 				},
 			},
+			"RouteAdd": {
+				DeclaredKind: (*prsim.Network)(nil),
+				TName:        "prsim.Network",
+				Name:         "RouteAdd",
+				Intype:       func() macro.Parameters { var parameters MeshNetworkRouteAddParameters; return &parameters },
+				Retype:       func() macro.Returns { var returns MeshNetworkRouteAddReturns; return &returns },
+				Inbound:      func() macro.Parameters { return new(MeshNetworkRouteAddParameters) },
+				Outbound:     func() macro.Returns { return new(MeshNetworkRouteAddReturns) },
+				MPI: &macro.MPIAnnotation{
+					Meta: &macro.Rtt{Name: "mesh.net.route.add"},
+				},
+			},
+			"RouteRemove": {
+				DeclaredKind: (*prsim.Network)(nil),
+				TName:        "prsim.Network",
+				Name:         "RouteRemove",
+				Intype:       func() macro.Parameters { var parameters MeshNetworkRouteRemoveParameters; return &parameters },
+				Retype:       func() macro.Returns { var returns MeshNetworkRouteRemoveReturns; return &returns },
+				Inbound:      func() macro.Parameters { return new(MeshNetworkRouteRemoveParameters) },
+				Outbound:     func() macro.Returns { return new(MeshNetworkRouteRemoveReturns) },
+				MPI: &macro.MPIAnnotation{
+					Meta: &macro.Rtt{Name: "mesh.net.route.remove"},
+				},
+			},
 		},
 	})
 }
@@ -473,6 +497,20 @@ func (that *meshNetworkMPI) Assert(ctx context.Context, feature string, nodeIds 
 	}
 	x = new(MeshNetworkAssertReturns)
 	return x.Content, cause.Errorf("Cant resolve response ")
+}
+
+// RouteAdd
+// @MPI("mesh.net.route.add")
+func (that *meshNetworkMPI) RouteAdd(ctx context.Context, routes []*types.RouteRule) error {
+	_, err := that.invoker.Call(ctx, that.invoker, that.methods["RouteAdd"], routes)
+	return err
+}
+
+// RouteRemove
+// @MPI("mesh.net.route.remove")
+func (that *meshNetworkMPI) RouteRemove(ctx context.Context, names []string) error {
+	_, err := that.invoker.Call(ctx, that.invoker, that.methods["RouteRemove"], names)
+	return err
 }
 
 type MeshNetworkGetEnvironParameters struct {
@@ -1795,5 +1833,147 @@ func (that *MeshNetworkAssertReturns) SetContent(ctx context.Context, arguments 
 		if len(arguments) > 0 && nil != arguments[0] {
 			that.Content = arguments[0].(bool)
 		}
+	}
+}
+
+type MeshNetworkRouteAddParameters struct {
+	Attachments map[string]string  `index:"-1" json:"attachments" xml:"attachments" yaml:"attachments"`
+	Routes      []*types.RouteRule `index:"0" json:"routes" xml:"routes" yaml:"routes"`
+}
+
+func (that *MeshNetworkRouteAddParameters) GetKind() interface{} {
+	return new(MeshNetworkRouteAddParameters)
+}
+
+func (that *MeshNetworkRouteAddParameters) GetArguments(ctx context.Context) []interface{} {
+	var arguments []interface{}
+	arguments = append(arguments, that.Routes)
+	return arguments
+}
+
+func (that *MeshNetworkRouteAddParameters) SetArguments(ctx context.Context, arguments ...interface{}) {
+	if len(arguments) > 0 {
+		if len(arguments) > 0 && nil != arguments[0] {
+			that.Routes = arguments[0].([]*types.RouteRule)
+		}
+	}
+}
+
+func (that *MeshNetworkRouteAddParameters) GetAttachments(ctx context.Context) map[string]string {
+	return that.Attachments
+}
+
+func (that *MeshNetworkRouteAddParameters) SetAttachments(ctx context.Context, attachments map[string]string) {
+	that.Attachments = attachments
+}
+
+type MeshNetworkRouteAddReturns struct {
+	Code    string       `index:"0" json:"code" xml:"code" yaml:"code" comment:"Result code"`
+	Message string       `index:"5" json:"message" xml:"message" yaml:"message" comment:"Result message"`
+	Cause   *macro.Cause `index:"10" json:"cause" xml:"cause" yaml:"cause" comment:"Service cause stacktrace"`
+}
+
+func (that *MeshNetworkRouteAddReturns) GetCode() string {
+	return that.Code
+}
+
+func (that *MeshNetworkRouteAddReturns) SetCode(code string) {
+	that.Code = code
+}
+
+func (that *MeshNetworkRouteAddReturns) GetMessage() string {
+	return that.Message
+}
+
+func (that *MeshNetworkRouteAddReturns) SetMessage(message string) {
+	that.Message = message
+}
+
+func (that *MeshNetworkRouteAddReturns) GetCause(ctx context.Context) *macro.Cause {
+	return that.Cause
+}
+
+func (that *MeshNetworkRouteAddReturns) SetCause(ctx context.Context, cause *macro.Cause) {
+	that.Cause = cause
+}
+
+func (that *MeshNetworkRouteAddReturns) GetContent(ctx context.Context) []interface{} {
+	var arguments []interface{}
+	return arguments
+}
+
+func (that *MeshNetworkRouteAddReturns) SetContent(ctx context.Context, arguments ...interface{}) {
+	if len(arguments) > 0 {
+	}
+}
+
+type MeshNetworkRouteRemoveParameters struct {
+	Attachments map[string]string `index:"-1" json:"attachments" xml:"attachments" yaml:"attachments"`
+	Names       []string          `index:"0" json:"names" xml:"names" yaml:"names"`
+}
+
+func (that *MeshNetworkRouteRemoveParameters) GetKind() interface{} {
+	return new(MeshNetworkRouteRemoveParameters)
+}
+
+func (that *MeshNetworkRouteRemoveParameters) GetArguments(ctx context.Context) []interface{} {
+	var arguments []interface{}
+	arguments = append(arguments, that.Names)
+	return arguments
+}
+
+func (that *MeshNetworkRouteRemoveParameters) SetArguments(ctx context.Context, arguments ...interface{}) {
+	if len(arguments) > 0 {
+		if len(arguments) > 0 && nil != arguments[0] {
+			that.Names = arguments[0].([]string)
+		}
+	}
+}
+
+func (that *MeshNetworkRouteRemoveParameters) GetAttachments(ctx context.Context) map[string]string {
+	return that.Attachments
+}
+
+func (that *MeshNetworkRouteRemoveParameters) SetAttachments(ctx context.Context, attachments map[string]string) {
+	that.Attachments = attachments
+}
+
+type MeshNetworkRouteRemoveReturns struct {
+	Code    string       `index:"0" json:"code" xml:"code" yaml:"code" comment:"Result code"`
+	Message string       `index:"5" json:"message" xml:"message" yaml:"message" comment:"Result message"`
+	Cause   *macro.Cause `index:"10" json:"cause" xml:"cause" yaml:"cause" comment:"Service cause stacktrace"`
+}
+
+func (that *MeshNetworkRouteRemoveReturns) GetCode() string {
+	return that.Code
+}
+
+func (that *MeshNetworkRouteRemoveReturns) SetCode(code string) {
+	that.Code = code
+}
+
+func (that *MeshNetworkRouteRemoveReturns) GetMessage() string {
+	return that.Message
+}
+
+func (that *MeshNetworkRouteRemoveReturns) SetMessage(message string) {
+	that.Message = message
+}
+
+func (that *MeshNetworkRouteRemoveReturns) GetCause(ctx context.Context) *macro.Cause {
+	return that.Cause
+}
+
+func (that *MeshNetworkRouteRemoveReturns) SetCause(ctx context.Context, cause *macro.Cause) {
+	that.Cause = cause
+}
+
+func (that *MeshNetworkRouteRemoveReturns) GetContent(ctx context.Context) []interface{} {
+	var arguments []interface{}
+	return arguments
+}
+
+func (that *MeshNetworkRouteRemoveReturns) SetContent(ctx context.Context, arguments ...interface{}) {
+	if len(arguments) > 0 {
 	}
 }

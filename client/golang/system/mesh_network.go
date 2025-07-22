@@ -132,3 +132,11 @@ func (that *systemNetwork) Disband(ctx context.Context, nodeIds []string) error 
 func (that *systemNetwork) Assert(ctx context.Context, feature string, nodeIds []string) (bool, error) {
 	return aware.Network.Assert(ctx, feature, nodeIds)
 }
+
+func (that *systemNetwork) RouteAdd(ctx context.Context, routes []*types.RouteRule) error {
+	return aware.Network.RouteAdd(ctx, routes)
+}
+
+func (that *systemNetwork) RouteRemove(ctx context.Context, names []string) error {
+	return aware.Network.RouteRemove(ctx, names)
+}

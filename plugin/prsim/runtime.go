@@ -30,6 +30,7 @@ var aware = new(runtimeAware)
 type runtimeAware struct {
 	KMS              prsim.KMS
 	Codec            codec.Codec
+	Yaml            codec.Codec
 	RemoteNet        prsim.Network
 	LocalNet         prsim.Network
 	RemoteSubscriber prsim.Subscriber
@@ -67,5 +68,6 @@ func (that *runtimeAware) Init() error {
 	that.KV = macro.Load(prsim.IKV).Get(metabase.Name).(prsim.KV)
 	that.Dispatcher = macro.Load(prsim.IDispatcher).Get(macro.MeshSPI).(prsim.Dispatcher)
 	that.Scheduler = macro.Load(prsim.IScheduler).Get(macro.MeshSys).(prsim.Scheduler)
+	that.Yaml = macro.Load(codec.ICodec).Get(codec.YAML).(codec.Codec)
 	return nil
 }
