@@ -403,6 +403,17 @@ func (that *SnapShot) routesMessage(ctx context.Context) *dynamic.Message {
 					PluginHeader:  {},
 					PluginBarrier: {},
 					PluginHath:    {},
+					PluginPrefix: {
+						StripPrefix: &dynamic.StripPrefix{
+							Prefixes: append(tool.WithoutZero(tool.Map(func(v *mtypes.Route) string {
+								if p := v.URC().URL(ctx).URL().Path; p == "/" {
+									return ""
+								} else {
+									return p
+								}
+							}, that.routers)), tool.Citizen.Get()...),
+						},
+					},
 				},
 				Models:            map[string]*dynamic.Model{},
 				ServersTransports: that.withTransports(ctx),

@@ -61,6 +61,10 @@ func SPA() string {
 	return Env("", "MESH_SPA", "MESH-SPA", "MESH.SPA", "mesh_spa", "mesh-spa", "mesh.spa")
 }
 
+func Citizen() string {
+	return Env("", "MESH_CITIZEN", "MESH-CITIZEN", "mesh.citizen", "mesh_citizen")
+}
+
 type Modes int64
 
 var (

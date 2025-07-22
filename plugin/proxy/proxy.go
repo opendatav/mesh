@@ -74,6 +74,7 @@ const (
 	PluginRewrite   = "rewrite"
 	PluginReplace   = "replace"
 	PluginHath      = "hath"
+	PluginPrefix    = "prefix"
 )
 
 var proxy = new(meshProxy)

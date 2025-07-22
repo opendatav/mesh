@@ -349,3 +349,13 @@ func Timestamp(ctx context.Context, v string) int64 {
 	}
 	return n
 }
+
+func Map[V any, VV any](fn func(v V) VV, lists ...[]V) []VV {
+	var vv []VV
+	for _, its := range lists {
+		for _, it := range its {
+			vv = append(vv, fn(it))
+		}
+	}
+	return vv
+}

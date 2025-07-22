@@ -367,3 +367,9 @@ func LocRouteWithAddr(environ *Environ, instId string, addr string) *Route {
 		Concurrency: 0,
 	}
 }
+
+type RouteRule struct {
+	Name    string   `index:"1" json:"name" xml:"name" yaml:"name" comment:"Route name"`
+	Matcher string   `index:"2" json:"matcher" xml:"matcher" yaml:"matcher" comment:"Route matcher"`
+	Backend []string `index:"3" json:"backend" xml:"backend" yaml:"backend" comment:"Route backend"`
+}

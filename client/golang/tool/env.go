@@ -79,5 +79,8 @@ var (
 		}
 		return adds
 	})
-	SPA = new(macro.Once[*Addr]).With(func() *Addr { return NewAddr(Anyone(macro.SPA(), macro.Runtime()), Port) })
+	SPA     = new(macro.Once[*Addr]).With(func() *Addr { return NewAddr(Anyone(macro.SPA(), macro.Runtime()), Port) })
+	Citizen = new(macro.Once[[]string]).With(func() []string {
+		return WithoutZero(strings.Split(macro.Citizen(), ","))
+	})
 )

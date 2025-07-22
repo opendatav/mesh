@@ -15,6 +15,7 @@ import (
 	//
 	_ "git.firmer.tech/firmer/mesh/client/golang/boost"
 	mm "git.firmer.tech/firmer/mesh/client/golang/macro"
+	mmm "git.firmer.tech/firmer/mesh/client/golang/mesh"
 	_ "git.firmer.tech/firmer/mesh/client/golang/orm/dao"
 	_ "git.firmer.tech/firmer/mesh/client/golang/proxy"
 	_ "git.firmer.tech/firmer/mesh/client/golang/system"
@@ -30,6 +31,7 @@ func main() {
 	if err := mm.Active(); nil != err {
 		panic(err)
 	}
+	mmm.WithMode(mmm.Isolate)
 	ctx := mesh.Context()
 	hooks := mm.Load[mm.RuntimeHook]().List()
 	for _, hook := range hooks {

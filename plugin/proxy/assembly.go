@@ -176,4 +176,26 @@ func (that *assembly) AsmMesh(ctx context.Context, routes *Routes, ns string, na
 			Domains: proxy.Domains(),
 		},
 	})
+	if len(tool.Citizen.Get()) < 1 {
+		return
+	}
+	citizen := strings.Join(tool.Map(func(v string) string { return fmt.Sprintf("PathRegexp(`%s.*`)", v) }, tool.Citizen.Get()), " || ")
+	routes.Route(ctx, fmt.Sprintf("%s#mesh#asm#c#insecure", types.LocalNodeId), &dynamic.Router{
+		EntryPoints: []string{TransportA, TransportB, TransportX, TransportY},
+		Middlewares: []string{PluginBarrier, PluginPrefix},
+		Service:     ns,
+		Rule:        citizen,
+		Priority:    200,
+	})
+	routes.Route(ctx, fmt.Sprintf("%s#mesh#asm#c#secure", types.LocalNodeId), &dynamic.Router{
+		EntryPoints: []string{TransportA, TransportB, TransportX, TransportY},
+		Middlewares: []string{PluginBarrier, PluginPrefix},
+		Service:     ns,
+		Rule:        citizen,
+		Priority:    200,
+		TLS: &dynamic.RouterTLSConfig{
+			Options: types.LocalNodeId,
+			Domains: proxy.Domains(),
+		},
+	})
 }
