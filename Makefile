@@ -45,3 +45,9 @@ image:setenv
 	--opt build-arg:HTTP_PROXY=$(HTTPS_PROXY) \
 	--opt build-arg:HTTPS_PROXY=$(HTTPS_PROXY) \
 	--opt build-arg:ALL_PROXY=$(HTTPS_PROXY) \
+
+.PHONY: b
+b:
+	$(eval branch:=$(or $(shell git branch --show-current), $(CI_BUILD_REF_NAME)))
+	$(eval commitid:=$(or $(shell git rev-parse --short HEAD), $(CI_COMMIT_SHORT_SHA)))
+	dockerfile=${PWD}/Dockerfile image=192.168.1.3:5000/bfia/mesh:$(branch)-$(commitid) platform=linux/amd64 make image -C ../../ark/dockerfile/
