@@ -138,14 +138,14 @@ func (that *assembly) AsmMesh(ctx context.Context, routes *Routes, ns string, na
 		EntryPoints: []string{TransportA, TransportB, TransportX},
 		Middlewares: []string{PluginBarrier},
 		Service:     ns,
-		Rule:        "PathRegexp(`/doc.*`) || PathRegexp(`/mesh.*`) || PathRegexp(`/v1/interconn/.*`)",
+		Rule:        "PathRegexp(`/mpc/.*`) || PathRegexp(`/doc.*`) || PathRegexp(`/mesh.*`) || PathRegexp(`/v1/interconn/.*`)",
 		Priority:    200,
 	})
 	routes.Route(ctx, fmt.Sprintf("%s#mesh#asm#secure", types.LocalNodeId), &dynamic.Router{
 		EntryPoints: []string{TransportA, TransportB, TransportX},
 		Middlewares: []string{PluginBarrier},
 		Service:     ns,
-		Rule:        "PathRegexp(`/doc.*`) || PathRegexp(`/mesh.*`) || PathRegexp(`/v1/interconn/.*`)",
+		Rule:        "PathRegexp(`/mpc/.*`) || PathRegexp(`/doc.*`) || PathRegexp(`/mesh.*`) || PathRegexp(`/v1/interconn/.*`)",
 		Priority:    200,
 		TLS: &dynamic.RouterTLSConfig{
 			Options: types.LocalNodeId,

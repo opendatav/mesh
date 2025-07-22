@@ -591,8 +591,8 @@ func (that *PRSINetwork) operateAlly(ctx context.Context, nodeIds []string, stat
 func (that *PRSINetwork) RouteAdd(ctx context.Context, routes []*types.RouteRule) error {
 	return metabase.WithTx(ctx, func(ctx context.Context, session orm.IO) error {
 		for _, route := range routes {
-			if _, err := session.Route().InsertRoute(ctx, &orm.Route{
-				Name:           fmt.Sprintf("mesh.proxy.routes.%s", route.Name),
+			rr := &orm.Route{
+				Name:           route.Name,
 				Listen:         strings.Join(route.Listen, ";"),
 				Matcher:        route.Matcher,
 				Backend:        strings.Join(route.Backend, ";"),
@@ -602,7 +602,15 @@ func (that *PRSINetwork) RouteAdd(ctx context.Context, routes []*types.RouteRule
 				UpdateAt:       time.Now(),
 				CreateBy:       "",
 				UpdateBy:       "",
-			}); nil != err {
+			}
+			rs, err := session.Route().SelectRouteByName(ctx, route.Name)
+			if metabase.IsNoRow(err) || nil == rs {
+				if _, err = session.Route().InsertRoute(ctx, rr); nil != err {
+					return cause.Error(err)
+				}
+				continue
+			}
+			if _, err = session.Route().UpdateRouteByName(ctx, rr); nil != err {
 				return cause.Error(err)
 			}
 		}
