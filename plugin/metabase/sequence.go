@@ -9,81 +9,105 @@ package metabase
 
 import (
 	"context"
-	"github.com/dgraph-io/badger/v4"
+	"git.firmer.tech/firmer/mesh/client/golang/mesh"
+	"git.firmer.tech/firmer/mesh/client/golang/psi"
 	"github.com/opendatav/mesh/client/golang/cause"
 	"github.com/opendatav/mesh/client/golang/macro"
 	"github.com/opendatav/mesh/client/golang/prsim"
-	"github.com/timshannon/badgerhold/v4"
+	"github.com/opendatav/mesh/plugin/metabase/orm"
 	"time"
 )
 
 func init() {
+	var ss = &sequence{
+		s: &prsim.SyncSequence[orm.IO]{
+			Syncer:   new(sequenceSyncer),
+			Macro:    &macro.Att{Name: Name},
+			Sections: map[string]chan string{}},
+	}
+	var _ psi.Sequence = ss
 	macro.Provide(prsim.ISequence, ss)
 }
 
-var ss = &prsim.SyncSequence[*session]{
-	Syncer:   new(sequence),
-	Macro:    &macro.Att{Name: Name},
-	Sections: map[string]chan string{}}
-
-type session struct {
-	tx *badger.Txn
-	ss *badgerhold.Store
-}
 type sequence struct {
+	s psi.Sequence
 }
 
-func (that *sequence) Tx(ctx context.Context, tx func(session *session) ([]string, error)) ([]string, error) {
-	return TXR(ctx, func(ctx context.Context, x *badger.Txn, ss *badgerhold.Store) ([]string, error) {
-		return tx(&session{tx: x, ss: ss})
+func (that *sequence) Att() *macro.Att {
+	return &macro.Att{Name: Name}
+}
+
+func (that *sequence) Next(ctx context.Context, kind string, length int) (string, error) {
+	if len(kind) < 2 {
+		return "", cause.Errorf("Unexpected kind %s, at least two chars", kind)
+	}
+	idc, err := mesh.Zone(ctx)
+	if nil != err {
+		return "", cause.Error(err)
+	}
+	seq, err := that.s.Next(ctx, kind, 8)
+	if nil != err {
+		return "", cause.Error(err)
+	}
+	id := &mesh.ID{
+		Prefix:  kind[0:2],
+		Reserve: "00",
+		SEQ:     seq,
+		MDC:     idc,
+	}
+	return id.String(), nil
+}
+
+func (that *sequence) Section(ctx context.Context, kind string, size int, length int) ([]string, error) {
+	return that.s.Section(ctx, kind, size, length)
+}
+
+type sequenceSyncer struct {
+}
+
+func (that *sequenceSyncer) Tx(ctx context.Context, tx func(session orm.IO) ([]string, error)) ([]string, error) {
+	return WithTxReturn[[]string](ctx, func(ctx context.Context, session orm.IO) ([]string, error) {
+		return tx(session)
 	})
 }
 
-func (that *sequence) Incr(ctx context.Context, sx *session, kind string) (*prsim.Section, error) {
-	seq := new(SequenceEnt)
-	err := sx.ss.TxGet(sx.tx, kind, seq)
-	if nil != err && !IsNotFound(err) {
+func (that *sequenceSyncer) Incr(ctx context.Context, session orm.IO, kind string) (*prsim.Section, error) {
+	seq, err := session.Sequence().SelectMeshSeqByKind(ctx, kind)
+	if nil != err {
 		return nil, cause.Error(err)
-	}
-	if IsNotFound(err) {
-		return nil, nil
 	}
 	return &prsim.Section{
 		Kind:    seq.Kind,
 		Min:     seq.Min,
 		Max:     seq.Max,
-		Size:    seq.Size,
-		Length:  seq.Length,
-		Version: seq.Version,
+		Size:    int32(seq.Size),
+		Length:  int32(seq.Length),
+		Version: int32(seq.Version),
 	}, nil
 }
 
-func (that *sequence) Init(ctx context.Context, sx *session, section *prsim.Section) error {
-	err := sx.ss.TxInsert(sx.tx, section.Kind, &SequenceEnt{
+func (that *sequenceSyncer) Init(ctx context.Context, session orm.IO, section *prsim.Section) error {
+	_, err := session.Sequence().InsertMeshSeq(ctx, &orm.MeshSeq{
 		Kind:     section.Kind,
 		Min:      section.Min,
 		Max:      section.Max,
-		Size:     section.Size,
-		Length:   section.Length,
+		Size:     int64(section.Size),
+		Length:   int64(section.Length),
 		Status:   0,
-		Version:  section.Version,
+		Version:  int64(section.Version),
 		CreateAt: time.Now(),
 		UpdateAt: time.Now(),
 	})
 	return cause.Error(err)
 }
 
-func (that *sequence) Sync(ctx context.Context, sx *session, section *prsim.Section) error {
-	err := sx.ss.TxUpdate(sx.tx, section.Kind, &SequenceEnt{
-		Kind:     section.Kind,
-		Min:      section.Min + int64(section.Size),
-		Max:      section.Max,
-		Size:     section.Size,
-		Length:   section.Length,
-		Status:   0,
-		Version:  section.Version,
-		CreateAt: time.Now(),
-		UpdateAt: time.Now(),
-	})
-	return cause.Error(err)
+func (that *sequenceSyncer) Sync(ctx context.Context, session orm.IO, section *prsim.Section) error {
+	rows, err := session.Sequence().SetMin(ctx, section.Min+int64(section.Size), section.Kind, int64(section.Version))
+	if nil != err {
+		return cause.Error(err)
+	}
+	if rows < 1 {
+		return cause.Errorf("Lock sequence fail.")
+	}
+	return nil
 }

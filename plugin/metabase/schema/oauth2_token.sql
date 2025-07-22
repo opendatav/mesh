@@ -1,5 +1,5 @@
-/* name: CreateToken :exec */
-CREATE TABLE oauth2_token
+-- @CreateToken
+CREATE TABLE IF NOT EXISTS oauth2_token
 (
     `code`      VARCHAR(255) NOT NULL COMMENT '授权码',
     `access`    VARCHAR(255) NOT NULL COMMENT '准入TOKEN',
@@ -13,12 +13,12 @@ CREATE TABLE oauth2_token
     KEY         `idx_expire_at` (`expire_at`)
 )DEFAULT CHARSET = utf8  COMMENT ='OAuth2令牌表';
 
-/* name: InsertToken :execrows */
-INSERT INTO `oauth2_token` (`create_at`, `expire_at`, `code`, `access`, `refresh`, `data`)
-VALUES (?, ?, ?, ?, ?, ?);
+-- @DeleteToken
+DELETE
+FROM `oauth2_token`
+WHERE `code` = '?.code';
 
-/* name: DeleteToken :exec */
-DELETE FROM `oauth2_token` WHERE `code` = ?;
-
-/* name: IndexToken :many */
-SELECT * FROM `oauth2_token` ORDER BY `code` ASC LIMIT ?, ?;
+-- @IndexToken#page
+SELECT *
+FROM `oauth2_token`
+ORDER BY `code` ASC LIMIT '?.index', '?.limit';

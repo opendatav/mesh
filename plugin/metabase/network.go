@@ -9,7 +9,6 @@ package metabase
 
 import (
 	"context"
-	"github.com/dgraph-io/badger/v4"
 	"github.com/opendatav/mesh/client/golang/cause"
 	"github.com/opendatav/mesh/client/golang/log"
 	"github.com/opendatav/mesh/client/golang/macro"
@@ -17,8 +16,7 @@ import (
 	"github.com/opendatav/mesh/client/golang/system"
 	"github.com/opendatav/mesh/client/golang/tool"
 	"github.com/opendatav/mesh/client/golang/types"
-	"github.com/timshannon/badgerhold/v4"
-	"math"
+	"github.com/opendatav/mesh/plugin/metabase/orm"
 	"time"
 )
 
@@ -54,13 +52,13 @@ func (that *network) Accessible(ctx context.Context, route *types.Route) (bool, 
 }
 
 func (that *network) Refresh(ctx context.Context, routes []*types.Route) error {
-	return TX(ctx, func(ctx context.Context, tx *badger.Txn, ss *badgerhold.Store) error {
+	return WithoutTx(ctx, func(ctx context.Context, session orm.IO) error {
 		for _, route := range routes {
 			if "" == route.NodeId {
 				continue
 			}
 			if (route.Status & int32(types.Removed)) == int32(types.Removed) {
-				if err := ss.TxDelete(tx, route.NodeId, new(EdgeEnt)); nil != err {
+				if _, err := session.Edge().DeleteEdge(ctx, route.NodeId); nil != err {
 					return cause.Error(err)
 				}
 				continue
@@ -70,20 +68,20 @@ func (that *network) Refresh(ctx context.Context, routes []*types.Route) error {
 				log.Warn(ctx, "Encode:%s", err.Error())
 				return cause.Error(err)
 			}
-			prev := new(EdgeEnt)
-			if err = ss.TxGet(tx, route.NodeId, prev); nil != err && !IsNotFound(err) {
+			prev, err := session.Edge().SelectEdgeByNodeId(ctx, route.NodeId)
+			if nil != err && !IsNoRow(err) {
 				return cause.Error(err)
 			}
 			certification := new(types.RouteCertificate)
 			certification.Decode(ctx, prev.Certificate, aware.Codec)
-			err = ss.TxUpsert(tx, route.NodeId, &EdgeEnt{
-				NodeID:      route.NodeId,
-				InstID:      tool.Anyone(route.InstId, prev.InstID),
+			edge := &orm.Edge{
+				NodeId:      route.NodeId,
+				InstId:      tool.Anyone(route.InstId, prev.InstId),
 				InstName:    tool.Anyone(route.Name, route.InstName, prev.InstName),
 				Address:     tool.Anyone(route.URC().String(), prev.Address),
 				Describe:    tool.Anyone(route.Describe, prev.Describe),
 				Certificate: certification.Override0(route).Encode(ctx, aware.Codec),
-				Status:      types.Weaved.OrElse(prev.Status, types.Connected.OrElse(prev.Status, route.Status)),
+				Status:      int64(types.Weaved.OrElse(int32(prev.Status), types.Connected.OrElse(int32(prev.Status), route.Status))),
 				Version:     prev.Version + 1,
 				AuthCode:    tool.Anyone(route.AuthCode, prev.AuthCode),
 				Extra:       tool.Anyone(extra, prev.Extra),
@@ -93,11 +91,16 @@ func (that *network) Refresh(ctx context.Context, routes []*types.Route) error {
 				CreateBy:    tool.Anyone(prev.CreateBy, route.CreateBy),
 				UpdateBy:    tool.Anyone(route.UpdateBy, prev.UpdateBy),
 				Group:       route.Group,
-				StaticIP:    tool.Anyone(route.StaticIP, prev.StaticIP),
-				PublicIP:    tool.Anyone(route.PublicIP, prev.PublicIP),
-				Requests:    tool.Anyone(route.Requests, prev.Requests),
-			})
-			if nil != err {
+				StaticIp:    tool.Anyone(route.StaticIP, prev.StaticIp),
+				PublicIp:    tool.Anyone(route.PublicIP, prev.PublicIp),
+				Requests:    int64(tool.Anyone(route.Requests, int(prev.Requests))),
+			}
+			if IsNoRow(err) {
+				if _, err = session.Edge().InsertEdge(ctx, edge); nil != err {
+					return cause.Error(err)
+				}
+			}
+			if _, err = session.Edge().UpdateEdgeByNodeId(ctx, edge); nil != err {
 				return cause.Error(err)
 			}
 		}
@@ -106,20 +109,12 @@ func (that *network) Refresh(ctx context.Context, routes []*types.Route) error {
 }
 
 func (that *network) GetRoute(ctx context.Context, nodeId string) (*types.Route, error) {
-	return TR(ctx, func(ctx context.Context, ss *badgerhold.Store) (*types.Route, error) {
-		edge := new(EdgeEnt)
-		err := ss.Get(nodeId, edge)
+	return WithoutTxReturn(ctx, func(ctx context.Context, session orm.IO) (*types.Route, error) {
+		edge, err := session.Edge().SelectByIds(ctx, nodeId, nodeId)
 		if nil == err {
 			return that.ToRoute(ctx, edge), nil
 		}
-		if !IsNotFound(err) {
-			return nil, cause.Error(err)
-		}
-		err = ss.FindOne(edge, badgerhold.Where("InstID").Eq(nodeId))
-		if nil == err {
-			return that.ToRoute(ctx, edge), nil
-		}
-		if !IsNotFound(err) {
+		if !IsNoRow(err) {
 			return nil, cause.Error(err)
 		}
 		return nil, nil
@@ -127,16 +122,12 @@ func (that *network) GetRoute(ctx context.Context, nodeId string) (*types.Route,
 }
 
 func (that *network) GetRoutes(ctx context.Context) ([]*types.Route, error) {
-	return TR(ctx, func(ctx context.Context, ss *badgerhold.Store) ([]*types.Route, error) {
-		var edges []*EdgeEnt
-		err := ss.Find(&edges, new(badgerhold.Query).Limit(math.MaxInt))
-		if nil == err {
-			return that.ToRoutes(ctx, edges), nil
-		}
-		if !IsNotFound(err) {
+	return WithoutTxReturn(ctx, func(ctx context.Context, session orm.IO) ([]*types.Route, error) {
+		edges, err := session.Edge().SelectAll(ctx)
+		if nil != err {
 			return nil, cause.Error(err)
 		}
-		return nil, nil
+		return that.ToRoutes(ctx, edges), nil
 	})
 }
 
@@ -183,32 +174,12 @@ func (that *network) Enable(ctx context.Context, nodeId string) error {
 }
 
 func (that *network) Index(ctx context.Context, index *types.Paging) (*types.Page[*types.Route], error) {
-	return TR(ctx, func(ctx context.Context, ss *badgerhold.Store) (*types.Page[*types.Route], error) {
-		con := badgerhold.Where("Status").MatchFunc(func(ra *badgerhold.RecordAccess) (bool, error) {
-			// (`status` & 320) = 0
-			return ra.Record() == nil, nil
-		}).SortBy("NodeId").Skip(int(index.Index * index.Limit)).Limit(int(index.Limit))
-		nodeId := index.Factor["node_id"]
-		instName := index.Factor["inst_name"]
-		if nil != nodeId && "" != nodeId {
-			con.And("NodeId").Contains(nodeId)
-		}
-		if nil != instName && "" != instName {
-			con.And("InstName").Contains(instName)
-		}
-		total, err := ss.Count(new(EdgeEnt), con)
+	return WithTxReturn(ctx, func(ctx context.Context, session orm.IO) (*types.Page[*types.Route], error) {
+		rs, err := session.Edge().IndexEdge(ctx, index.Index, index.Limit)
 		if nil != err {
 			return nil, cause.Error(err)
 		}
-		sid := index.SID
-		if "" == sid {
-			sid = tool.NextID()
-		}
-		var edges []*EdgeEnt
-		if err = ss.Find(&edges, con); nil != err {
-			return nil, cause.Error(err)
-		}
-		return types.Reset(index, int64(total), that.ToRoutes(ctx, edges)), nil
+		return types.Reset(index, int64(rs.Total), that.ToRoutes(ctx, rs.Data)), nil
 	})
 }
 
@@ -236,7 +207,7 @@ func (that *network) Assert(ctx context.Context, feature string, nodeIds []strin
 	return false, nil
 }
 
-func (that *network) ToRoutes(ctx context.Context, edges []*EdgeEnt) []*types.Route {
+func (that *network) ToRoutes(ctx context.Context, edges []*orm.Edge) []*types.Route {
 	var es []*types.Route
 	for _, edge := range edges {
 		es = append(es, that.ToRoute(ctx, edge))
@@ -244,13 +215,13 @@ func (that *network) ToRoutes(ctx context.Context, edges []*EdgeEnt) []*types.Ro
 	return es
 }
 
-func (that *network) ToRoute(ctx context.Context, route *EdgeEnt) *types.Route {
+func (that *network) ToRoute(ctx context.Context, route *orm.Edge) *types.Route {
 	certification := new(types.RouteCertificate)
 	certification.Decode(ctx, route.Certificate, aware.Codec)
 	attribute := new(types.RouteAttribute).Decode(ctx, route.Extra, aware.Codec)
 	return &types.Route{
-		NodeId:      route.NodeID,
-		InstId:      route.InstID,
+		NodeId:      route.NodeId,
+		InstId:      route.InstId,
 		Name:        route.InstName,
 		InstName:    route.InstName,
 		Address:     route.Address,
@@ -261,8 +232,8 @@ func (that *network) ToRoute(ctx context.Context, route *EdgeEnt) *types.Route {
 		GuestRoot:   certification.GuestRoot,
 		GuestKey:    certification.GuestKey,
 		GuestCrt:    certification.GuestCrt,
-		Status:      route.Status,
-		Version:     route.Version,
+		Status:      int32(route.Status),
+		Version:     int32(route.Version),
 		AuthCode:    route.AuthCode,
 		ExpireAt:    route.ExpireAt.UnixMilli(),
 		Extra:       attribute.Compat(ctx, aware.Codec),
@@ -273,9 +244,9 @@ func (that *network) ToRoute(ctx context.Context, route *EdgeEnt) *types.Route {
 		Group:       route.Group,
 		Upstream:    attribute.Upstream,
 		Downstream:  attribute.Downstream,
-		StaticIP:    tool.Anyone(route.StaticIP, attribute.StaticIP),
-		PublicIP:    route.PublicIP,
-		Requests:    route.Requests,
+		StaticIP:    tool.Anyone(route.StaticIp, attribute.StaticIP),
+		PublicIP:    route.PublicIp,
+		Requests:    int(route.Requests),
 		Proxy:       attribute.Proxy,
 		Concurrency: attribute.Concurrency,
 	}

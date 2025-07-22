@@ -1,5 +1,5 @@
-/* name: CreateKV :exec */
-CREATE TABLE `kv`
+-- @Create
+CREATE TABLE IF NOT EXISTS `mesh_kv`
 (
     `key`       varchar(255) NOT NULL COMMENT '配置KEY',
     `value`     text         NOT NULL COMMENT '配置内容',
@@ -8,14 +8,15 @@ CREATE TABLE `kv`
     `create_by` varchar(255) NOT NULL DEFAULT '' COMMENT '创建人',
     `update_by` varchar(255) NOT NULL DEFAULT '' COMMENT '更新人',
     PRIMARY KEY (`key`)
-) DEFAULT CHARSET = utf8 COMMENT ='KV配置表';
+    ) DEFAULT CHARSET = utf8mb4 COMMENT ='KV表';
 
-/* name: InsertKV :execrows */
-INSERT INTO `kv` (`key`, `value`, `create_at`, `update_at`, `create_by`, `update_by`)
-VALUES (?, ?, ?, ?, ?, ?);
+-- @Index#page
+SELECT *
+FROM `mesh_kv`
+ORDER BY `key` ASC
+    LIMIT '?.index', '?.limit';
 
-/* name: DeleteKV :execrows */
-DELETE FROM `kv` WHERE `key` = ?;
-
-/* name: IndexKV :many */
-SELECT * FROM `kv` ORDER BY `key` ASC LIMIT ?, ?;
+-- @SelectKeys#many
+SELECT `key`
+FROM `mesh_kv`
+WHERE `key` LIKE '%?.key%';

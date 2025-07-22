@@ -1,5 +1,5 @@
-/* name: CreateSequence :exec */
-CREATE TABLE `sequence`
+-- @Create
+CREATE TABLE IF NOT EXISTS `mesh_seq`
 (
     `kind`      varchar(255) NOT NULL DEFAULT '' COMMENT '序列号类型',
     `min`       bigint(20)   NOT NULL DEFAULT '0' COMMENT '当前范围最小值',
@@ -11,18 +11,17 @@ CREATE TABLE `sequence`
     `create_at` datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_at` datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`kind`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8 COMMENT ='序列号表';
+    ) DEFAULT CHARSET = utf8mb4 COMMENT ='序列号表';
 
-/* name: InsertSequence :execrows */
-INSERT INTO `sequence` (`kind`, `min`, `max`, `size`, `length`, `status`, `version`, `create_at`, `update_at`)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+-- @SetMin
+UPDATE `mesh_seq`
+SET `min`     = '?.min',
+    `version` = `version` + 1
+WHERE `kind` = '?.kind'
+  AND `version` = '?.version';
 
-/* name: GetSequenceByKind :one */
-SELECT * FROM `sequence` WHERE `kind` = ?;
-
-/* name: SetSequenceMin :execrows */
-UPDATE `sequence` SET `min` = ?, `version` = `version` + 1 WHERE `kind` = ? AND `version` = ?;
-
-/* name: GetSequenceByKindForUpdate :one */
-SELECT * FROM `sequence` WHERE `kind` = ? FOR UPDATE;
+-- @SelectByKindForUpdate#one
+SELECT *
+FROM `mesh_seq`
+WHERE `kind` = '?.kind' FOR
+    UPDATE;
