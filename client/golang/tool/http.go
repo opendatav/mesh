@@ -14,10 +14,16 @@ import (
 
 var Client = &http.Client{
 	Transport: &http.Transport{
-		MaxIdleConns:        1,
-		MaxIdleConnsPerHost: 1,
-		MaxConnsPerHost:     10,
+		MaxIdleConns:        100,
+		MaxIdleConnsPerHost: 100,
+		MaxConnsPerHost:     800,
 		IdleConnTimeout:     time.Minute * 10,
+		DisableKeepAlives:   false,
+		DisableCompression:  false,
+		TLSClientConfig: &tls.Config{
+			InsecureSkipVerify:     true,
+			SessionTicketsDisabled: false,
+			ClientSessionCache:     tls.NewLRUClientSessionCache(800),
+		},
 	},
-	Timeout: time.Second * 30,
 }
