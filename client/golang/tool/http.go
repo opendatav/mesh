@@ -10,6 +10,7 @@ package tool
 import (
 	"net/http"
 	"time"
+	"crypto/tls"
 )
 
 var Client = &http.Client{
