@@ -150,7 +150,7 @@ func (that *SnapShot) withRemoteRoute(ctx context.Context, routes *Routes) {
 	h2s := routes.IfAbsent(fmt.Sprintf("%s#h2l", that.env.NodeId), func(n string) *dynamic.Service {
 		return that.remoteService(ctx, n, routes, "h2c", that.env.NodeId, mtypes.URC(addr))
 	})
-	h2r := fmt.Sprintf("!PathRegexp(`/org.ppc.ptp.PrivateTransferTransport/.*`) && (HeaderRegexp(`x-ptp-target-node-id`, `%s`) || HeaderRegexp(`x-ptp-target-inst-id`, `%s`))", that.env.NodeId, that.env.InstId)
+	h2r := fmt.Sprintf("PathRegexp(`/org.ppc.ptp.PrivateTransferProtocol/.*`) && (HeaderRegexp(`x-ptp-target-node-id`, `%s`) || HeaderRegexp(`x-ptp-target-inst-id`, `%s`))", that.env.NodeId, that.env.InstId)
 	routes.Route(ctx, fmt.Sprintf("%s#secure#h2l", that.env.NodeId), &dynamic.Router{
 		EntryPoints: []string{TransportY},
 		Middlewares: []string{PluginBarrier},
@@ -173,7 +173,7 @@ func (that *SnapShot) withRemoteRoute(ctx context.Context, routes *Routes) {
 		h, p := assemblies.ParseHost(ctx, addr)
 		return that.remoteService(ctx, n, routes, "http", that.env.NodeId, mtypes.URC(fmt.Sprintf("%s:%d", h, p)))
 	})
-	h1r := fmt.Sprintf("!PathRegexp(`/v1/interconn/chan/(pop|push|peek|release)`) && (HeaderRegexp(`x-ptp-target-node-id`, `%s`) || HeaderRegexp(`x-ptp-target-inst-id`, `%s`))", that.env.NodeId, that.env.InstId)
+	h1r := fmt.Sprintf("PathRegexp(`/v1/interconn/chan/(invoke|transport)`) && (HeaderRegexp(`x-ptp-target-node-id`, `%s`) || HeaderRegexp(`x-ptp-target-inst-id`, `%s`))", that.env.NodeId, that.env.InstId)
 	routes.Route(ctx, fmt.Sprintf("%s#secure#h1l", that.env.NodeId), &dynamic.Router{
 		EntryPoints: []string{TransportY},
 		Middlewares: []string{PluginBarrier},
