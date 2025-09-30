@@ -9,8 +9,8 @@ package cache
 
 import (
 	"context"
-	"github.com/buraksezer/olric"
-	"github.com/buraksezer/olric/config"
+	"github.com/olric-data/olric"
+	"github.com/olric-data/olric/config"
 	"github.com/opendatav/mesh/client/golang/log"
 	"github.com/opendatav/mesh/client/golang/plugin"
 )

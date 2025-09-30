@@ -9,14 +9,15 @@ package proxy
 
 import (
 	"fmt"
+	"os"
+	"time"
+
 	mtypes "github.com/opendatav/mesh/client/golang/types"
 	ptypes "github.com/traefik/paerser/types"
 	"github.com/traefik/traefik/v3/pkg/config/static"
 	"github.com/traefik/traefik/v3/pkg/ping"
 	"github.com/traefik/traefik/v3/pkg/provider/acme"
 	"github.com/traefik/traefik/v3/pkg/types"
-	"os"
-	"time"
 )
 
 func (that *meshProxy) Domains() []types.Domain {
@@ -247,11 +248,6 @@ func (that *meshProxy) Configuration() *static.Configuration {
 		//	InfluxDB2:  nil,
 		//},
 		HostResolver: &types.HostResolverConfig{},
-		API: &static.API{
-			Insecure:  true,
-			Dashboard: true,
-			Debug:     false,
-		},
 		Ping: &ping.Handler{
 			EntryPoint: TransportY,
 		},

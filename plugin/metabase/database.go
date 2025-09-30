@@ -12,10 +12,10 @@ import (
 	"database/sql"
 	_ "github.com/dolthub/go-mysql-server"
 	_ "github.com/go-sql-driver/mysql"
-	_ "github.com/kyleconroy/sqlc"
 	_ "github.com/lib/pq"
 	"github.com/opendatav/mesh/client/golang/boost"
 	"github.com/opendatav/mesh/plugin/metabase/dal"
+	_ "github.com/sqlc-dev/sqlc"
 	"strings"
 )
 

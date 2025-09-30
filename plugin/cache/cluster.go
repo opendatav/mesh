@@ -9,7 +9,7 @@ package cache
 
 import (
 	"context"
-	"github.com/buraksezer/olric"
+	"github.com/olric-data/olric"
 	"github.com/opendatav/mesh/client/golang/cause"
 	"github.com/opendatav/mesh/client/golang/log"
 	"github.com/opendatav/mesh/client/golang/macro"

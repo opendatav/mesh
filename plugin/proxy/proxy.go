@@ -12,11 +12,21 @@ import (
 	"crypto/x509"
 	_ "embed"
 	"fmt"
+	"io"
+	"maps"
+	"net/http"
+	"os/signal"
+	"slices"
+	"strings"
+	"syscall"
+	"time"
+
 	"github.com/coreos/go-systemd/v22/daemon"
 	"github.com/go-acme/lego/v4/challenge"
 	gokitmetrics "github.com/go-kit/kit/metrics"
 	"github.com/opendatav/mesh/client/golang/cause"
 	"github.com/opendatav/mesh/client/golang/log"
+	"github.com/opendatav/mesh/client/golang/macro"
 	"github.com/opendatav/mesh/client/golang/plugin"
 	"github.com/opendatav/mesh/client/golang/prsim"
 	"github.com/opendatav/mesh/client/golang/tool"
@@ -32,6 +42,8 @@ import (
 	"github.com/traefik/traefik/v3/pkg/provider/aggregator"
 	"github.com/traefik/traefik/v3/pkg/provider/tailscale"
 	"github.com/traefik/traefik/v3/pkg/provider/traefik"
+	pxy "github.com/traefik/traefik/v3/pkg/proxy"
+	"github.com/traefik/traefik/v3/pkg/proxy/httputil"
 	"github.com/traefik/traefik/v3/pkg/safe"
 	"github.com/traefik/traefik/v3/pkg/server"
 	"github.com/traefik/traefik/v3/pkg/server/middleware"
@@ -42,15 +54,8 @@ import (
 	"github.com/traefik/traefik/v3/pkg/tracing"
 	"github.com/traefik/traefik/v3/pkg/types"
 	"github.com/traefik/traefik/v3/pkg/udp"
-	"go.opentelemetry.io/otel/trace"
+	"github.com/traefik/traefik/v3/pkg/version"
 	"gopkg.in/natefinch/lumberjack.v2"
-	"io"
-	"net/http"
-	"os/signal"
-	"sort"
-	"strings"
-	"syscall"
-	"time"
 )
 
 func init() {
@@ -115,7 +120,7 @@ func (that *meshProxy) Start(ctx context.Context, runtime plugin.Runtime) {
 	config.SetEffectiveConfiguration()
 	err := config.ValidateConfiguration()
 	if nil != err {
-		log.Error(ctx, err.Error())
+		log.Error(ctx, "%s", err)
 		return
 	}
 	if err = tool.MakeDir(that.Home); nil != err {
@@ -130,7 +135,27 @@ func (that *meshProxy) Start(ctx context.Context, runtime plugin.Runtime) {
 		MaxAge:     that.AccessAge, //days
 		Compress:   that.Compress,  // disabled by default
 	}
-	if that.Server, err = that.setupServer(ctx, config); nil != err {
+	accessLog, err := accesslog.NewHandlerWithFormatWriter(config.AccessLog, that.RollingWriter, logger)
+	if nil != err {
+		log.Error(ctx, "%s", err)
+		return
+	}
+	tls := NewTLSManager(traefiktls.NewManager())
+	pb := &proxyBuilder{
+		option: &SetupOption{
+			SC:       config,
+			Provider: meshGraph,
+			TCPUpdate: func(tcp map[string]*tcp.Router) {
+				that.TCPRouters = tcp
+			},
+			UDPUpdate: func(udp map[string]udp.Handler) {
+				that.UDPRouters = udp
+			},
+			Setup: func(tcm *pcp.DialerManager) {
+			},
+		},
+	}
+	if that.Server, err = pb.build(ctx, accessLog, tls); nil != err {
 		log.Error(ctx, err.Error())
 		return
 	}
@@ -217,85 +242,122 @@ func (that *meshProxy) startTraefik(ctx context.Context, staticConfiguration *st
 	log.Info(ntx, "Plugin proxy has been shutdown")
 }
 
-func (that *meshProxy) setupServer(ctx context.Context, staticConfiguration *static.Configuration) (*server.Server, error) {
-	accessLog, err := accesslog.NewHandlerWithFormatWriter(staticConfiguration.AccessLog, that.RollingWriter, logger)
-	if nil != err {
-		return nil, cause.Error(err)
-	}
-	routinesPool := safe.NewPool(ctx)
-	providerAggregator := aggregator.NewProviderAggregator(*staticConfiguration.Providers)
-	if err = providerAggregator.AddProvider(meshGraph); nil != err {
-		return nil, cause.Error(err)
-	}
+type proxyBuilder struct {
+	option *SetupOption
+}
+
+func (that *proxyBuilder) build(ctx context.Context, accessLog accesslog.Accesslog, tlsManager TLSManager) (*server.Server, error) {
+	providerAggregator := aggregator.NewProviderAggregator(*that.option.SC.Providers)
 	// adds internal provider
-	if err = providerAggregator.AddProvider(traefik.New(*staticConfiguration)); nil != err {
+	if err := providerAggregator.AddProvider(traefik.New(*that.option.SC)); nil != err {
+		return nil, cause.Error(err)
+	}
+	if err := providerAggregator.AddProvider(that.option.Provider); nil != err {
 		return nil, cause.Error(err)
 	}
 	// ACME
-	tlsManager := traefiktls.NewManager()
 	httpChallengeProvider := acme.NewChallengeHTTP()
 	tlsChallengeProvider := acme.NewChallengeTLSALPN()
-	if err = providerAggregator.AddProvider(tlsChallengeProvider); nil != err {
+	if err := providerAggregator.AddProvider(tlsChallengeProvider); nil != err {
 		return nil, cause.Error(err)
 	}
-	acmeProviders := that.initACMEProvider(ctx, staticConfiguration, &providerAggregator, tlsManager, httpChallengeProvider, tlsChallengeProvider)
+	acmeProviders := that.initACMEProvider(ctx, that.option.SC, providerAggregator, tlsManager.Obtain(ctx), httpChallengeProvider, tlsChallengeProvider)
 	// Tailscale
-	tsProviders := initTailscaleProviders(ctx, staticConfiguration, &providerAggregator)
-	// Metrics
-	metricRegistries := that.registerMetricClients(ctx, staticConfiguration.Metrics)
+	tsProviders := initTailscaleProviders(ctx, that.option.SC, providerAggregator)
+	// Observability
+	metricRegistries := that.registerMetricClients(ctx, that.option.SC.Metrics)
+	semConvMetricRegistry, err := func() (*metrics.SemConvMetricsRegistry, error) {
+		if that.option.SC.Metrics != nil && that.option.SC.Metrics.OTLP != nil {
+			semConvMetricRegistry, err := metrics.NewSemConvMetricRegistry(ctx, that.option.SC.Metrics.OTLP)
+			return semConvMetricRegistry, cause.Error(err)
+		}
+		return nil, nil
+	}()
+	if nil != err {
+		return nil, cause.Error(err)
+	}
 	metricsRegistry := metrics.NewMultiRegistry(metricRegistries)
+
+	tracer, tracerCloser := setupTracing(ctx, that.option.SC.Tracing)
+	observabilityMgr := middleware.NewObservabilityMgr(*that.option.SC, metricsRegistry, semConvMetricRegistry, accessLog, tracer, tracerCloser)
+
 	// Entrypoints
-	serverEntryPointsTCP, err := server.NewTCPEntryPoints(staticConfiguration.EntryPoints, staticConfiguration.HostResolver, metricsRegistry)
+	serverEntryPointsTCP, err := server.NewTCPEntryPoints(that.option.SC.EntryPoints, that.option.SC.HostResolver, metricsRegistry)
 	if nil != err {
 		return nil, cause.Error(err)
 	}
-	serverEntryPointsUDP, err := server.NewUDPEntryPoints(staticConfiguration.EntryPoints)
+	serverEntryPointsUDP, err := server.NewUDPEntryPoints(that.option.SC.EntryPoints)
 	if nil != err {
 		return nil, cause.Error(err)
 	}
+
+	if that.option.SC.API != nil {
+		version.DisableDashboardAd = that.option.SC.API.DisableDashboardAd
+	}
+
 	// Plugins
-	pluginBuilder, err := createPluginBuilder(staticConfiguration)
+	hasPlugins := that.option.SC.Experimental != nil && (that.option.SC.Experimental.Plugins != nil || that.option.SC.Experimental.LocalPlugins != nil)
+	if hasPlugins {
+		pluginsList := slices.Collect(maps.Keys(that.option.SC.Experimental.Plugins))
+		pluginsList = append(pluginsList, slices.Collect(maps.Keys(that.option.SC.Experimental.LocalPlugins))...)
+		log.Info(ctx, "Loading plugins: %s", strings.Join(pluginsList, ","))
+	}
+	pluginBuilder, err := createPluginBuilder(that.option.SC)
+	if err != nil && that.option.SC.Experimental != nil && that.option.SC.Experimental.AbortOnPluginFailure {
+		return nil, cause.Errorf("plugin: failed to create plugin builder: %s", err)
+	}
 	if nil != err {
 		log.Error(ctx, "Plugins are disabled because an error has occurred. %s", err.Error())
 	}
 	// Providers plugins
-	for name, conf := range staticConfiguration.Providers.Plugin {
+	for name, conf := range that.option.SC.Providers.Plugin {
 		if nil == pluginBuilder {
 			break
 		}
-		provider, err := pluginBuilder.BuildProvider(name, conf)
+		p, err := pluginBuilder.BuildProvider(name, conf)
 		if nil != err {
 			return nil, cause.Errorf("plugin: failed to build provider: %w", err)
 		}
-		if err = providerAggregator.AddProvider(provider); nil != err {
+		if err = providerAggregator.AddProvider(p); nil != err {
 			return nil, cause.Errorf("plugin: failed to add provider: %w", err)
 		}
 	}
 
 	// Service manager factory
 	var spiffeX509Source *workloadapi.X509Source
-	if staticConfiguration.Spiffe != nil && staticConfiguration.Spiffe.WorkloadAPIAddr != "" {
-		log.Info(ctx, "Waiting on SPIFFE SVID delivery, workloadAPIAddr is %s", staticConfiguration.Spiffe.WorkloadAPIAddr)
-		spiffeX509Source, err = workloadapi.NewX509Source(ctx, workloadapi.WithClientOptions(workloadapi.WithAddr(staticConfiguration.Spiffe.WorkloadAPIAddr)))
+	if that.option.SC.Spiffe != nil && that.option.SC.Spiffe.WorkloadAPIAddr != "" {
+		log.Info(ctx, "Waiting on SPIFFE SVID delivery, workloadAPIAddr is %s", that.option.SC.Spiffe.WorkloadAPIAddr)
+		spiffeX509Source, err = workloadapi.NewX509Source(ctx, workloadapi.WithClientOptions(workloadapi.WithAddr(that.option.SC.Spiffe.WorkloadAPIAddr)))
 		if nil != err {
 			return nil, cause.Errorf("unable to create SPIFFE x509 source: %w", err)
 		}
 		log.Info(ctx, "Successfully obtained SPIFFE SVID.")
 	}
-	roundTripperManager := service.NewRoundTripperManager(spiffeX509Source)
+
+	transportManager := service.NewTransportManager(spiffeX509Source)
+	var proxyBuilder service.ProxyBuilder = httputil.NewProxyBuilder(transportManager, semConvMetricRegistry)
+	if that.option.SC.Experimental != nil && that.option.SC.Experimental.FastProxy != nil {
+		proxyBuilder = pxy.NewSmartBuilder(transportManager, proxyBuilder, *that.option.SC.Experimental.FastProxy)
+	}
+
 	dialerManager := pcp.NewDialerManager(spiffeX509Source)
+	if nil != that.option.Setup {
+		that.option.Setup(dialerManager)
+	}
 	acmeHTTPHandler := that.getHTTPChallengeHandler(acmeProviders, httpChallengeProvider)
-	managerFactory := service.NewManagerFactory(*staticConfiguration, routinesPool, metricsRegistry, roundTripperManager, acmeHTTPHandler)
-	tracer, tracerCloser := setupTracing(ctx, staticConfiguration.Tracing)
-	chainBuilder := middleware.NewChainBuilder(metricsRegistry, accessLog, tracer)
-	routerFactory := server.NewRouterFactory(*staticConfiguration, managerFactory, tlsManager, chainBuilder, pluginBuilder, metricsRegistry, dialerManager)
+
+	routinesPool := safe.NewPool(ctx)
+
+	managerFactory := service.NewManagerFactory(*that.option.SC, routinesPool, observabilityMgr, transportManager, proxyBuilder, acmeHTTPHandler)
+	// Router factory
+	routerFactory := server.NewRouterFactory(*that.option.SC, managerFactory, tlsManager.Obtain(ctx), observabilityMgr, pluginBuilder, dialerManager)
 	// Watcher
-	watcher := server.NewConfigurationWatcher(routinesPool, providerAggregator, that.getDefaultsEntrypoints(ctx, staticConfiguration), "internal")
+	watcher := server.NewConfigurationWatcher(routinesPool, providerAggregator, that.getDefaultsEntrypoints(ctx, that.option.SC), "internal")
 	// TLS
 	watcher.AddListener(func(conf dynamic.Configuration) {
-		tlsManager.UpdateConfigs(ctx, conf.TLS.Stores, conf.TLS.Options, conf.TLS.Certificates)
+		tlsManager.UpdateConfigs(macro.Context(), conf.TLS.Stores, conf.TLS.Options, conf.TLS.Certificates)
 		gauge := metricsRegistry.TLSCertsNotAfterTimestampGauge()
-		for _, certificate := range tlsManager.GetServerCertificates() {
+		for _, certificate := range tlsManager.Obtain(ctx).GetServerCertificates() {
 			that.appendCertMetric(gauge, certificate)
 		}
 	})
@@ -306,7 +368,9 @@ func (that *meshProxy) setupServer(ctx context.Context, staticConfiguration *sta
 	})
 	// Server Transports
 	watcher.AddListener(func(conf dynamic.Configuration) {
-		roundTripperManager.Update(conf.HTTP.ServersTransports)
+		log.Info(ctx, "proxy configuration updating")
+		transportManager.Update(conf.HTTP.ServersTransports)
+		proxyBuilder.Update(conf.HTTP.ServersTransports)
 		dialerManager.Update(conf.TCP.ServersTransports)
 	})
 	// Switch router
@@ -346,10 +410,10 @@ func (that *meshProxy) setupServer(ctx context.Context, staticConfiguration *sta
 			}
 		}
 	})
-	return server.NewServer(routinesPool, serverEntryPointsTCP, serverEntryPointsUDP, watcher, chainBuilder, accessLog, tracerCloser), nil
+	return server.NewServer(routinesPool, serverEntryPointsTCP, serverEntryPointsUDP, watcher, observabilityMgr), nil
 }
 
-func (that *meshProxy) getHTTPChallengeHandler(acmeProviders []*acme.Provider, httpChallengeProvider http.Handler) http.Handler {
+func (that *proxyBuilder) getHTTPChallengeHandler(acmeProviders []*acme.Provider, httpChallengeProvider http.Handler) http.Handler {
 	var acmeHTTPHandler http.Handler
 	for _, p := range acmeProviders {
 		if p != nil && p.HTTPChallenge != nil {
@@ -360,7 +424,7 @@ func (that *meshProxy) getHTTPChallengeHandler(acmeProviders []*acme.Provider, h
 	return acmeHTTPHandler
 }
 
-func (that *meshProxy) getDefaultsEntrypoints(ctx context.Context, staticConfiguration *static.Configuration) []string {
+func (that *proxyBuilder) getDefaultsEntrypoints(ctx context.Context, staticConfiguration *static.Configuration) []string {
 	var defaultEntryPoints []string
 
 	// Determines if at least one EntryPoint is configured to be used by default.
@@ -388,24 +452,28 @@ func (that *meshProxy) getDefaultsEntrypoints(ctx context.Context, staticConfigu
 			defaultEntryPoints = append(defaultEntryPoints, name)
 		}
 	}
-	sort.Strings(defaultEntryPoints)
+	slices.Sort(defaultEntryPoints)
 	return defaultEntryPoints
 }
 
-func (that *meshProxy) switchRouter(routerFactory *server.RouterFactory, serverEntryPointsTCP server.TCPEntryPoints, serverEntryPointsUDP server.UDPEntryPoints) func(conf dynamic.Configuration) {
+func (that *proxyBuilder) switchRouter(routerFactory *server.RouterFactory, serverEntryPointsTCP server.TCPEntryPoints, serverEntryPointsUDP server.UDPEntryPoints) func(conf dynamic.Configuration) {
 	return func(conf dynamic.Configuration) {
 		rtConf := runtime.NewConfig(conf)
 		routers, udpRouters := routerFactory.CreateRouters(rtConf)
 		serverEntryPointsTCP.Switch(routers)
 		serverEntryPointsUDP.Switch(udpRouters)
-		that.TCPRouters = routers
-		that.UDPRouters = udpRouters
+		if x := that.option.TCPUpdate; nil != x {
+			x(routers)
+		}
+		if x := that.option.UDPUpdate; nil != x {
+			x(udpRouters)
+		}
 	}
 }
 
 // initACMEProvider creates and registers acme.Provider instances corresponding to the configured ACME certificate resolvers.
-func (that *meshProxy) initACMEProvider(ctx context.Context, c *static.Configuration, providerAggregator *aggregator.ProviderAggregator, tlsManager *traefiktls.Manager, httpChallengeProvider, tlsChallengeProvider challenge.Provider) []*acme.Provider {
-	localStores := map[string]*acme.LocalStore{}
+func (that *proxyBuilder) initACMEProvider(ctx context.Context, c *static.Configuration, providerAggregator *aggregator.ProviderAggregator, tlsManager *traefiktls.Manager, httpChallengeProvider, tlsChallengeProvider challenge.Provider) []*acme.Provider {
+	localStores := map[string]acme.Store{}
 	var resolvers []*acme.Provider
 	for name, resolver := range c.CertificatesResolvers {
 		if resolver.ACME == nil {
@@ -453,7 +521,7 @@ func initTailscaleProviders(ctx context.Context, cfg *static.Configuration, prov
 	return providers
 }
 
-func (that *meshProxy) registerMetricClients(ctx context.Context, metricsConfig *types.Metrics) []metrics.Registry {
+func (that *proxyBuilder) registerMetricClients(ctx context.Context, metricsConfig *types.Metrics) []metrics.Registry {
 	if metricsConfig == nil {
 		return nil
 	}
@@ -483,19 +551,19 @@ func (that *meshProxy) registerMetricClients(ctx context.Context, metricsConfig 
 				metricsConfig.InfluxDB2.Address, metricsConfig.InfluxDB2.Org, metricsConfig.InfluxDB2.Bucket, metricsConfig.InfluxDB2.PushInterval)
 		}
 	}
-	if metricsConfig.OpenTelemetry != nil {
-		openTelemetryRegistry := metrics.RegisterOpenTelemetry(ctx, metricsConfig.OpenTelemetry)
+	if metricsConfig.OTLP != nil {
+		openTelemetryRegistry := metrics.RegisterOpenTelemetry(ctx, metricsConfig.OTLP)
 		if openTelemetryRegistry != nil {
 			registries = append(registries, openTelemetryRegistry)
 			log.Debug(ctx, "Configured OpenTelemetry metrics: pushing to %s once every %s",
-				metricsConfig.OpenTelemetry.Address, metricsConfig.OpenTelemetry.PushInterval.String())
+				metricsConfig.OTLP.ServiceName, metricsConfig.OTLP.PushInterval.String())
 		}
 	}
 	return registries
 }
 
-func (that *meshProxy) appendCertMetric(gauge gokitmetrics.Gauge, certificate *x509.Certificate) {
-	sort.Strings(certificate.DNSNames)
+func (that *proxyBuilder) appendCertMetric(gauge gokitmetrics.Gauge, certificate *x509.Certificate) {
+	slices.Sort(certificate.DNSNames)
 	labels := []string{
 		"cn", certificate.Subject.CommonName,
 		"serial", certificate.SerialNumber.String(),
@@ -505,7 +573,7 @@ func (that *meshProxy) appendCertMetric(gauge gokitmetrics.Gauge, certificate *x
 	gauge.With(labels...).Set(notAfter)
 }
 
-func setupTracing(ctx context.Context, conf *static.Tracing) (trace.Tracer, io.Closer) {
+func setupTracing(ctx context.Context, conf *static.Tracing) (*tracing.Tracer, io.Closer) {
 	if nil == conf {
 		return nil, nil
 	}
