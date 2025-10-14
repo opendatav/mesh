@@ -14,182 +14,182 @@ _sym_db = _symbol_database.Default()
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
-  name='x.proto',
-  package='org.ppc.ptp',
-  syntax='proto3',
-  serialized_options=b'\n\013io.bfia.ptpZ\031github.com/opendatav/mesh/ptp',
-  create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x07x.proto\x12\x0borg.ppc.ptp\"\x81\x01\n\x07Inbound\x12\x34\n\x08metadata\x18\x01 \x03(\x0b\x32\".org.ppc.ptp.Inbound.MetadataEntry\x12\x0f\n\x07payload\x18\x02 \x01(\x0c\x1a/\n\rMetadataEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xa2\x01\n\x08Outbound\x12\x35\n\x08metadata\x18\x01 \x03(\x0b\x32#.org.ppc.ptp.Outbound.MetadataEntry\x12\x0f\n\x07payload\x18\x02 \x01(\x0c\x12\x0c\n\x04\x63ode\x18\x03 \x01(\t\x12\x0f\n\x07message\x18\x04 \x01(\t\x1a/\n\rMetadataEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x32\x8e\x01\n\x17PrivateTransferProtocol\x12<\n\ttransport\x12\x14.org.ppc.ptp.Inbound\x1a\x15.org.ppc.ptp.Outbound(\x01\x30\x01\x12\x35\n\x06invoke\x12\x14.org.ppc.ptp.Inbound\x1a\x15.org.ppc.ptp.OutboundB(\n\x0bio.bfia.ptpZ\x19github.com/opendatav/mesh/ptpb\x06proto3'
+    name='x.proto',
+    package='org.ppc.ptp',
+    syntax='proto3',
+    serialized_options=b'\n\013io.bfia.ptpZ\031github.com/be-io/mesh/ptp',
+    create_key=_descriptor._internal_create_key,
+    serialized_pb=b'\n\x07x.proto\x12\x0borg.ppc.ptp\"\x81\x01\n\x07Inbound\x12\x34\n\x08metadata\x18\x01 \x03(\x0b\x32\".org.ppc.ptp.Inbound.MetadataEntry\x12\x0f\n\x07payload\x18\x02 \x01(\x0c\x1a/\n\rMetadataEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xa2\x01\n\x08Outbound\x12\x35\n\x08metadata\x18\x01 \x03(\x0b\x32#.org.ppc.ptp.Outbound.MetadataEntry\x12\x0f\n\x07payload\x18\x02 \x01(\x0c\x12\x0c\n\x04\x63ode\x18\x03 \x01(\t\x12\x0f\n\x07message\x18\x04 \x01(\t\x1a/\n\rMetadataEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x32\x8e\x01\n\x17PrivateTransferProtocol\x12<\n\ttransport\x12\x14.org.ppc.ptp.Inbound\x1a\x15.org.ppc.ptp.Outbound(\x01\x30\x01\x12\x35\n\x06invoke\x12\x14.org.ppc.ptp.Inbound\x1a\x15.org.ppc.ptp.OutboundB(\n\x0bio.bfia.ptpZ\x19github.com/be-io/mesh/ptpb\x06proto3'
 )
 
 
 
 
 _INBOUND_METADATAENTRY = _descriptor.Descriptor(
-  name='MetadataEntry',
-  full_name='org.ppc.ptp.Inbound.MetadataEntry',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='key', full_name='org.ppc.ptp.Inbound.MetadataEntry.key', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='value', full_name='org.ppc.ptp.Inbound.MetadataEntry.value', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=b'8\001',
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=107,
-  serialized_end=154,
+    name='MetadataEntry',
+    full_name='org.ppc.ptp.Inbound.MetadataEntry',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    create_key=_descriptor._internal_create_key,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='key', full_name='org.ppc.ptp.Inbound.MetadataEntry.key', index=0,
+            number=1, type=9, cpp_type=9, label=1,
+            has_default_value=False, default_value=b"".decode('utf-8'),
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+        _descriptor.FieldDescriptor(
+            name='value', full_name='org.ppc.ptp.Inbound.MetadataEntry.value', index=1,
+            number=2, type=9, cpp_type=9, label=1,
+            has_default_value=False, default_value=b"".decode('utf-8'),
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    ],
+    extensions=[
+    ],
+    nested_types=[],
+    enum_types=[
+    ],
+    serialized_options=b'8\001',
+    is_extendable=False,
+    syntax='proto3',
+    extension_ranges=[],
+    oneofs=[
+    ],
+    serialized_start=107,
+    serialized_end=154,
 )
 
 _INBOUND = _descriptor.Descriptor(
-  name='Inbound',
-  full_name='org.ppc.ptp.Inbound',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='metadata', full_name='org.ppc.ptp.Inbound.metadata', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='payload', full_name='org.ppc.ptp.Inbound.payload', index=1,
-      number=2, type=12, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"",
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[_INBOUND_METADATAENTRY, ],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=25,
-  serialized_end=154,
+    name='Inbound',
+    full_name='org.ppc.ptp.Inbound',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    create_key=_descriptor._internal_create_key,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='metadata', full_name='org.ppc.ptp.Inbound.metadata', index=0,
+            number=1, type=11, cpp_type=10, label=3,
+            has_default_value=False, default_value=[],
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+        _descriptor.FieldDescriptor(
+            name='payload', full_name='org.ppc.ptp.Inbound.payload', index=1,
+            number=2, type=12, cpp_type=9, label=1,
+            has_default_value=False, default_value=b"",
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    ],
+    extensions=[
+    ],
+    nested_types=[_INBOUND_METADATAENTRY, ],
+    enum_types=[
+    ],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto3',
+    extension_ranges=[],
+    oneofs=[
+    ],
+    serialized_start=25,
+    serialized_end=154,
 )
 
 
 _OUTBOUND_METADATAENTRY = _descriptor.Descriptor(
-  name='MetadataEntry',
-  full_name='org.ppc.ptp.Outbound.MetadataEntry',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='key', full_name='org.ppc.ptp.Outbound.MetadataEntry.key', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='value', full_name='org.ppc.ptp.Outbound.MetadataEntry.value', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=b'8\001',
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=107,
-  serialized_end=154,
+    name='MetadataEntry',
+    full_name='org.ppc.ptp.Outbound.MetadataEntry',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    create_key=_descriptor._internal_create_key,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='key', full_name='org.ppc.ptp.Outbound.MetadataEntry.key', index=0,
+            number=1, type=9, cpp_type=9, label=1,
+            has_default_value=False, default_value=b"".decode('utf-8'),
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+        _descriptor.FieldDescriptor(
+            name='value', full_name='org.ppc.ptp.Outbound.MetadataEntry.value', index=1,
+            number=2, type=9, cpp_type=9, label=1,
+            has_default_value=False, default_value=b"".decode('utf-8'),
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    ],
+    extensions=[
+    ],
+    nested_types=[],
+    enum_types=[
+    ],
+    serialized_options=b'8\001',
+    is_extendable=False,
+    syntax='proto3',
+    extension_ranges=[],
+    oneofs=[
+    ],
+    serialized_start=107,
+    serialized_end=154,
 )
 
 _OUTBOUND = _descriptor.Descriptor(
-  name='Outbound',
-  full_name='org.ppc.ptp.Outbound',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='metadata', full_name='org.ppc.ptp.Outbound.metadata', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='payload', full_name='org.ppc.ptp.Outbound.payload', index=1,
-      number=2, type=12, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"",
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='code', full_name='org.ppc.ptp.Outbound.code', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='message', full_name='org.ppc.ptp.Outbound.message', index=3,
-      number=4, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[_OUTBOUND_METADATAENTRY, ],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=157,
-  serialized_end=319,
+    name='Outbound',
+    full_name='org.ppc.ptp.Outbound',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    create_key=_descriptor._internal_create_key,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='metadata', full_name='org.ppc.ptp.Outbound.metadata', index=0,
+            number=1, type=11, cpp_type=10, label=3,
+            has_default_value=False, default_value=[],
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+        _descriptor.FieldDescriptor(
+            name='payload', full_name='org.ppc.ptp.Outbound.payload', index=1,
+            number=2, type=12, cpp_type=9, label=1,
+            has_default_value=False, default_value=b"",
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+        _descriptor.FieldDescriptor(
+            name='code', full_name='org.ppc.ptp.Outbound.code', index=2,
+            number=3, type=9, cpp_type=9, label=1,
+            has_default_value=False, default_value=b"".decode('utf-8'),
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+        _descriptor.FieldDescriptor(
+            name='message', full_name='org.ppc.ptp.Outbound.message', index=3,
+            number=4, type=9, cpp_type=9, label=1,
+            has_default_value=False, default_value=b"".decode('utf-8'),
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    ],
+    extensions=[
+    ],
+    nested_types=[_OUTBOUND_METADATAENTRY, ],
+    enum_types=[
+    ],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto3',
+    extension_ranges=[],
+    oneofs=[
+    ],
+    serialized_start=157,
+    serialized_end=319,
 )
 
 _INBOUND_METADATAENTRY.containing_type = _INBOUND
@@ -202,31 +202,31 @@ _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 Inbound = _reflection.GeneratedProtocolMessageType('Inbound', (_message.Message,), {
 
-  'MetadataEntry' : _reflection.GeneratedProtocolMessageType('MetadataEntry', (_message.Message,), {
-    'DESCRIPTOR' : _INBOUND_METADATAENTRY,
-    '__module__' : 'x_pb2'
-    # @@protoc_insertion_point(class_scope:org.ppc.ptp.Inbound.MetadataEntry)
+    'MetadataEntry' : _reflection.GeneratedProtocolMessageType('MetadataEntry', (_message.Message,), {
+        'DESCRIPTOR' : _INBOUND_METADATAENTRY,
+        '__module__' : 'x_pb2'
+        # @@protoc_insertion_point(class_scope:org.ppc.ptp.Inbound.MetadataEntry)
     })
-  ,
-  'DESCRIPTOR' : _INBOUND,
-  '__module__' : 'x_pb2'
-  # @@protoc_insertion_point(class_scope:org.ppc.ptp.Inbound)
-  })
+    ,
+    'DESCRIPTOR' : _INBOUND,
+    '__module__' : 'x_pb2'
+    # @@protoc_insertion_point(class_scope:org.ppc.ptp.Inbound)
+})
 _sym_db.RegisterMessage(Inbound)
 _sym_db.RegisterMessage(Inbound.MetadataEntry)
 
 Outbound = _reflection.GeneratedProtocolMessageType('Outbound', (_message.Message,), {
 
-  'MetadataEntry' : _reflection.GeneratedProtocolMessageType('MetadataEntry', (_message.Message,), {
-    'DESCRIPTOR' : _OUTBOUND_METADATAENTRY,
-    '__module__' : 'x_pb2'
-    # @@protoc_insertion_point(class_scope:org.ppc.ptp.Outbound.MetadataEntry)
+    'MetadataEntry' : _reflection.GeneratedProtocolMessageType('MetadataEntry', (_message.Message,), {
+        'DESCRIPTOR' : _OUTBOUND_METADATAENTRY,
+        '__module__' : 'x_pb2'
+        # @@protoc_insertion_point(class_scope:org.ppc.ptp.Outbound.MetadataEntry)
     })
-  ,
-  'DESCRIPTOR' : _OUTBOUND,
-  '__module__' : 'x_pb2'
-  # @@protoc_insertion_point(class_scope:org.ppc.ptp.Outbound)
-  })
+    ,
+    'DESCRIPTOR' : _OUTBOUND,
+    '__module__' : 'x_pb2'
+    # @@protoc_insertion_point(class_scope:org.ppc.ptp.Outbound)
+})
 _sym_db.RegisterMessage(Outbound)
 _sym_db.RegisterMessage(Outbound.MetadataEntry)
 
@@ -236,36 +236,36 @@ _INBOUND_METADATAENTRY._options = None
 _OUTBOUND_METADATAENTRY._options = None
 
 _PRIVATETRANSFERPROTOCOL = _descriptor.ServiceDescriptor(
-  name='PrivateTransferProtocol',
-  full_name='org.ppc.ptp.PrivateTransferProtocol',
-  file=DESCRIPTOR,
-  index=0,
-  serialized_options=None,
-  create_key=_descriptor._internal_create_key,
-  serialized_start=322,
-  serialized_end=464,
-  methods=[
-  _descriptor.MethodDescriptor(
-    name='transport',
-    full_name='org.ppc.ptp.PrivateTransferProtocol.transport',
+    name='PrivateTransferProtocol',
+    full_name='org.ppc.ptp.PrivateTransferProtocol',
+    file=DESCRIPTOR,
     index=0,
-    containing_service=None,
-    input_type=_INBOUND,
-    output_type=_OUTBOUND,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='invoke',
-    full_name='org.ppc.ptp.PrivateTransferProtocol.invoke',
-    index=1,
-    containing_service=None,
-    input_type=_INBOUND,
-    output_type=_OUTBOUND,
-    serialized_options=None,
-    create_key=_descriptor._internal_create_key,
-  ),
-])
+    serialized_start=322,
+    serialized_end=464,
+    methods=[
+        _descriptor.MethodDescriptor(
+            name='transport',
+            full_name='org.ppc.ptp.PrivateTransferProtocol.transport',
+            index=0,
+            containing_service=None,
+            input_type=_INBOUND,
+            output_type=_OUTBOUND,
+            serialized_options=None,
+            create_key=_descriptor._internal_create_key,
+        ),
+        _descriptor.MethodDescriptor(
+            name='invoke',
+            full_name='org.ppc.ptp.PrivateTransferProtocol.invoke',
+            index=1,
+            containing_service=None,
+            input_type=_INBOUND,
+            output_type=_OUTBOUND,
+            serialized_options=None,
+            create_key=_descriptor._internal_create_key,
+        ),
+    ])
 _sym_db.RegisterServiceDescriptor(_PRIVATETRANSFERPROTOCOL)
 
 DESCRIPTOR.services_by_name['PrivateTransferProtocol'] = _PRIVATETRANSFERPROTOCOL

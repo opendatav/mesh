@@ -8,7 +8,6 @@ import random
 from typing import Any, List, Dict, Callable
 
 import grpc
-
 import mesh.tool as tool
 from mesh.grpx.interceptor import GrpcInterceptor
 from mesh.grpx.marshaller import GrpcMarshaller
@@ -142,10 +141,10 @@ class GrpcMultiplexChannel(grpc.Channel):
         return [
             ("grpc.enable_retries", True),
             ("grpc.default_compression_algorithm", self.default_compression()),
-            ("grpc.client_idle_timeout_ms", 1000 * 32),
+            ("grpc.client_idle_timeout_ms", 1000 * 120),
             ("grpc.max_send_message_length", 1 << 30),
             ("grpc.max_receive_message_length", 1 << 30),
-            ("grpc.max_connection_age_ms", 1000 * 60),
+            ("grpc.max_connection_age_ms", 1000 * 360),
             ("grpc.max_connection_age_grace_ms", 1000 * 12),
             ("grpc.per_message_compression", True),
             ("grpc.per_message_decompression", True),
