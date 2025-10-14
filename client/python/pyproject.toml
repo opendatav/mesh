@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "imesh"
-version = "0.0.29"
+version = "0.0.29.5"
 description = "A lightweight, distributed, relational network architecture for MPC."
 authors = ["coyzeng <coyzeng@gmail.com>"]
 maintainers = ["coyzeng <coyzeng@gmail.com>"]
@@ -35,7 +35,3 @@ pytest = "^7.0.1"
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
-[[tool.poetry.source]]
-name = "aliyun"
-url = "https://mirrors.aliyun.com/pypi/simple/"
-default = true

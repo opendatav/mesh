@@ -116,6 +116,7 @@ class Environ:
     __mesh_min_channels = ['mesh.grpc.channel.min', 'mesh_grpc_channel_min', 'MESH_GRPC_CHANNEL_MIN']
     __mesh_max_channels = ['mesh.grpc.channel.max', 'mesh_grpc_channel_max', 'MESH_GRPC_CHANNEL_MAX']
     __mesh_packet_size = ['mesh.packet.size', 'mesh_packet_size', 'MESH_PACKET_SIZE']
+    __mesh_bfia_proto = ['mesh.bfia.proto', 'mesh_bfia_proto', 'MESH_BFIA_PROTO']
 
     @staticmethod
     def get_default_mesh_port() -> int:
@@ -125,10 +126,11 @@ class Environ:
         if not keys:
             return dft
         for key in keys:
-            if '' != self.get_arguments.get(key, ''):
-                return self.get_arguments[key]
             if os.getenv(key):
                 return os.getenv(key)
+        for key in keys:
+            if '' != self.get_arguments.get(key, ''):
+                return self.get_arguments[key]
         return dft
 
     @Cache
@@ -141,7 +143,8 @@ class Environ:
         parser.add_argument("--mesh.direct", type=str, default='', required=False)
         parser.add_argument("--mesh.grpc.channel.min", type=int, default=20, required=False)
         parser.add_argument("--mesh.grpc.channel.max", type=int, default=200, required=False)
-        parser.add_argument("--mesh.packet.size", type=int, default=1 << 26, required=False)
+        parser.add_argument("--mesh.packet.size", type=int, default=1 << 20, required=False)
+        parser.add_argument("--mesh.bfia.proto", type=str, default='grpc', required=False)
         args, _ = parser.parse_known_args()
         return vars(args)
 
@@ -183,6 +186,10 @@ class Environ:
     @Cache
     def get_packet_size(self) -> int:
         return int(self.get_property(f"{1 << 26}", self.__mesh_packet_size))
+
+    @Cache
+    def get_bfia_proto(self) -> str:
+        return self.get_property('grpc', self.__mesh_bfia_proto)
 
     @Cache
     def get_hostname(self) -> str:

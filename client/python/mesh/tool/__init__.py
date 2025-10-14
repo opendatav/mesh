@@ -85,6 +85,10 @@ def get_packet_size() -> int:
     return System.environ().get_packet_size()
 
 
+def get_bfia_proto() -> int:
+    return System.environ().get_bfia_proto()
+
+
 def required(*args: Any) -> bool:
     if not args:
         return False
