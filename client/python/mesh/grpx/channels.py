@@ -149,7 +149,7 @@ class GrpcMultiplexChannel(grpc.Channel):
             ("grpc.per_message_compression", True),
             ("grpc.per_message_decompression", True),
             ("grpc.enable_deadline_checking", True),
-            ("grpc.keepalive_time_ms", 1000 * 12),
+            ("grpc.keepalive_time_ms", 1000 * 60 * 2),
             ("grpc.keepalive_timeout_ms", 1000 * 12),
         ]
 
