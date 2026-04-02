@@ -141,16 +141,14 @@ class GrpcMultiplexChannel(grpc.Channel):
         return [
             ("grpc.enable_retries", True),
             ("grpc.default_compression_algorithm", self.default_compression()),
-            ("grpc.client_idle_timeout_ms", 1000 * 60 * 3),
             ("grpc.max_send_message_length", 1 << 30),
             ("grpc.max_receive_message_length", 1 << 30),
-            ("grpc.max_connection_age_ms", 1000 * 60 * 12),
-            ("grpc.max_connection_age_grace_ms", 1000 * 60 * 4),
             ("grpc.per_message_compression", True),
             ("grpc.per_message_decompression", True),
             ("grpc.enable_deadline_checking", True),
             ("grpc.keepalive_time_ms", 1000 * 60 * 2),
             ("grpc.keepalive_timeout_ms", 1000 * 12),
+            ("grpc.keepalive_permit_without_calls", 1),
         ]
 
     def incr(self):
