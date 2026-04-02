@@ -149,6 +149,9 @@ class GrpcMultiplexChannel(grpc.Channel):
             ("grpc.keepalive_time_ms", 1000 * 60 * 2),
             ("grpc.keepalive_timeout_ms", 1000 * 12),
             ("grpc.keepalive_permit_without_calls", 1),
+            # Allow unlimited pings without data frames; default is 2, which causes
+            # UNAVAILABLE/Socket close when server blocks for >4min with no data flow.
+            ("grpc.http2.max_pings_without_data", 0),
         ]
 
     def incr(self):
